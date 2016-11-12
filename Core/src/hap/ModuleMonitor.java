@@ -31,7 +31,7 @@ public class ModuleMonitor {
 		boolean res = true;
 
 		try {
-			myFsm = new ModuleMonitorFSM(new MqttAsyncClient(myBroker, "HAPCore-" + myTopicRoot, new MemoryPersistence()), myTopicRoot, myLog);
+			myFsm = new ModuleMonitorFSM(new MqttAsyncClient(myBroker, "HAPCore-" + myTopicRoot, new MemoryPersistence()), myTopicRoot, myLog, myWorkingDir, myModuleDir);
 			myFsm.setState(new ConnectState(myFsm));
 		} catch (MqttException e) {
 			myLog.severe(e.getMessage());
