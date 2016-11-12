@@ -7,8 +7,27 @@
     </content>
     <content url="file://$MODULE_DIR$/../externals/CmdParser4J/src">
       <sourceFolder url="file://$MODULE_DIR$/../externals/CmdParser4J/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../externals/CmdParser4J/src/cmdparser4j" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library" exported="">
+      <library name="CmdParser4J">
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/../externals/CmdParser4J/src" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../lib/org.eclipse.paho.client.mqttv3-1.1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
