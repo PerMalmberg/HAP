@@ -1,3 +1,6 @@
 [submodule "externals/CmdParser4J"]
 	path = externals/CmdParser4J
 	url = https://github.com/PerMalmberg/CmdParser4J.git
+[submodule "externals/ChainedFSM4J"]
+	path = externals/ChainedFSM4J
+	url = https://github.com/PerMalmberg/ChainedFSM4J.git

@@ -54,16 +54,16 @@ public class Core {
 
 		if (res) {
 			boolean done = false;
-			ModuleMonitor mm = new ModuleMonitor( myWorkDir, myModDir, "HAPControl", myLog);
+			ModuleMonitor mm = new ModuleMonitor(myWorkDir, myModDir, myParser.getString("--topic") , myLog, myBroker);
 
-			mm.start();
-
-			while (!done) {
-				mm.tick();
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					done = true;
+			if (mm.start()) {
+				while (!done) {
+					mm.tick();
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						done = true;
+					}
 				}
 			}
 		}
@@ -81,6 +81,7 @@ public class Core {
 
 		myLog = Logger.getLogger("HAPCore");
 		ConsoleHandler console = new ConsoleHandler();
+		console.setFormatter(new LogFormatter());
 		myLog.addHandler(console);
 		myLog.setLevel(Level.ALL);
 
@@ -91,14 +92,16 @@ public class Core {
 				SystemOutputUsageFormatter usage = new SystemOutputUsageFormatter("HAP::Core");
 				myParser.getUsage(usage);
 				myLog.info(usage.toString());
-			}
-			else {
+			} else {
 				myWorkDir = Paths.get(myParser.getString("--working-dir", 0, Paths.get(SysUtil.getDirectoryOfJar(Core.class), "data").toAbsolutePath().toString()));
 				myModDir = Paths.get(myParser.getString("--module-dir", 0, Paths.get(SysUtil.getDirectoryOfJar(Core.class), "modules").toAbsolutePath().toString()));
+				myBroker = myParser.getString("--broker");
 
 				if (Files.exists(myWorkDir)) {
 					try {
-						myLog.addHandler(new FileHandler(Paths.get(myWorkDir.toString(), "core.log").toString(), 1024 * 1024, 10, true));
+						FileHandler fh = new FileHandler(Paths.get(myWorkDir.toString(), "HAPCore.log").toString(), 1024 * 1024, 10, true);
+						fh.setFormatter(new LogFormatter());
+						myLog.addHandler(fh);
 					} catch (IOException e) {
 						res = false;
 						myLog.severe(e.getMessage());
@@ -163,4 +166,5 @@ public class Core {
 	private CmdParser4J myParser;
 	private Path myModDir;
 	private Path myWorkDir;
+	private String myBroker;
 }
