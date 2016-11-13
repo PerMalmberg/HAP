@@ -3,9 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BaseModule/BaseModule.iml" filepath="$PROJECT_DIR$/BaseModule/BaseModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/externals/CmdParser4J/CmdParser4J.iml" filepath="$PROJECT_DIR$/externals/CmdParser4J/CmdParser4J.iml" />
       <module fileurl="file://$PROJECT_DIR$/Common/Common.iml" filepath="$PROJECT_DIR$/Common/Common.iml" />
       <module fileurl="file://$PROJECT_DIR$/Core/Core.iml" filepath="$PROJECT_DIR$/Core/Core.iml" />
       <module fileurl="file://$PROJECT_DIR$/ExampleModule/ExampleModule.iml" filepath="$PROJECT_DIR$/ExampleModule/ExampleModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/externals/ChainedFSM4J/FSM.iml" filepath="$PROJECT_DIR$/externals/ChainedFSM4J/FSM.iml" />
       <module fileurl="file://$PROJECT_DIR$/HAP.iml" filepath="$PROJECT_DIR$/HAP.iml" />
     </modules>
   </component>

@@ -3,8 +3,6 @@ package hap.modulemonitor.state;
 import chainedfsm.EnterLeaveState;
 import hap.event.*;
 import hap.message.Message;
-import hap.message.MessageFactory;
-import hap.modulemonitor.ModuleMonitor;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 

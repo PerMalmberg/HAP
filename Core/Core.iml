@@ -6,12 +6,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$" type="java-resource" />
     </content>
-    <content url="file://$MODULE_DIR$/../externals/ChainedFSM4J">
-      <sourceFolder url="file://$MODULE_DIR$/../externals/ChainedFSM4J/src" isTestSource="false" />
-    </content>
-    <content url="file://$MODULE_DIR$/../externals/CmdParser4J">
-      <sourceFolder url="file://$MODULE_DIR$/../externals/CmdParser4J/src" isTestSource="false" />
-    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library" exported="">
@@ -24,5 +18,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="Common" exported="" />
+    <orderEntry type="module" module-name="CmdParser4J" exported="" />
+    <orderEntry type="module" module-name="FSM" exported="" />
   </component>
 </module>

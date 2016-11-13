@@ -6,6 +6,4 @@ package hap.basemodule;
 // Interface for all HAP modules
 public interface IHAPModule {
 	void tick();
-
-
 }
