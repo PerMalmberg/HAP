@@ -9,7 +9,9 @@ import hap.message.cmd.Ping;
 import hap.modulemonitor.ActiveModules;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Instant;
+import java.util.logging.Logger;
 
 public class MonitorModuleState extends ModuleMonitorStateBase {
 
@@ -39,7 +41,13 @@ public class MonitorModuleState extends ModuleMonitorStateBase {
 			String modName = getModName( f );
 			if( !myActiveModules.isModuleActive( modName )) {
 				// Start module
-
+				ProcessBuilder pb = new ProcessBuilder();
+				pb.command( "java", "-Xms20m -jar " + f.getAbsolutePath() + "-w " + myFsm.getWorkingDir() );
+				try {
+					pb.start();
+				} catch (IOException e) {
+					myLog.severe(e.getMessage());
+				}
 			}
 		}
 	}
@@ -72,5 +80,6 @@ public class MonitorModuleState extends ModuleMonitorStateBase {
 
 	private final MessageFactory myMessageFactory = new MessageFactory();
 	private final ActiveModules myActiveModules = new ActiveModules();
+	private final Logger myLog = Logger.getLogger("HAPCore");
 
 }

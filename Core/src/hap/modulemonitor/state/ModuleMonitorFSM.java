@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.Logger;
 
 public class ModuleMonitorFSM extends FSM<ModuleMonitorStateBase> implements IMqttActionListener, IMqttMessageListener {
 
@@ -49,7 +48,7 @@ public class ModuleMonitorFSM extends FSM<ModuleMonitorStateBase> implements IMq
 		}
 
 		TimedEvent te = timedQueue.peek();
-		while ( te != null && te.getInstant().isBefore(Instant.now())) {
+		while (te != null && te.getInstant().isBefore(Instant.now())) {
 			te = timedQueue.poll();
 			te.getEvent().visit(getCurrentState());
 			// Get next possible event

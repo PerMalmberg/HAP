@@ -11,6 +11,8 @@ import hap.message.Message;
 import hap.modulemonitor.ModuleMonitor;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -118,6 +120,17 @@ public class Core {
 
 				if (!Files.exists(myModDir)) {
 					myLog.severe("Module directory does not exist (" + myModDir.toString() + ")");
+					res = false;
+				}
+
+				try {
+					URI uri = new URI(myParser.getString("--broker"));
+					if( uri.getScheme() == null ) {
+						myLog.severe("Broker must be specified with URI scheme, i.e. tcp://<DNS|IP>");
+						res = false;
+					}
+				} catch (URISyntaxException e) {
+					myLog.severe("Invalid broker specified");
 					res = false;
 				}
 			}

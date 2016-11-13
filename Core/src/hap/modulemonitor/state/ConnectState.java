@@ -19,8 +19,6 @@ public class ConnectState extends ModuleMonitorStateBase {
 	}
 
 
-	private IMqttToken myToken;
-
 	private void enter() {
 		try {
 
@@ -32,7 +30,7 @@ public class ConnectState extends ModuleMonitorStateBase {
 			connOpts.setCleanSession(true);
 			connOpts.setAutomaticReconnect(true);
 			connOpts.setConnectionTimeout(5);
-			myToken = myFsm.getClient().connect(connOpts, null, myFsm);
+			myFsm.getClient().connect(connOpts, null, myFsm);
 
 		} catch (MqttException e) {
 			myLog.severe("Exception during connect: " + e.getMessage());

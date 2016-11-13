@@ -1,6 +1,6 @@
 package hap.modulemonitor;
 
-import hap.message.IMessageListener;
+import hap.message.MessageListener;
 import hap.message.cmd.Ping;
 import hap.message.response.PingResponse;
 
@@ -10,12 +10,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 
-public class ActiveModules implements IMessageListener {
-
-	@Override
-	public void accept(Ping msg) {
-
-	}
+public class ActiveModules extends MessageListener {
 
 	@Override
 	public void accept(PingResponse msg) {
