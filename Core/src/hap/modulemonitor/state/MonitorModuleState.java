@@ -43,11 +43,11 @@ public class MonitorModuleState extends ModuleMonitorStateBase {
 				// Start module
 				ProcessBuilder pb = new ProcessBuilder();
 				pb.command( "java", "-Xms20m -jar " + f.getAbsolutePath() + "-w " + myFsm.getWorkingDir() );
-				try {
-					pb.start();
-				} catch (IOException e) {
-					myLog.severe(e.getMessage());
-				}
+// QQQ				try {
+//					pb.start();
+//				} catch (IOException e) {
+//					myLog.severe(e.getMessage());
+//				}
 			}
 		}
 	}

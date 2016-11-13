@@ -22,10 +22,6 @@ public abstract class ModuleMonitorStateBase extends EnterLeaveState implements 
 
 	protected ModuleMonitorFSM myFsm;
 
-	protected String getControlTopic(String subTopic) {
-		return Message.combineTopic(Message.getTopicRoot(), "HAPControl", subTopic);
-	}
-
 	protected void publish(Message m) {
 		MqttMessage mqtt = new MqttMessage(m.getPayload());
 		mqtt.setQos(m.getQos().getValue());

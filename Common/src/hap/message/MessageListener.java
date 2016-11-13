@@ -1,6 +1,7 @@
 package hap.message;
 
 import hap.message.cmd.Ping;
+import hap.message.general.UnclassifiedMessage;
 import hap.message.response.PingResponse;
 
 // This class is used to hide methods in the IMessageListener
@@ -13,6 +14,11 @@ public abstract class MessageListener implements IMessageListener {
 
 	@Override
 	public void accept(PingResponse msg) {
+
+	}
+
+	@Override
+	public void accept(UnclassifiedMessage msg) {
 
 	}
 }

@@ -2,6 +2,7 @@ package hap.modulemonitor;
 
 import hap.message.MessageListener;
 import hap.message.cmd.Ping;
+import hap.message.general.UnclassifiedMessage;
 import hap.message.response.PingResponse;
 
 import java.time.Instant;
