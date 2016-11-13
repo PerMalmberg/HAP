@@ -1,4 +1,4 @@
-package hap.state;
+package hap.modulemonitor.state;
 
 import java.util.Comparator;
 

@@ -1,4 +1,4 @@
-package hap.state;
+package hap.modulemonitor.state;
 
 
 import chainedfsm.FSM;
@@ -10,19 +10,16 @@ import org.eclipse.paho.client.mqttv3.*;
 
 import java.nio.file.Path;
 import java.time.Instant;
-import java.time.temporal.TemporalAmount;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
 public class ModuleMonitorFSM extends FSM<ModuleMonitorStateBase> implements IMqttActionListener, IMqttMessageListener {
 
-	public ModuleMonitorFSM(IMqttAsyncClient client, String topicRoot, Logger logger, Path workingDir, Path moduleDir) {
+	public ModuleMonitorFSM(IMqttAsyncClient client, Path workingDir, Path moduleDir) {
 		myClient = client;
-		myTopicRoot = topicRoot;
-		myLog = logger;
 		myWorkingDir = workingDir;
-		mymoduleDir = moduleDir;
+		myModuleDir = moduleDir;
 	}
 
 	@Override
@@ -52,9 +49,9 @@ public class ModuleMonitorFSM extends FSM<ModuleMonitorStateBase> implements IMq
 		}
 
 		TimedEvent te = timedQueue.peek();
-		while( te != null && te.getInstant().isBefore( Instant.now() ) ) {
+		while ( te != null && te.getInstant().isBefore(Instant.now())) {
 			te = timedQueue.poll();
-			te.getEvent().visit( getCurrentState() );
+			te.getEvent().visit(getCurrentState());
 			// Get next possible event
 			te = timedQueue.peek();
 		}
@@ -62,19 +59,9 @@ public class ModuleMonitorFSM extends FSM<ModuleMonitorStateBase> implements IMq
 		getCurrentState().tick();
 	}
 
-	public java.util.logging.Logger getLogger() {
-		return myLog;
-	}
-
-	public String getTopicRoot() {
-		return myTopicRoot;
-	}
-
 	private IMqttAsyncClient myClient;
-	private final String myTopicRoot;
-	private java.util.logging.Logger myLog;
 	private final Path myWorkingDir;
-	private final Path mymoduleDir;
+	private final Path myModuleDir;
 	private final ConcurrentLinkedQueue<EventBase> myEvent = new ConcurrentLinkedQueue<>();
 	private final PriorityQueue<TimedEvent> timedQueue = new PriorityQueue<>(new TimedComparator());
 
@@ -83,7 +70,7 @@ public class ModuleMonitorFSM extends FSM<ModuleMonitorStateBase> implements IMq
 	}
 
 	public Path getModuleDir() {
-		return mymoduleDir;
+		return myModuleDir;
 	}
 
 	public void startSingleShotTimer(Instant triggerTime, EventBase event) {

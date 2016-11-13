@@ -1,11 +1,12 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package hap;
+package hap.modulemonitor;
 
 
-import hap.state.ConnectState;
-import hap.state.ModuleMonitorFSM;
+import hap.message.Message;
+import hap.modulemonitor.state.ConnectState;
+import hap.modulemonitor.state.ModuleMonitorFSM;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -15,11 +16,9 @@ import java.util.logging.Logger;
 
 public class ModuleMonitor {
 
-	public ModuleMonitor(Path workingDir, Path moduleDir, String topicRoot, Logger log, String broker) {
+	public ModuleMonitor(Path workingDir, Path moduleDir, String broker) {
 		myWorkingDir = workingDir;
 		myModuleDir = moduleDir;
-		myTopicRoot = topicRoot;
-		myLog = log;
 		myBroker = broker;
 	}
 
@@ -30,8 +29,10 @@ public class ModuleMonitor {
 	public boolean start() {
 		boolean res = true;
 
+		myLog.info("Starting Module Monitor");
+
 		try {
-			myFsm = new ModuleMonitorFSM(new MqttAsyncClient(myBroker, "HAPCore-" + myTopicRoot, new MemoryPersistence()), myTopicRoot, myLog, myWorkingDir, myModuleDir);
+			myFsm = new ModuleMonitorFSM(new MqttAsyncClient(myBroker, "HAPCore-" + Message.getTopicRoot(), new MemoryPersistence()), myWorkingDir, myModuleDir);
 			myFsm.setState(new ConnectState(myFsm));
 		} catch (MqttException e) {
 			myLog.severe(e.getMessage());
@@ -43,9 +44,9 @@ public class ModuleMonitor {
 
 
 	private ModuleMonitorFSM myFsm;
-	private final String myTopicRoot;
 	private final Path myWorkingDir;
 	private final Path myModuleDir;
-	private final Logger myLog;
 	private final String myBroker;
+
+	private Logger myLog = Logger.getLogger("HAPCore");
 }

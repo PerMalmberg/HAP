@@ -7,6 +7,8 @@ import cmdparser4j.CmdParser4J;
 import cmdparser4j.IParseResult;
 import cmdparser4j.SystemOutputParseResult;
 import cmdparser4j.SystemOutputUsageFormatter;
+import hap.message.Message;
+import hap.modulemonitor.ModuleMonitor;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -54,13 +56,14 @@ public class Core {
 
 		if (res) {
 			boolean done = false;
-			ModuleMonitor mm = new ModuleMonitor(myWorkDir, myModDir, myParser.getString("--topic") , myLog, myBroker);
+			Message.setTopicRoot(myParser.getString("--topic"));
+			ModuleMonitor mm = new ModuleMonitor(myWorkDir, myModDir, myBroker);
 
 			if (mm.start()) {
 				while (!done) {
 					mm.tick();
 					try {
-						Thread.sleep(100);
+						Thread.sleep(0, 1);
 					} catch (InterruptedException e) {
 						done = true;
 					}
@@ -79,11 +82,12 @@ public class Core {
 			Logger.getGlobal().removeHandler(h);
 		}
 
-		myLog = Logger.getLogger("HAPCore");
+		Level level = Level.FINEST;
+		myLog.setLevel(level);
 		ConsoleHandler console = new ConsoleHandler();
 		console.setFormatter(new LogFormatter());
+		console.setLevel(level);
 		myLog.addHandler(console);
-		myLog.setLevel(Level.ALL);
 
 		boolean res = myParser.parse(myArgs);
 
@@ -101,6 +105,7 @@ public class Core {
 					try {
 						FileHandler fh = new FileHandler(Paths.get(myWorkDir.toString(), "HAPCore.log").toString(), 1024 * 1024, 10, true);
 						fh.setFormatter(new LogFormatter());
+						fh.setLevel(level);
 						myLog.addHandler(fh);
 					} catch (IOException e) {
 						res = false;
@@ -127,44 +132,12 @@ public class Core {
 		return res;
 	}
 
-	///////////////////////////////////////////////////////////////////////////
-	//
-	//
-	//
-	///////////////////////////////////////////////////////////////////////////
-//	private void LoadModules() {
-//		// Find modules in the sub directory 'modules'
-//		String workingDir = SysUtil.getDirectoryOfJar(Core.class);
-//		Path fullPath = Paths.get(workingDir, "modules");
-//		File[] modules = getModulesToLoad(fullPath.toString());
-//		//return myMods.load(modules);
-//	}
-
-	///////////////////////////////////////////////////////////////////////////
-	//
-	//
-	//
-	///////////////////////////////////////////////////////////////////////////
-//	private File[] getModulesToLoad(String workingDir) {
-//		List<String> modules = new ArrayList<>();
-//
-//		for (int i = 0; i < myParser.getAvailableStringParameterCount(myModuleArg); ++i) {
-//			String modToLoad = myParser.getString(myModuleArg, i);
-//			if (!modToLoad.endsWith(".jar")) {
-//				modToLoad += ".jar";
-//			}
-//			modules.add(modToLoad);
-//		}
-//
-//		File f = new File(workingDir);
-//		return f.listFiles(o -> modules.contains(o.getName()));
-//	}
-
-	private Logger myLog;
 	private String[] myArgs;
 	private IParseResult myResult;
 	private CmdParser4J myParser;
 	private Path myModDir;
 	private Path myWorkDir;
 	private String myBroker;
+
+	private final Logger myLog = Logger.getLogger("HAPCore");
 }

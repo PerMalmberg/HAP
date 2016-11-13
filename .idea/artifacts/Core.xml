@@ -3,6 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/Core</output-path>
     <root id="archive" name="Core.jar">
       <element id="module-output" name="Core" />
+      <element id="module-output" name="Common" />
     </root>
   </artifact>
 </component>

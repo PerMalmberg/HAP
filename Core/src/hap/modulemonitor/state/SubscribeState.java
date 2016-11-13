@@ -1,11 +1,11 @@
-package hap.state;
+package hap.modulemonitor.state;
 
 import chainedfsm.EnterChain;
-import hap.event.FailureEvent;
-import hap.event.MessageEvent;
 import hap.event.SuccessEvent;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttException;
+
+import java.util.logging.Logger;
 
 public class SubscribeState extends ModuleMonitorStateBase {
 
@@ -19,7 +19,7 @@ public class SubscribeState extends ModuleMonitorStateBase {
 		try {
 			mySubscribeToken = myFsm.getClient().subscribe(getControlTopic("/#"), 2, null, myFsm, myFsm);
 		} catch (MqttException e) {
-			severe(e.getMessage());
+			myLog.severe(e.getMessage());
 			myFsm.setState(new ConnectState(myFsm));
 		}
 	}
@@ -31,18 +31,7 @@ public class SubscribeState extends ModuleMonitorStateBase {
 		}
 	}
 
-	@Override
-	public void accept(FailureEvent e) {
-		if (e.getToken() == mySubscribeToken) {
-			severe(e.toString());
-			myFsm.setState(new ConnectState(myFsm));
-		}
-	}
-
-	@Override
-	public void accept(MessageEvent e) {
-
-	}
-
 	private IMqttToken mySubscribeToken;
+
+	private Logger myLog = Logger.getLogger("HAPCore");
 }

@@ -1,9 +1,8 @@
-package hap.state;
+package hap.modulemonitor.state;
 
 import hap.event.EventBase;
 
 import java.time.Instant;
-import java.util.Comparator;
 
 public class TimedEvent {
 	public Instant getInstant() {

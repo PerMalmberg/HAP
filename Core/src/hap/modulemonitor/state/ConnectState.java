@@ -1,13 +1,14 @@
-package hap.state;
+package hap.modulemonitor.state;
 
 
 import chainedfsm.EnterChain;
 import hap.event.FailureEvent;
-import hap.event.MessageEvent;
 import hap.event.SuccessEvent;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+
+import java.util.logging.Logger;
 
 public class ConnectState extends ModuleMonitorStateBase {
 
@@ -34,9 +35,9 @@ public class ConnectState extends ModuleMonitorStateBase {
 			myToken = myFsm.getClient().connect(connOpts, null, myFsm);
 
 		} catch (MqttException e) {
-			myFsm.getLogger().severe("Exception during connect: " + e.getMessage());
-			myFsm.getLogger().severe("Reason " + e.getReasonCode());
-			myFsm.getLogger().severe("Cause " + e.getCause());
+			myLog.severe("Exception during connect: " + e.getMessage());
+			myLog.severe("Reason " + e.getReasonCode());
+			myLog.severe("Cause " + e.getCause());
 		}
 	}
 
@@ -47,12 +48,9 @@ public class ConnectState extends ModuleMonitorStateBase {
 
 	@Override
 	public void accept(FailureEvent e) {
-		severe( e.toString() );
-		enter();
+		myLog.severe( e.toString() );
+		enter(); // Retry
 	}
 
-	@Override
-	public void accept(MessageEvent e) {
-
-	}
+	private static Logger myLog = Logger.getLogger("HAPCore");
 }
