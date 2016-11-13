@@ -47,6 +47,6 @@ public class ExampleModule extends ModuleRunner {
 
 	@Override
 	public void accept(UnclassifiedMessage msg) {
-		//
+		// This is where any unclassified messages (i.e. not a control message) are received.
 	}
 }
