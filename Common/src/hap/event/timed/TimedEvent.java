@@ -1,4 +1,4 @@
-package hap.modulemonitor.state;
+package hap.event.timed;
 
 import hap.event.EventBase;
 

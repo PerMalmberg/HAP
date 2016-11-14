@@ -17,5 +17,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="CmdParser4J" exported="" />
+    <orderEntry type="module" module-name="FSM" exported="" />
   </component>
 </module>

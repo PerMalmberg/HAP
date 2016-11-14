@@ -4,17 +4,16 @@
 package hap.modulemonitor;
 
 
+import hap.communication.Communicator;
+import hap.communication.IEntryStateProvider;
+import hap.communication.state.CommState;
 import hap.message.Message;
-import hap.modulemonitor.state.ConnectState;
-import hap.modulemonitor.state.ModuleMonitorFSM;
-import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import hap.modulemonitor.state.MonitorModuleState;
 
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
-public class ModuleMonitor {
+public class ModuleMonitor implements IEntryStateProvider {
 
 	public ModuleMonitor(Path workingDir, Path moduleDir, String broker) {
 		myWorkingDir = workingDir;
@@ -23,30 +22,25 @@ public class ModuleMonitor {
 	}
 
 	public void tick() {
-		myFsm.tick();
+		myCom.tick();
 	}
 
 	public boolean start() {
-		boolean res = true;
-
 		myLog.info("Starting Module Monitor");
-
-		try {
-			myFsm = new ModuleMonitorFSM(new MqttAsyncClient(myBroker, "HAPCore-" + Message.getTopicRoot(), new MemoryPersistence()), myWorkingDir, myModuleDir);
-			myFsm.setState(new ConnectState(myFsm));
-		} catch (MqttException e) {
-			myLog.severe(e.getMessage());
-			res = false;
-		}
-
-		return res;
+		myCom = new Communicator(myBroker, "HAPCore-" + Message.getTopicRoot(), myLog);
+		return myCom.start(this);
 	}
 
+	@Override
+	public CommState createEntryState(Communicator com) {
+		return new MonitorModuleState(com, myModuleDir, myWorkingDir);
+	}
 
-	private ModuleMonitorFSM myFsm;
+	private Communicator myCom;
 	private final Path myWorkingDir;
 	private final Path myModuleDir;
 	private final String myBroker;
 
 	private Logger myLog = Logger.getLogger("HAPCore");
+
 }

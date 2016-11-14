@@ -3,12 +3,12 @@ package hap.message.response;
 
 import hap.message.ControlTopic;
 import hap.message.IMessageListener;
-import hap.message.NonRetainedMessage;
+import hap.message.Message;
 
-public class PingResponse extends NonRetainedMessage {
+public class PingResponse extends Message {
 
 	public PingResponse( String moduleName ) {
-		super(ControlTopic.getControlTopic("PingResponse"), moduleName, QOS.AtMostOnce);
+		this(ControlTopic.getControlTopic("PingResponse"), moduleName.getBytes(), QOS.AtMostOnce, false);
 	}
 
 	public PingResponse(String topic, byte[] payload, QOS qos, boolean retained)

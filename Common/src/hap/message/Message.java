@@ -64,8 +64,26 @@ public abstract class Message {
 	@Override
 	public String toString() {
 		String s = getTopic();
-		s += Arrays.toString(getPayload());
+
+		if( isText( getPayload()) ) {
+			s += " '" + new String( getPayload() ) + "'";
+		}
+		else {
+			s += " " + Arrays.toString(getPayload());
+		}
 		return s;
+	}
+
+	private boolean isText(byte[] payload) {
+		double hit = 0;
+
+		for (byte b: payload ) {
+			if( b >= ' ' && b <= 126 ){
+				++hit;
+			}
+		}
+
+		return hit/payload.length > 0.95;
 	}
 
 	final private String myTopic;

@@ -9,11 +9,9 @@ import cmdparser4j.SystemOutputParseResult;
 import cmdparser4j.SystemOutputUsageFormatter;
 import hap.LogFormatter;
 import hap.SysUtil;
-import hap.basemodule.communication.Communicator;
-import hap.message.IMessageListener;
+import hap.communication.Communicator;
+import hap.communication.IEntryStateProvider;
 import hap.message.Message;
-import hap.message.response.PingResponse;
-import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 
 import java.io.IOException;
 import java.net.URI;
@@ -23,9 +21,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.*;
 
-public abstract class ModuleRunner implements IMessageListener {
+public abstract class ModuleRunner implements IEntryStateProvider {
 
-	public ModuleRunner(String moduleName ) {
+	public ModuleRunner(String moduleName) {
 		myModuleName = moduleName;
 		myLog = Logger.getLogger(moduleName);
 		myResult = new SystemOutputParseResult();
@@ -40,8 +38,13 @@ public abstract class ModuleRunner implements IMessageListener {
 		myParser.accept("--log-to-console").asSingleBoolean().describedAs("If specified, logging to console will be enabled").withAlias("-l");
 		myParser.accept("--help").asSingleBoolean().describedAs("Print help text").withAlias("-?");
 
-		initCmdParser( myParser );
-		return setup(myLog, myParser, myResult, args);
+		initCmdParser(myParser);
+		boolean res = setup(myLog, myParser, myResult, args);
+		if (res) {
+			myCom = new Communicator(myBroker, myModuleName, myLog);
+		}
+
+		return res;
 	}
 
 	// Overridden by the module and used to read command line arguments.
@@ -112,7 +115,7 @@ public abstract class ModuleRunner implements IMessageListener {
 
 		Message.setTopicRoot(myParser.getString("--topic"));
 
-		if( res ) {
+		if (res) {
 			// Let the module initialize
 			res = initializeModule(myParser);
 		}
@@ -120,15 +123,14 @@ public abstract class ModuleRunner implements IMessageListener {
 		return res;
 	}
 
-	public boolean run() {
-		myCom = new Communicator(myBroker, myModuleName, this, myLog);
-		myCom.start();
+	public boolean run(IEntryStateProvider stateProvider) {
+
+		myCom.start(stateProvider);
 
 		try {
 			while (!myIsTerminated) {
 				Thread.sleep(0, 1);
 				myCom.tick();
-				tick();
 			}
 		} catch (InterruptedException e) {
 			myLog.finest(e.getMessage());
@@ -137,19 +139,13 @@ public abstract class ModuleRunner implements IMessageListener {
 		return myIsTerminated;
 	}
 
-	protected void terminate() {
+	// Call this to terminate the module
+	public void terminate() {
 		myIsTerminated = true;
 	}
 
-	protected void publish(Message message) {
-		myCom.publish( message.getTopic(), message.getPayload(), message.getQos(), message.isRetained() );
-	}
-
-	protected abstract void tick();
-
-	@Override
-	public void accept(PingResponse msg) {
-		// Not used by modules.
+	protected Communicator getCommunicator() {
+		return myCom;
 	}
 
 	private Communicator myCom = null;
