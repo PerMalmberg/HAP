@@ -1,8 +1,6 @@
 package hap.modulemonitor;
 
 import hap.message.MessageListener;
-import hap.message.cmd.Ping;
-import hap.message.general.UnclassifiedMessage;
 import hap.message.response.PingResponse;
 
 import java.time.Instant;
@@ -40,4 +38,9 @@ public class ActiveModules extends MessageListener {
 
 	private final HashMap<String, Instant> myModules = new HashMap<>();
 	private static Logger myLog = Logger.getLogger("HAPCore");
+
+	public void prepareModule(String moduleName) {
+		myLog.finest("Giving module '" + moduleName + "' temporary active status");
+		myModules.put(moduleName, Instant.now());
+	}
 }

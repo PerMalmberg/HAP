@@ -34,7 +34,6 @@ public abstract class ModuleRunner implements IEntryStateProvider {
 		myParser.accept("--broker").asString(1).describedAs("The DNS or IP of the MQTT broker").setMandatory().withAlias("-b");
 		myParser.accept("--topic").asString(1).describedAs("The root topic used by the HAP Core").setMandatory().withAlias("-r");
 		myParser.accept("--working-dir").asString(1).describedAs("The working directory").withAlias("-w");
-		myParser.accept("--module-dir").asString(1).describedAs("Directory containing modules").withAlias("-m");
 		myParser.accept("--log-to-console").asSingleBoolean().describedAs("If specified, logging to console will be enabled").withAlias("-l");
 		myParser.accept("--help").asSingleBoolean().describedAs("Print help text").withAlias("-?");
 
