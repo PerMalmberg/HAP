@@ -12,7 +12,6 @@ import hap.message.response.PingResponse;
 import hap.modulemonitor.ActiveModules;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -22,7 +21,6 @@ import java.util.jar.Manifest;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 public class MonitorModuleState extends CommState {
 
@@ -53,91 +51,67 @@ public class MonitorModuleState extends CommState {
 
 		for (File f : modules) {
 			try {
-				ZipFile zip = new ZipFile( f );
+				ZipFile zip = new ZipFile(f);
 				ZipEntry manifest = zip.getEntry("META-INF/MANIFEST.MF");
-				if( manifest == null) {
+				if (manifest == null) {
 					myLog.warning("No META-INF/MANIFEST.MF found in " + f.getAbsolutePath());
-				}
-				else {
+				} else {
 					InputStream zin = zip.getInputStream(manifest);
 					Manifest m = new Manifest(zin);
 					Attributes attributes = m.getMainAttributes();
-					String mainClass = attributes.getValue("Main-Class");
-					if( mainClass == null ) {
-						myLog.warning("No Main-Class in manifest of " + f.getAbsolutePath() );
-					}
-					else {
-						if( myActiveModules.isModuleActive(mainClass)) {
-							myLog.finest("Module '" + mainClass + "' is already active");
-						}
-						else {
-							myLog.fine("Attempting to load module '" + mainClass + "' from " + f.getAbsolutePath());
-							myActiveModules.prepareModule( mainClass );
-							ProcessBuilder pb = new ProcessBuilder();
+					String moduleName = attributes.getValue("Main-Class");
+					if (moduleName == null) {
+						myLog.warning("No Main-Class in manifest of " + f.getAbsolutePath());
+					} else if (!myModules.isModuleActive(moduleName)
+							&& myModules.mayStart(moduleName)) {
 
-							pb.command("java", "-Xms20m",
-									"-jar",
-									f.getAbsolutePath(),
-									"-w", myWorkingDir.toString(),
-									"--broker", myCom.getClient().getServerURI(),
-									"--topic", Message.getTopicRoot(),
-									"-l");
+						ProcessBuilder pb = new ProcessBuilder();
 
-							pb.inheritIO();
-							try {
-								// TODO: Save process with its entry in myModules for later monitoring and termination.
-								Process p = pb.start();
-								int i = 0;
-							} catch (IOException e) {
-								myLog.severe(e.getMessage());
-							}
+						pb.command("java", "-Xms20m",
+								"-jar",
+								f.getAbsolutePath(),
+								"-w", myWorkingDir.toString(),
+								"--broker", myCom.getClient().getServerURI(),
+								"--topic", Message.getTopicRoot(),
+								"-l");
+
+						pb.inheritIO();
+
+						try {
+							myLog.finest("Starting module '" + moduleName + "'.");
+							Process p = pb.start();
+							myModules.update(moduleName, p);
+						} catch (IOException e) {
+							myLog.severe(e.getMessage());
+							myModules.delayStart(moduleName);
 						}
 					}
+
 				}
 
 				zip.close();
 			} catch (IOException e) {
-				myLog.severe( "Error while loading module: " + e.getMessage() );
+				myLog.severe("Error while loading module: " + e.getMessage());
 			}
-
-			// Find name of main class in META-INF/MANIFEST.MF in the jar file.
-			// That name will be what we expect from in the PingResponse from the module.
-
-//			String modName = getModName( f );
-//
-//				// Start module
-//				ProcessBuilder pb = new ProcessBuilder();
-//				pb.command( "java", "-Xms20m -jar " + f.getAbsolutePath() + "-w " + myWorkingDir );
-//// QQQ				try {
-////					pb.start();
-////				} catch (IOException e) {
-////					myLog.severe(e.getMessage());
-////				}
-//			}
 		}
-	}
-
-	private String getModName(File f) {
-		String name = f.getName();
-		return name.substring( 0, name.indexOf('.') );
 	}
 
 	@Override
 	public void tick() {
-		myActiveModules.tick();
+		myModules.tick();
 	}
 
 	@Override
 	public void accept(MessageEvent e) {
 		Message m = myMessageFactory.Create(e.getTopic(), e.getMsg());
 		if (m != null) {
-			m.visit(myActiveModules);
+			m.visit(myModules);
 		}
 	}
 
 	@Override
 	public void accept(PingResponse msg) {
-		msg.visit(myActiveModules);
+		msg.visit(myModules);
 	}
 
 	@Override
@@ -149,7 +123,7 @@ public class MonitorModuleState extends CommState {
 	}
 
 	private final MessageFactory myMessageFactory = new MessageFactory();
-	private final ActiveModules myActiveModules = new ActiveModules();
+	private final ActiveModules myModules = new ActiveModules();
 	private final Logger myLog;
 	private final Path myModuleDir;
 	private final Path myWorkingDir;
