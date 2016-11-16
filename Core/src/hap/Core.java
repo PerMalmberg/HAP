@@ -62,8 +62,7 @@ public class Core {
 			ModuleMonitor mm = new ModuleMonitor(myWorkDir, myModDir, myBroker);
 
 			if (mm.start()) {
-				while (!done) {
-					mm.tick();
+				while (!done && mm.tick()) {
 					try {
 						Thread.sleep(0, 1);
 					} catch (InterruptedException e) {

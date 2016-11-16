@@ -32,7 +32,7 @@ public class Communicator extends chainedfsm.FSM<CommState> implements IMqttMess
 		myLog = logger;
 	}
 
-	public boolean start(IEntryStateProvider stateProvider) {
+	public boolean start(IModuleRunner stateProvider) {
 		boolean res = true;
 		myStateProvider = stateProvider;
 
@@ -124,7 +124,7 @@ public class Communicator extends chainedfsm.FSM<CommState> implements IMqttMess
 		return myClient;
 	}
 
-	public IEntryStateProvider getStateProvider() {
+	public IModuleRunner getStateProvider() {
 		return myStateProvider;
 	}
 
@@ -151,13 +151,12 @@ public class Communicator extends chainedfsm.FSM<CommState> implements IMqttMess
 	private final ConcurrentLinkedDeque<Message> myMessage = new ConcurrentLinkedDeque<>();
 	private final HashMap<String, Message.QOS> mySubscriptions = new HashMap<>();
 
-	private IMqttToken myToken = null;
 	private final MessageFactory myMessageFactory = new MessageFactory();
 	private IMqttAsyncClient myClient = null;
 	private final String myBroker;
 	private final String myClientId;
 	private final Logger myLog;
-	private IEntryStateProvider myStateProvider;
+	private IModuleRunner myStateProvider;
 	private boolean myDoResubscribe = false;
 
 }

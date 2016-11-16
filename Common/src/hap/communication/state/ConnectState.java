@@ -42,6 +42,7 @@ public class ConnectState extends CommState {
 
 	@Override
 	public void accept(SuccessEvent e) {
+		myLog.finest("Connected to broker");
 		myCom.setState( new SubscribeState(myCom));
 	}
 

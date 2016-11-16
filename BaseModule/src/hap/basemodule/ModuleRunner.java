@@ -10,7 +10,7 @@ import cmdparser4j.SystemOutputUsageFormatter;
 import hap.LogFormatter;
 import hap.SysUtil;
 import hap.communication.Communicator;
-import hap.communication.IEntryStateProvider;
+import hap.communication.IModuleRunner;
 import hap.message.Message;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.*;
 
-public abstract class ModuleRunner implements IEntryStateProvider {
+public abstract class ModuleRunner implements IModuleRunner {
 
 	public ModuleRunner(String moduleName) {
 		myModuleName = moduleName;
@@ -122,7 +122,7 @@ public abstract class ModuleRunner implements IEntryStateProvider {
 		return res;
 	}
 
-	public boolean run(IEntryStateProvider stateProvider) {
+	public boolean run(IModuleRunner stateProvider) {
 
 		myCom.start(stateProvider);
 

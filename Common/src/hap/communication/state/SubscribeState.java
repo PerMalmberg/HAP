@@ -18,15 +18,16 @@ public class SubscribeState extends CommState {
 	}
 
 	private void subscribe() {
-		myCom.subscribe(ControlTopic.getControlTopic("/#"), Message.QOS.AtMostOnce);
+		myCom.subscribe(ctrlTopic, Message.QOS.AtMostOnce);
 	}
 
 	@Override
 	public void accept(SuccessEvent e) {
 		// Pass control to the applications entry state
+		myLog.finest("Subscribed to control topic: " + ctrlTopic);
 		myCom.setState(myCom.getStateProvider().createEntryState(myCom));
 	}
 
-
+	private final String ctrlTopic = ControlTopic.getControlTopic("/#");
 	private Logger myLog;
 }

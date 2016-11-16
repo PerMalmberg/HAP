@@ -27,7 +27,6 @@ public class ExampleModuleEntryState extends CommState {
 	@Override
 	public void accept(FailureEvent event )
 	{
-
 		// Reconnect whenever a failure occurs
 		myCom.setState(new ConnectState(myCom));
 	}

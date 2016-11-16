@@ -6,6 +6,7 @@ package hap.communication;
 
 import hap.communication.state.CommState;
 
-public interface IEntryStateProvider {
+public interface IModuleRunner {
 	CommState createEntryState(Communicator com );
+	void terminate();
 }
