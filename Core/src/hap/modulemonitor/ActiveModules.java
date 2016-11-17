@@ -19,7 +19,7 @@ public class ActiveModules extends MessageListener {
 		ModuleContainer m = myModules.get(msg.getModuleName());
 		if (m == null) {
 			myLog.warning("Received ping response from unmonitored module: '" + mod + "'");
-		}else {
+		} else {
 			m.lastLifesign = Instant.now();
 		}
 		myLog.finest("Module reporting active: " + mod);
@@ -34,19 +34,12 @@ public class ActiveModules extends MessageListener {
 		for (String moduleName : mods) {
 			ModuleContainer module = myModules.get(moduleName);
 
-			if( !module.isActive() ) {
-				if( module.hasTerminated() ) {
-					delayStart(moduleName);
-				}
-			}
-			else if (module.lastLifesign.isBefore(threshold)) {
-				if( module.isActive() ) {
-					myLog.warning("Terminating process for module '" + moduleName + "'");
-					module.process.destroyForcibly();
-					delayStart(moduleName);
-				}
-
-				myLog.fine("Module '" + moduleName + "' has been removed" );
+			if (module.isActive() && module.hasExpired(threshold)) {
+				myLog.warning("Terminating process for expired module '" + moduleName + "'");
+				module.process.destroyForcibly();
+				delayStart(moduleName);
+			} else if (module.hasTerminated()) {
+				delayStart(moduleName);
 			}
 		}
 	}
@@ -65,7 +58,7 @@ public class ActiveModules extends MessageListener {
 		boolean mayStart = true;
 
 		ModuleContainer m = myModules.get(name);
-		if( m != null ) {
+		if (m != null) {
 			mayStart = m.mayStart();
 		}
 

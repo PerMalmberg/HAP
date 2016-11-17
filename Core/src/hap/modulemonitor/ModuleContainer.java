@@ -22,15 +22,21 @@ public class ModuleContainer {
 		return !isActive() && Instant.now().isAfter(doNotStartBefore);
 	}
 
-	public Instant lastLifesign;
-	public Instant doNotStartBefore;
-	public Process process = null;
+	public boolean hasTerminated() {
+		return process != null && !process.isAlive();
+	}
+
+	public boolean hasExpired(Instant threshold) {
+		return lastLifesign.isBefore(threshold);
+	}
 
 	public boolean isActive() {
 		return process != null && process.isAlive();
 	}
 
-	public boolean hasTerminated() {
-		return process != null && !process.isAlive();
-	}
+	public Instant lastLifesign;
+	public Instant doNotStartBefore;
+	public Process process = null;
+
+
 }
