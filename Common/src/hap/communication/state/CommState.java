@@ -5,13 +5,16 @@ package hap.communication.state;
 
 import hap.communication.Communicator;
 import hap.event.*;
+import hap.event.timed.PingTimeoutEvent;
 import hap.message.IMessageListener;
 import hap.message.Message;
 import hap.message.cmd.Ping;
+import hap.message.cmd.Start;
+import hap.message.cmd.Stop;
 import hap.message.general.UnclassifiedMessage;
 import hap.message.response.PingResponse;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import hap.message.response.StartResponse;
+import hap.message.response.StopResponse;
 
 import java.util.logging.Logger;
 
@@ -30,7 +33,6 @@ public class CommState extends chainedfsm.EnterLeaveState implements IEventListe
 
 	protected void publish(Message m) {
 		myCom.publish(m.getTopic(), m.getPayload(), m.getQos(), m.isRetained());
-		myLog.finest("Publish: " + m.toString());
 	}
 
 	@Override
@@ -62,6 +64,26 @@ public class CommState extends chainedfsm.EnterLeaveState implements IEventListe
 
 	@Override
 	public void accept(Ping msg) {
+
+	}
+
+	@Override
+	public void accept(Stop msg) {
+
+	}
+
+	@Override
+	public void accept(Start msg) {
+
+	}
+
+	@Override
+	public void accept(StopResponse stopResponse) {
+
+	}
+
+	@Override
+	public void accept(StartResponse startResponse) {
 
 	}
 

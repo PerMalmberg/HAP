@@ -80,7 +80,7 @@ public abstract class ModuleRunner implements IModuleRunner {
 
 				if (Files.exists(myWorkDir)) {
 					try {
-						FileHandler fh = new FileHandler(Paths.get(myWorkDir.toString(), "HAPCore.log").toString(), 1024 * 1024, 10, true);
+						FileHandler fh = new FileHandler(Paths.get(myWorkDir.toString(), myModuleName + ".log").toString(), 1024 * 1024, 10, true);
 						fh.setFormatter(new LogFormatter());
 						fh.setLevel(level);
 						logger.addHandler(fh);

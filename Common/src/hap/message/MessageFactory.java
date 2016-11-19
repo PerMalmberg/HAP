@@ -56,7 +56,7 @@ public class MessageFactory {
 			}
 			catch (ClassNotFoundException ex )
 			{
-				myLog.finest("No matching class: " + ": " + ex.getMessage());
+				myLog.finest("No matching class: " + ex.getMessage());
 			}
 		}
 

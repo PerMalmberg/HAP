@@ -11,6 +11,7 @@ import hap.event.FailureEvent;
 import hap.event.SuccessEvent;
 import hap.event.timed.TimedComparator;
 import hap.event.timed.TimedEvent;
+import hap.event.timed.TimedEventBase;
 import hap.message.Message;
 import hap.message.MessageFactory;
 import org.eclipse.paho.client.mqttv3.*;
@@ -23,8 +24,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
-public class Communicator extends chainedfsm.FSM<CommState> implements IMqttMessageListener, IMqttActionListener, MqttCallback {
-
+public class Communicator extends chainedfsm.FSM<CommState> implements IPublisher, IMqttMessageListener, IMqttActionListener, MqttCallback {
 
 	public Communicator(String broker, String clientId, Logger logger) {
 		myBroker = broker;
@@ -59,7 +59,7 @@ public class Communicator extends chainedfsm.FSM<CommState> implements IMqttMess
 			TimedEvent te = timedQueue.peek();
 			while (te != null && te.getInstant().isBefore(Instant.now())) {
 				te = timedQueue.poll();
-				te.getEvent().visit(getCurrentState());
+				te.getEvent().execute();
 				// Get next possible event
 				te = timedQueue.peek();
 			}
@@ -82,6 +82,13 @@ public class Communicator extends chainedfsm.FSM<CommState> implements IMqttMess
 			}
 
 		}
+	}
+
+	@Override
+	public void preSetState()
+	{
+		// Reset time events every time we change state
+		timedQueue.clear();
 	}
 
 	@Override
@@ -112,12 +119,18 @@ public class Communicator extends chainedfsm.FSM<CommState> implements IMqttMess
 		}
 	}
 
+	@Override
 	public void publish(String topic, byte[] payload, Message.QOS qos, boolean retained) {
 		try {
 			myClient.publish(topic, payload, qos.getValue(), retained, null, this);
 		} catch (MqttException e) {
 			myLog.severe(e.getMessage());
 		}
+	}
+
+	@Override
+	public void publish(Message m) {
+		publish(m.getTopic(), m.getPayload(), m.getQos(), m.isRetained());
 	}
 
 	public IMqttAsyncClient getClient() {
@@ -132,7 +145,7 @@ public class Communicator extends chainedfsm.FSM<CommState> implements IMqttMess
 		return myLog;
 	}
 
-	public void startSingleShotTimer(Instant triggerTime, EventBase event) {
+	public void startSingleShotTimer(Instant triggerTime, TimedEventBase event) {
 		timedQueue.add(new TimedEvent(triggerTime, event));
 	}
 

@@ -1,29 +1,28 @@
 package hap.modulemonitor;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 
 public class ModuleContainer {
 
 	public ModuleContainer(Instant startTime) {
 		lastLifesign = startTime;
-		doNotStartBefore = Instant.now().minusSeconds(1);
+		myDoNotStartBefore = Instant.now().minusSeconds(1);
 	}
 
-	public ModuleContainer(Instant startTime, Process p)
-	{
-		this( startTime );
+	public ModuleContainer(Instant startTime, Process p) {
+		this(startTime);
 		lastLifesign = Instant.now();
-		process = p;
+		myProcess = p;
 	}
 
-	public boolean mayStart()
-	{
-		return !isActive() && Instant.now().isAfter(doNotStartBefore);
+	public boolean mayStart() {
+		return myMayAutostart && !isActive() && Instant.now().isAfter(myDoNotStartBefore);
 	}
 
 	public boolean hasTerminated() {
-		return process != null && !process.isAlive();
+		return myProcess != null && !myProcess.isAlive();
 	}
 
 	public boolean hasExpired(Instant threshold) {
@@ -31,12 +30,43 @@ public class ModuleContainer {
 	}
 
 	public boolean isActive() {
-		return process != null && process.isAlive();
+		return myProcess != null && myProcess.isAlive();
 	}
 
-	public Instant lastLifesign;
-	public Instant doNotStartBefore;
-	public Process process = null;
 
+	public void terminate() {
+		if( myProcess != null ) {
+			myProcess.destroyForcibly();
+			myProcess = null;
+			delayStart();
+		}
+	}
 
+	public void delayStart() {
+		myProcess = null;
+		myDoNotStartBefore = Instant.now().plus(15, ChronoUnit.MINUTES);
+	}
+
+	public void setProcess(Process process) {
+		myProcess = process;
+		lastLifesign = Instant.now();
+	}
+
+	public void setIsAlive() {
+		lastLifesign = Instant.now();
+	}
+
+	private Instant lastLifesign;
+	private Instant myDoNotStartBefore;
+	private Process myProcess = null;
+	private boolean myMayAutostart = true;
+
+	public void disableAutoStart() {
+		myMayAutostart = false;
+	}
+
+	public void enableAutoStart() {
+		myMayAutostart = true;
+		myDoNotStartBefore = Instant.now().minusSeconds(1); // Ensure immediate start
+	}
 }

@@ -1,7 +1,5 @@
 package hap.event.timed;
 
-import hap.event.EventBase;
-
 import java.time.Instant;
 
 public class TimedEvent {
@@ -9,18 +7,16 @@ public class TimedEvent {
 		return myInstant;
 	}
 
-	public EventBase getEvent() {
+	public TimedEventBase getEvent() {
 		return myEvent;
 	}
 
 
-
-	public TimedEvent( Instant instant, EventBase event )
-	{
+	public TimedEvent(Instant instant, TimedEventBase event) {
 		myInstant = instant;
 		myEvent = event;
 	}
 
 	private final Instant myInstant;
-	private final EventBase myEvent;
+	private final TimedEventBase myEvent;
 }

@@ -57,18 +57,17 @@ public class Core {
 		boolean res = setup();
 
 		if (res) {
-			boolean done = false;
+
 			Message.setTopicRoot(myParser.getString("--topic"));
 			ModuleMonitor mm = new ModuleMonitor(myWorkDir, myModDir, myBroker);
 
-			if (mm.start()) {
-				while (!done && mm.tick()) {
-					try {
+			try {
+				if (mm.start()) {
+					while (mm.tick()) {
 						Thread.sleep(0, 1);
-					} catch (InterruptedException e) {
-						done = true;
-					}
-				}
+					}				}
+			} catch (InterruptedException e) {
+				myLog.finest(e.getMessage());
 			}
 		}
 
@@ -124,7 +123,7 @@ public class Core {
 
 				try {
 					URI uri = new URI(myParser.getString("--broker"));
-					if( uri.getScheme() == null ) {
+					if (uri.getScheme() == null) {
 						myLog.severe("Broker must be specified with URI scheme, i.e. tcp://<DNS|IP>");
 						res = false;
 					}
