@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="OneWire">
+    <output-path>$PROJECT_DIR$/out/artifacts/OneWire</output-path>
+    <root id="archive" name="OneWire.jar">
+      <element id="module-output" name="OneWire" />
+      <element id="module-output" name="Common" />
+      <element id="module-output" name="CmdParser4J" />
+      <element id="module-output" name="FSM" />
+      <element id="module-output" name="BaseModule" />
+      <element id="directory" name="org">
+        <element id="extracted-dir" path="$PROJECT_DIR$/lib/org.eclipse.paho.client.mqttv3-1.1.0.jar" path-in-jar="/org/" />
+      </element>
+      <element id="module-output" name="JOwShell" />
+    </root>
+  </artifact>
+</component>

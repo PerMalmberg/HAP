@@ -151,7 +151,7 @@ public abstract class ModuleRunner implements IModuleRunner {
 	private final String myModuleName;
 	private IParseResult myResult;
 	private CmdParser4J myParser;
-	private Logger myLog;
+	protected Logger myLog;
 	private String myBroker;
 	protected Path myWorkDir;
 	private boolean myIsTerminated = false;

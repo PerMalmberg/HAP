@@ -4,3 +4,6 @@
 [submodule "externals/ChainedFSM4J"]
 	path = externals/ChainedFSM4J
 	url = https://github.com/PerMalmberg/ChainedFSM4J.git
+[submodule "externals/JOwShell"]
+	path = externals/JOwShell
+	url = https://github.com/PerMalmberg/JOwShell.git

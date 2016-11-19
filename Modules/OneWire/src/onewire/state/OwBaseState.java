@@ -1,0 +1,25 @@
+// Copyright (c) 2016 Per Malmberg
+// Licensed under MIT, see LICENSE file.
+
+package onewire.state;
+
+import hap.communication.Communicator;
+import hap.communication.state.CommState;
+import hap.message.cmd.Ping;
+import hap.message.response.PingResponse;
+import onewire.OneWire;
+
+
+public class OwBaseState extends CommState {
+	public OwBaseState(Communicator com, OneWire oneWire) {
+		super(com);
+		myOw = oneWire;
+	}
+
+	@Override
+	public void accept(Ping msg) {
+		publish(new PingResponse(OneWire.class.getName()));
+	}
+
+	protected final OneWire myOw;
+}

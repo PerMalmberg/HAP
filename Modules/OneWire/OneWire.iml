@@ -7,17 +7,17 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="Common" exported="" />
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../lib/org.eclipse.paho.client.mqttv3-1.1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/org.eclipse.paho.client.mqttv3-1.1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="Common" exported="" />
-    <orderEntry type="module" module-name="CmdParser4J" exported="" />
-    <orderEntry type="module" module-name="FSM" exported="" />
+    <orderEntry type="module" module-name="BaseModule" exported="" />
+    <orderEntry type="module" module-name="JOwShell" exported="" />
   </component>
 </module>
