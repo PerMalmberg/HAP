@@ -33,7 +33,7 @@ public boolean initialize( String[] args )
 {
 	myParser.accept( "--broker" ).asString( 1 ).describedAs( "The DNS or IP of the MQTT broker" ).setMandatory().withAlias( "-b" );
 	myParser.accept( "--topic" ).asString( 1 ).describedAs( "The root topic used by the HAP Core" ).setMandatory().withAlias( "-r" );
-	myParser.accept( "--config" ).asString( 1 ).describedAs( "Full path to configuration file" ).withAlias( "-c" ).setMandatory();
+	myParser.accept( "--config" ).asString( 1 ).describedAs( "Full path to configuration file" ).setMandatory().withAlias( "-c" );
 	myParser.accept( "--working-dir" ).asString( 1 ).describedAs( "The working directory" ).withAlias( "-w" );
 	myParser.accept( "--log-to-console" ).asBoolean( 1 ).describedAs( "If specified, logging to console will be enabled" ).withAlias( "-l" );
 	myParser.accept( "--log-to-file" ).asBoolean( 1 ).describedAs( "If specified, logging to file will be enabled" ).withAlias( "-f" );
@@ -41,6 +41,8 @@ public boolean initialize( String[] args )
 	myParser.accept( "--help" ).asSingleBoolean().describedAs( "Print help text" ).withAlias( "-?" );
 	myCfg = new XMLConfigurationReader( myResult );
 
+	myCfg.setMatcher( "--broker", new XMLConfigurationReader.NodeMatcher( myModuleName + "/MQTT/Broker" ) );
+	myCfg.setMatcher( "--topic", new XMLConfigurationReader.NodeMatcher( myModuleName + "/MQTT/Topic" ) );
 	myCfg.setMatcher( "--log-to-console", new XMLConfigurationReader.NodeMatcher( myModuleName + "/Module/Logging", "console" ) );
 	myCfg.setMatcher( "--log-to-file", new XMLConfigurationReader.NodeMatcher( myModuleName + "/Module/Logging", "file" ) );
 	myCfg.setMatcher( "--log-level", new XMLConfigurationReader.NodeMatcher( myModuleName + "/Module/Logging/Level" ) );
@@ -74,17 +76,18 @@ private boolean setup( CmdParser4J parser, IParseResult result, String... args )
 
 	boolean res = parser.parse( "--config", myCfg, args );
 
-
+	ConsoleHandler console = new ConsoleHandler();
+	console.setFormatter( new LogFormatter() );
+	myLog.setLevel( Level.INFO );
+	console.setLevel( Level.INFO );
+	myLog.addHandler( console );
 
 	if( res )
 	{
 		String lvl = myParser.getString( "--log-level", 0, "info" );
 		Level level = Level.parse( lvl.toUpperCase() );
 		myLog.setLevel( level );
-		ConsoleHandler console = new ConsoleHandler();
-		console.setFormatter( new LogFormatter() );
 		console.setLevel( level );
-		myLog.addHandler( console );
 
 		if( parser.getBool( "--help" ) )
 		{

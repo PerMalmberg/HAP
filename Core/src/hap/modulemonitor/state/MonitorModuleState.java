@@ -110,9 +110,9 @@ private boolean startModule( String specificModule )
 								"-w", myWorkingDir.toString(),
 								"--broker", myCom.getClient().getServerURI(),
 								"--topic", Message.getTopicRoot(),
-								"--config", Paths.get( myConfigDir.toString(), moduleName + ".config" ).toString(),
-								"-l" );
+								"--config", Paths.get( myConfigDir.toString(), moduleName + ".config" ).toString() );
 
+						myLog.finer( "Starting module:" + pb.command() );
 						pb.inheritIO();
 
 						try

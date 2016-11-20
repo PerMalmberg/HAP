@@ -116,15 +116,18 @@ private boolean setup()
 
 	boolean res = myParser.parse( "--config", myCfgReader, myArgs );
 
+	ConsoleHandler console = new ConsoleHandler();
+	console.setFormatter( new LogFormatter() );
+	myLog.setLevel( Level.INFO );
+	console.setLevel( Level.INFO );
+	myLog.addHandler( console );
+
 	if( res )
 	{
 		String lvl = myParser.getString( "--log-level", 0, "info" );
 		Level level = Level.parse( lvl.toUpperCase() );
 		myLog.setLevel( level );
-		ConsoleHandler console = new ConsoleHandler();
-		console.setFormatter( new LogFormatter() );
 		console.setLevel( level );
-		myLog.addHandler( console );
 
 		if( myParser.getBool( "--help" ) )
 		{

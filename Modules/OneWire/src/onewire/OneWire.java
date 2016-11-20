@@ -62,9 +62,9 @@ protected void initCmdParser( CmdParser4J parser, XMLConfigurationReader configu
 	parser.accept( "--ow-host" ).asString( 1 ).setMandatory().describedAs( "The host on which ow-Server is running" );
 	parser.accept( "--ow-topic" ).asString( 1 ).setMandatory().describedAs( "The root MQTT-topic to which data will be published" );
 	parser.accept( "--ow-timeout" ).asInteger( 1, new NumericLimit<>( 1, 10 ) ).describedAs( "Timeout for 1-Wire commands, in seconds" ).withAlias( "-t" );
-	configurationReader.setMatcher( "--ow-host", new XMLConfigurationReader.NodeMatcher( "/OneWire/Settings/OWServer/Host" ) );
-	configurationReader.setMatcher( "--ow-timeout", new XMLConfigurationReader.NodeMatcher( "/OneWire/Settings/OWServer/Timeout" ) );
-	configurationReader.setMatcher( "--ow-topic", new XMLConfigurationReader.NodeMatcher( "/OneWire/Settings/MQTT/PublishTopic" ) );
+	configurationReader.setMatcher( "--ow-host", new XMLConfigurationReader.NodeMatcher( OneWire.class.getName() + "/OWServer/Host" ) );
+	configurationReader.setMatcher( "--ow-timeout", new XMLConfigurationReader.NodeMatcher( OneWire.class.getName() + "/OWServer/Timeout" ) );
+	configurationReader.setMatcher( "--ow-topic", new XMLConfigurationReader.NodeMatcher( OneWire.class.getName() + "/MQTT/PublishTopic" ) );
 }
 
 @Override
