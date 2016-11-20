@@ -4,6 +4,7 @@
 package hap.modulemonitor;
 
 
+import hap.SysUtil;
 import hap.communication.Communicator;
 import hap.communication.IModuleRunner;
 import hap.communication.state.CommState;
@@ -13,6 +14,7 @@ import sun.misc.Signal;
 import sun.misc.SignalHandler;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 public class ModuleMonitor implements IModuleRunner {
@@ -32,6 +34,9 @@ public class ModuleMonitor implements IModuleRunner {
 	public boolean start() {
 		myLog.info("Starting Module Monitor");
 
+		myConfigDir = Paths.get(SysUtil.getDirectoryOfJar(MonitorModuleState.class), "config");
+		myLog.finest("Configuration directory: " + myConfigDir);
+
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
@@ -44,7 +49,7 @@ public class ModuleMonitor implements IModuleRunner {
 
 	@Override
 	public CommState createEntryState(Communicator com) {
-		return new MonitorModuleState(com, myActiveModules, myModuleDir, myWorkingDir);
+		return new MonitorModuleState(com, myActiveModules, myModuleDir, myWorkingDir, myConfigDir);
 	}
 
 	@Override
@@ -57,6 +62,7 @@ public class ModuleMonitor implements IModuleRunner {
 	private final Path myModuleDir;
 	private boolean myIsTerminated = false;
 	private final ActiveModules myActiveModules;
+	private Path myConfigDir;
 
 	private Logger myLog = Logger.getLogger("HAPCore");
 

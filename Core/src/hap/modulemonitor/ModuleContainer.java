@@ -25,8 +25,8 @@ public class ModuleContainer {
 		return myProcess != null && !myProcess.isAlive();
 	}
 
-	public boolean hasExpired(Instant threshold) {
-		return lastLifesign.isBefore(threshold);
+	public boolean hasExpired() {
+		return lastLifesign.isBefore(Instant.now().minusSeconds(30));
 	}
 
 	public boolean isActive() {
@@ -38,7 +38,6 @@ public class ModuleContainer {
 		if( myProcess != null ) {
 			myProcess.destroyForcibly();
 			myProcess = null;
-			delayStart();
 		}
 	}
 

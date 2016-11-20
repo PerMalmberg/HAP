@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="Cli">
-    <output-path>$PROJECT_DIR$/out/artifacts/Cli</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts</output-path>
     <root id="archive" name="Cli.jar">
       <element id="module-output" name="Common" />
       <element id="module-output" name="FSM" />

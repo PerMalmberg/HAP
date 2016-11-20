@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="OneWire">
-    <output-path>$PROJECT_DIR$/out/artifacts/OneWire</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/modules</output-path>
     <root id="archive" name="OneWire.jar">
       <element id="module-output" name="OneWire" />
       <element id="module-output" name="Common" />

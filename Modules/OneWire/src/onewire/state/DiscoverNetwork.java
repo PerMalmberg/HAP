@@ -18,6 +18,7 @@ public class DiscoverNetwork extends OwBaseState {
 	public void enter()
 	{
 		if( myOw.getDiscovery().discoverTree() ) {
+			myCom.getLogger().info("Found " + myOw.getDiscovery().getNetwork().getAllDevices().keySet().size() + " devices");
 			myCom.setState(new ReadValueState(myCom, myOw));
 		}
 		else {

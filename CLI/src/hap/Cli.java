@@ -4,6 +4,7 @@
 package hap;
 
 import cmdparser4j.CmdParser4J;
+import cmdparser4j.XMLConfigurationReader;
 import hap.basemodule.ModuleRunner;
 import hap.communication.Communicator;
 import hap.communication.state.CommState;
@@ -52,7 +53,7 @@ public class Cli extends ModuleRunner {
 	}
 
 	@Override
-	protected void initCmdParser(CmdParser4J parser) {
+	protected void initCmdParser(CmdParser4J parser, XMLConfigurationReader configurationReader) {
 		// Add more command line arguments here if needed by the module
 		parser.accept("--start-module").asString(1).blockedBy("--stop-module").describedAs("Starts a module");
 		parser.accept("--stop-module").asString(1).blockedBy("--start-module").describedAs("Stops a module");

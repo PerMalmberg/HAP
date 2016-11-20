@@ -43,12 +43,14 @@ public class ReadValueState extends OwBaseState {
 						OwData dataItem = data.get(dataName);
 						if (dataItem.isReadable(myOw)) {
 							String readData = dataItem.read(myOw);
-							String topic = Message.combineTopic(myOw.getOwTopic(), d.getName());
-							topic = Message.combineTopic(topic, dataItem.getFullPropertyName());
-							Message m = new UnclassifiedMessage(topic, readData.getBytes(), Message.QOS.AtMostOnce, false);
+							if( readData != null) {
+								String topic = Message.combineTopic(myOw.getOwTopic(), d.getName());
+								topic = Message.combineTopic(topic, dataItem.getFullPropertyName());
+								Message m = new UnclassifiedMessage(topic, readData.getBytes(), Message.QOS.AtMostOnce, false);
 
-							// Transfer to module's main thread
-							myOutgoing.add(m);
+								// Transfer to module's main thread
+								myOutgoing.add(m);
+							}
 						}
 					}
 				}

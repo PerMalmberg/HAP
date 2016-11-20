@@ -61,16 +61,17 @@ public class ActiveModules extends MessageListener {
 
 	public void tick() {
 		// Any module that hasn't checked in for fifteen seconds is considered dead and shall be terminated.
-		Instant threshold = Instant.now().minusSeconds(15);
 
 		Set<String> strings = myModules.keySet();
 		String[] mods = strings.toArray(new String[strings.size()]);
 		for (String moduleName : mods) {
 			ModuleContainer module = myModules.get(moduleName);
 
-			if (module.isActive() && module.hasExpired(threshold)) {
+			if (module.isActive() && module.hasExpired()) {
 				myLog.warning("Terminating process for expired module '" + moduleName + "'");
 				module.terminate();
+				myLog.warning("Delaying restart of module '" + moduleName + "'");
+				module.delayStart();
 			} else if (module.hasTerminated()) {
 				myLog.warning("Delaying restart of module '" + moduleName + "'");
 				module.delayStart();

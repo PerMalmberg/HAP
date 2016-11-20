@@ -4,6 +4,8 @@
 package onewire;
 
 import cmdparser4j.CmdParser4J;
+import cmdparser4j.XMLConfigurationReader;
+import cmdparser4j.limits.NumericLimit;
 import hap.basemodule.ModuleRunner;
 import hap.communication.Communicator;
 import hap.communication.state.CommState;
@@ -40,15 +42,20 @@ public class OneWire extends ModuleRunner implements ILogger, ICommandExecution 
 		String myOwHost = myParser.getString("--ow-host");
 		myOwTopic = myParser.getString("--ow-topic");
 		myDiscovery = new Discovery(myOwHost, this, this);
+		myExec.setTimeout( myParser.getInteger("--ow-timeout", 0, 5) * 1000);
 
 		return true;
 	}
 
 	@Override
-	protected void initCmdParser(CmdParser4J parser) {
+	protected void initCmdParser(CmdParser4J parser, XMLConfigurationReader configurationReader) {
 		// Add more command line arguments here if needed by the module
 		parser.accept("--ow-host").asString(1).setMandatory().describedAs("The host on which ow-Server is running");
 		parser.accept("--ow-topic").asString(1).setMandatory().describedAs("The root MQTT-topic to which data will be published");
+		parser.accept("--ow-timeout").asInteger(1, new NumericLimit<>(1, 10)).describedAs("Timeout for 1-Wire commands, in seconds").withAlias("-t");
+		configurationReader.setMatcher("--ow-host", new XMLConfigurationReader.NodeMatcher("/OneWire/Settings/OWServer/Host"));
+		configurationReader.setMatcher("--ow-timeout", new XMLConfigurationReader.NodeMatcher("/OneWire/Settings/OWServer/Timeout"));
+		configurationReader.setMatcher("--ow-topic", new XMLConfigurationReader.NodeMatcher("/OneWire/Settings/MQTT/PublishTopic"));
 	}
 
 	@Override
@@ -104,4 +111,6 @@ public class OneWire extends ModuleRunner implements ILogger, ICommandExecution 
 	public IExecute getExec() {
 		return myExec;
 	}
+
+
 }

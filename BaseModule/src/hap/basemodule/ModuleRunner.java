@@ -3,10 +3,7 @@
 
 package hap.basemodule;
 
-import cmdparser4j.CmdParser4J;
-import cmdparser4j.IParseResult;
-import cmdparser4j.SystemOutputParseResult;
-import cmdparser4j.SystemOutputUsageFormatter;
+import cmdparser4j.*;
 import hap.LogFormatter;
 import hap.SysUtil;
 import hap.communication.Communicator;
@@ -33,12 +30,15 @@ public abstract class ModuleRunner implements IModuleRunner {
 	public boolean initialize(String[] args) {
 		myParser.accept("--broker").asString(1).describedAs("The DNS or IP of the MQTT broker").setMandatory().withAlias("-b");
 		myParser.accept("--topic").asString(1).describedAs("The root topic used by the HAP Core").setMandatory().withAlias("-r");
+		myParser.accept("--config").asString(1).describedAs("Full path to configuration file").withAlias("-c").setMandatory();
 		myParser.accept("--working-dir").asString(1).describedAs("The working directory").withAlias("-w");
 		myParser.accept("--log-to-console").asSingleBoolean().describedAs("If specified, logging to console will be enabled").withAlias("-l");
 		myParser.accept("--help").asSingleBoolean().describedAs("Print help text").withAlias("-?");
+		myCfg = new XMLConfigurationReader(myResult);
 
-		initCmdParser(myParser);
-		boolean res = setup(myLog, myParser, myResult, args);
+		initCmdParser(myParser, myCfg);
+
+		boolean res = setup( myParser, myResult, args);
 		if (res) {
 			myCom = new Communicator(myBroker, myModuleName, myLog);
 		}
@@ -50,9 +50,9 @@ public abstract class ModuleRunner implements IModuleRunner {
 	protected abstract boolean initializeModule(CmdParser4J myParser);
 
 	// Overridden by the module and used to setup additional command line arguments.
-	protected abstract void initCmdParser(CmdParser4J parser);
+	protected abstract void initCmdParser(CmdParser4J parser, XMLConfigurationReader configurationReader);
 
-	public boolean setup(Logger logger, CmdParser4J parser, IParseResult result, String... args) {
+	private boolean setup( CmdParser4J parser, IParseResult result, String... args) {
 		// Disable default global logging handlers
 		LogManager.getLogManager().reset();
 
@@ -61,19 +61,19 @@ public abstract class ModuleRunner implements IModuleRunner {
 		}
 
 		Level level = Level.FINEST;
-		logger.setLevel(level);
+		myLog.setLevel(level);
 		ConsoleHandler console = new ConsoleHandler();
 		console.setFormatter(new LogFormatter());
 		console.setLevel(level);
-		logger.addHandler(console);
+		myLog.addHandler(console);
 
-		boolean res = parser.parse(args);
+		boolean res = parser.parse( "--config", myCfg, args);
 
 		if (res) {
 			if (parser.getBool("--help")) {
-				SystemOutputUsageFormatter usage = new SystemOutputUsageFormatter("HAP::Core");
+				SystemOutputUsageFormatter usage = new SystemOutputUsageFormatter(myModuleName);
 				parser.getUsage(usage);
-				logger.info(usage.toString());
+				myLog.info(usage.toString());
 			} else {
 				myWorkDir = Paths.get(parser.getString("--working-dir", 0, Paths.get(SysUtil.getDirectoryOfJar(ModuleRunner.class), "data").toAbsolutePath().toString()));
 				myBroker = parser.getString("--broker");
@@ -83,33 +83,33 @@ public abstract class ModuleRunner implements IModuleRunner {
 						FileHandler fh = new FileHandler(Paths.get(myWorkDir.toString(), myModuleName + ".log").toString(), 1024 * 1024, 10, true);
 						fh.setFormatter(new LogFormatter());
 						fh.setLevel(level);
-						logger.addHandler(fh);
+						myLog.addHandler(fh);
 					} catch (IOException e) {
 						res = false;
-						logger.severe(e.getMessage());
+						myLog.severe(e.getMessage());
 					}
 				} else {
-					logger.severe("Working directory does not exist (" + myWorkDir.toString() + ")");
+					myLog.severe("Working directory does not exist (" + myWorkDir.toString() + ")");
 					res = false;
 				}
 
 				try {
 					URI uri = new URI(parser.getString("--broker"));
 					if (uri.getScheme() == null) {
-						logger.severe("Broker must be specified with URI scheme, i.e. tcp://<DNS|IP>");
+						myLog.severe("Broker must be specified with URI scheme, i.e. tcp://<DNS|IP>");
 						res = false;
 					}
 				} catch (URISyntaxException e) {
-					logger.severe("Invalid broker specified");
+					myLog.severe("Invalid broker specified");
 					res = false;
 				}
 			}
 		} else {
-			logger.info(result.getParseResult());
+			myLog.info(result.getParseResult());
 		}
 
 		if (!parser.getBool("--log-to-console")) {
-			logger.removeHandler(console);
+			myLog.removeHandler(console);
 		}
 
 		Message.setTopicRoot(myParser.getString("--topic"));
@@ -143,14 +143,11 @@ public abstract class ModuleRunner implements IModuleRunner {
 		myIsTerminated = true;
 	}
 
-	protected Communicator getCommunicator() {
-		return myCom;
-	}
-
 	private Communicator myCom = null;
 	private final String myModuleName;
 	private IParseResult myResult;
 	private CmdParser4J myParser;
+	private XMLConfigurationReader myCfg;
 	protected Logger myLog;
 	private String myBroker;
 	protected Path myWorkDir;

@@ -18,6 +18,7 @@ import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -122,6 +123,7 @@ public class Communicator extends chainedfsm.FSM<CommState> implements IPublishe
 	@Override
 	public void publish(String topic, byte[] payload, Message.QOS qos, boolean retained) {
 		try {
+			myLog.finest("Publish: " + topic + "[Q:" + qos + ", R:" + retained + "] " + Arrays.toString(payload));
 			myClient.publish(topic, payload, qos.getValue(), retained, null, this);
 		} catch (MqttException e) {
 			myLog.severe(e.getMessage());

@@ -1,6 +1,7 @@
 package hap.modulemonitor.state;
 
 import chainedfsm.EnterChain;
+import hap.SysUtil;
 import hap.communication.Communicator;
 import hap.communication.state.CommState;
 import hap.event.MessageEvent;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -30,12 +32,13 @@ import java.util.zip.ZipFile;
 public class MonitorModuleState extends CommState implements ITimedEventListener {
 
 
-	public MonitorModuleState(Communicator com, ActiveModules activeMod, Path moduleDir, Path workingDir) {
+	public MonitorModuleState(Communicator com, ActiveModules activeMod, Path moduleDir, Path workingDir, Path configDir) {
 		super(com);
 		myModules = activeMod;
 		myLog = com.getLogger();
 		myModuleDir = moduleDir;
 		myWorkingDir = workingDir;
+		myConfigDir = configDir;
 		new EnterChain<>(this, this::enter);
 	}
 
@@ -60,7 +63,7 @@ public class MonitorModuleState extends CommState implements ITimedEventListener
 			return name.endsWith(".jar");
 		});
 
-		for( int i = 0; !res && i < jarFiles.length; ++i) {
+		for (int i = 0; !res && i < jarFiles.length; ++i) {
 			File jar = jarFiles[i];
 
 			try {
@@ -87,6 +90,7 @@ public class MonitorModuleState extends CommState implements ITimedEventListener
 									"-w", myWorkingDir.toString(),
 									"--broker", myCom.getClient().getServerURI(),
 									"--topic", Message.getTopicRoot(),
+									"--config", Paths.get(myConfigDir.toString(), moduleName + ".config").toString(),
 									"-l");
 
 							pb.inheritIO();
@@ -146,7 +150,7 @@ public class MonitorModuleState extends CommState implements ITimedEventListener
 
 	@Override
 	public void accept(PingTimeoutEvent e) {
-		if( !myFirstStartCompleted) {
+		if (!myFirstStartCompleted) {
 			// Ping has timed out, check what modules are running and which ones that needs to be started.
 			startAllModules();
 			myFirstStartCompleted = true;
@@ -164,6 +168,7 @@ public class MonitorModuleState extends CommState implements ITimedEventListener
 	private final Logger myLog;
 	private final Path myModuleDir;
 	private final Path myWorkingDir;
+	private final Path myConfigDir;
 	private boolean myFirstStartCompleted = false;
 
 }
