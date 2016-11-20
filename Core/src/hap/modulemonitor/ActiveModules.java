@@ -16,142 +16,144 @@ import java.util.logging.Logger;
 public class ActiveModules extends MessageListener
 {
 
-private static Logger myLog = Logger.getLogger( "HAPCore" );
-private final IPublisher myPublisher;
-private final HashMap<String, ModuleContainer> myModules = new HashMap<>();
+	private static Logger myLog = Logger.getLogger( "HAPCore" );
+	private final IPublisher myPublisher;
+	private final HashMap<String, ModuleContainer> myModules = new HashMap<>();
 
-public ActiveModules( IPublisher publisher )
-{
-	myPublisher = publisher;
-}
-
-@Override
-public void accept( PingResponse msg )
-{
-	String mod = msg.getModuleName();
-
-	ModuleContainer m = myModules.get( msg.getModuleName() );
-	if( m == null )
+	public ActiveModules( IPublisher publisher )
 	{
-		myLog.warning( "Received ping response from unmonitored module: '" + mod + "'" );
-	} else
-	{
-		m.setIsAlive();
+		myPublisher = publisher;
 	}
-	myLog.finest( "Module reporting active: " + mod );
-}
 
-@Override
-public void accept( Stop msg )
-{
-	String name = new String( msg.getPayload() );
-	ModuleContainer mod = myModules.get( name );
-	if( mod == null )
+	@Override
+	public void accept( PingResponse msg )
 	{
-		myPublisher.publish( new StopResponse( name, false ) );
-		myLog.warning( "Received message to stop module '" + name + "' but no such module is known." );
-	} else if( mod.isActive() )
-	{
-		mod.terminate();
-		mod.disableAutoStart();
-		myPublisher.publish( new StopResponse( name, true ) );
-		myLog.info( "Stopped module '" + name + "'" );
-	}
-}
+		String mod = msg.getModuleName();
 
-@Override
-public void accept( Start msg )
-{
-	String name = new String( msg.getPayload() );
-	myLog.finest( "Received message to start module '" + name + "'" );
-
-	ModuleContainer mod = myModules.get( name );
-	if( mod != null && ! mod.isActive() )
-	{
-		mod.enableAutoStart();
-	}
-}
-
-public void tick()
-{
-	// Any module that hasn't checked in for fifteen seconds is considered dead and shall be terminated.
-
-	Set<String> strings = myModules.keySet();
-	String[] mods = strings.toArray( new String[strings.size()] );
-	for( String moduleName : mods )
-	{
-		ModuleContainer module = myModules.get( moduleName );
-
-		if( module.isActive() && module.hasExpired() )
+		ModuleContainer m = myModules.get( msg.getModuleName() );
+		if( m == null )
 		{
-			myLog.warning( "Terminating process for expired module '" + moduleName + "'" );
-			module.terminate();
-			myLog.warning( "Delaying restart of module '" + moduleName + "'" );
-			module.delayStart();
-		} else if( module.hasTerminated() )
+			myLog.warning( "Received ping response from unmonitored module: '" + mod + "'" );
+		}
+		else
 		{
-			myLog.warning( "Delaying restart of module '" + moduleName + "'" );
-			module.delayStart();
+			m.setIsAlive();
+			myLog.finest( "Module reporting active: " + mod );
 		}
 	}
-}
 
-public void update( String moduleName, Process p )
-{
-	ModuleContainer m = myModules.get( moduleName );
-	if( m == null )
+	@Override
+	public void accept( Stop msg )
 	{
-		myModules.put( moduleName, new ModuleContainer( Instant.now(), p ) );
-	} else
-	{
-		m.setProcess( p );
-	}
-}
-
-public boolean mayStart( String name )
-{
-	boolean mayStart = true;
-
-	ModuleContainer m = myModules.get( name );
-	if( m != null )
-	{
-		mayStart = m.mayStart();
+		String name = new String( msg.getPayload() );
+		ModuleContainer mod = myModules.get( name );
+		if( mod == null )
+		{
+			myPublisher.publish( new StopResponse( name, false ) );
+			myLog.warning( "Received message to stop module '" + name + "' but no such module is known." );
+		}
+		else
+		{
+			mod.terminate();
+			mod.disableAutoStart();
+			myPublisher.publish( new StopResponse( name, true ) );
+			myLog.info( "Stopped module '" + name + "'" );
+		}
 	}
 
-	return mayStart;
-}
-
-public boolean isModuleActive( String name )
-{
-	boolean active = false;
-
-	ModuleContainer m = myModules.get( name );
-	if( m != null )
+	@Override
+	public void accept( Start msg )
 	{
-		active = m.isActive();
+		String name = new String( msg.getPayload() );
+		myLog.finest( "Received message to start module '" + name + "'" );
+
+		ModuleContainer mod = myModules.get( name );
+		if( mod != null && ! mod.isActive() )
+		{
+			mod.enableAutoStart();
+		}
 	}
 
-	return active;
-}
-
-public void delayStart( String moduleName )
-{
-	ModuleContainer m = myModules.get( moduleName );
-	if( m == null )
+	public void tick()
 	{
-		m = new ModuleContainer( Instant.now() );
-		myModules.put( moduleName, m );
+		Set<String> strings = myModules.keySet();
+		String[] mods = strings.toArray( new String[strings.size()] );
+		for( String moduleName : mods )
+		{
+			ModuleContainer module = myModules.get( moduleName );
+
+			if( module.isActive() && module.hasExpired() )
+			{
+				myLog.warning( "Terminating process for expired module '" + moduleName + "'" );
+				module.terminate();
+				myLog.warning( "Delaying restart of module '" + moduleName + "'" );
+				module.delayStart();
+			}
+			else if( module.hasTerminated() )
+			{
+				myLog.warning( "Delaying restart of module '" + moduleName + "'" );
+				module.delayStart();
+			}
+		}
 	}
 
-	m.delayStart();
-}
-
-public void killAll()
-{
-	for( ModuleContainer m : myModules.values() )
+	public void update( String moduleName, Process p )
 	{
-		m.terminate();
+		ModuleContainer m = myModules.get( moduleName );
+		if( m == null )
+		{
+			myModules.put( moduleName, new ModuleContainer( Instant.now(), p ) );
+		}
+		else
+		{
+			m.setProcess( p );
+		}
 	}
-}
+
+	public boolean mayStart( String name )
+	{
+		boolean mayStart = true;
+
+		ModuleContainer m = myModules.get( name );
+		if( m != null )
+		{
+			mayStart = m.mayStart();
+		}
+
+		return mayStart;
+	}
+
+	public boolean isModuleActive( String name )
+	{
+		boolean active = false;
+
+		ModuleContainer m = myModules.get( name );
+		if( m != null )
+		{
+			active = m.isActive();
+		}
+
+		return active;
+	}
+
+	public void delayStart( String moduleName )
+	{
+		ModuleContainer m = myModules.get( moduleName );
+		if( m == null )
+		{
+			m = new ModuleContainer( Instant.now() );
+			myModules.put( moduleName, m );
+		}
+
+		m.delayStart();
+	}
+
+	public void killAll()
+	{
+		for( ModuleContainer m : myModules.values() )
+		{
+			m.terminate();
+		}
+	}
 
 }
