@@ -35,9 +35,15 @@ public boolean initialize( String[] args )
 	myParser.accept( "--topic" ).asString( 1 ).describedAs( "The root topic used by the HAP Core" ).setMandatory().withAlias( "-r" );
 	myParser.accept( "--config" ).asString( 1 ).describedAs( "Full path to configuration file" ).withAlias( "-c" ).setMandatory();
 	myParser.accept( "--working-dir" ).asString( 1 ).describedAs( "The working directory" ).withAlias( "-w" );
-	myParser.accept( "--log-to-console" ).asSingleBoolean().describedAs( "If specified, logging to console will be enabled" ).withAlias( "-l" );
+	myParser.accept( "--log-to-console" ).asBoolean( 1 ).describedAs( "If specified, logging to console will be enabled" ).withAlias( "-l" );
+	myParser.accept( "--log-to-file" ).asBoolean( 1 ).describedAs( "If specified, logging to file will be enabled" ).withAlias( "-f" );
+	myParser.accept( "--log-level" ).asString( 1 ).describedAs( "Specifies the log level" ).withAlias( "-ll" );
 	myParser.accept( "--help" ).asSingleBoolean().describedAs( "Print help text" ).withAlias( "-?" );
 	myCfg = new XMLConfigurationReader( myResult );
+
+	myCfg.setMatcher( "--log-to-console", new XMLConfigurationReader.NodeMatcher( myModuleName + "/Module/Logging", "console" ) );
+	myCfg.setMatcher( "--log-to-file", new XMLConfigurationReader.NodeMatcher( myModuleName + "/Module/Logging", "file" ) );
+	myCfg.setMatcher( "--log-level", new XMLConfigurationReader.NodeMatcher( myModuleName + "/Module/Logging/Level" ) );
 
 	initCmdParser( myParser, myCfg );
 
@@ -66,42 +72,50 @@ private boolean setup( CmdParser4J parser, IParseResult result, String... args )
 		Logger.getGlobal().removeHandler( h );
 	}
 
-	Level level = Level.FINEST;
-	myLog.setLevel( level );
-	ConsoleHandler console = new ConsoleHandler();
-	console.setFormatter( new LogFormatter() );
-	console.setLevel( level );
-	myLog.addHandler( console );
-
 	boolean res = parser.parse( "--config", myCfg, args );
+
+
 
 	if( res )
 	{
+		String lvl = myParser.getString( "--log-level", 0, "info" );
+		Level level = Level.parse( lvl.toUpperCase() );
+		myLog.setLevel( level );
+		ConsoleHandler console = new ConsoleHandler();
+		console.setFormatter( new LogFormatter() );
+		console.setLevel( level );
+		myLog.addHandler( console );
+
 		if( parser.getBool( "--help" ) )
 		{
 			SystemOutputUsageFormatter usage = new SystemOutputUsageFormatter( myModuleName );
 			parser.getUsage( usage );
 			myLog.info( usage.toString() );
-		} else
+		}
+		else
 		{
-			myWorkDir = Paths.get( parser.getString( "--working-dir", 0, Paths.get( SysUtil.getDirectoryOfJar( ModuleRunner.class ), "data" ).toAbsolutePath().toString() ) );
+			myWorkDir = Paths.get( SysUtil.getFullOrRelativePath( ModuleRunner.class, myParser.getString( "--working-dir", 0, "data" ) ) );
 			myBroker = parser.getString( "--broker" );
 
 			if( Files.exists( myWorkDir ) )
 			{
-				try
+				if( myParser.getBool( "--log-to-file" ) )
 				{
-					FileHandler fh = new FileHandler( Paths.get( myWorkDir.toString(), myModuleName + ".log" ).toString(), 1024 * 1024, 10, true );
-					fh.setFormatter( new LogFormatter() );
-					fh.setLevel( level );
-					myLog.addHandler( fh );
+					try
+					{
+						FileHandler fh = new FileHandler( Paths.get( myWorkDir.toString(), myModuleName + ".log" ).toString(), 1024 * 1024, 10, true );
+						fh.setFormatter( new LogFormatter() );
+						fh.setLevel( level );
+						myLog.addHandler( fh );
+					}
+					catch( IOException e )
+					{
+						res = false;
+						myLog.severe( e.getMessage() );
+					}
 				}
-				catch( IOException e )
-				{
-					res = false;
-					myLog.severe( e.getMessage() );
-				}
-			} else
+			}
+			else
 			{
 				myLog.severe( "Working directory does not exist (" + myWorkDir.toString() + ")" );
 				res = false;
@@ -122,15 +136,17 @@ private boolean setup( CmdParser4J parser, IParseResult result, String... args )
 				res = false;
 			}
 		}
-	} else
+
+		if( ! parser.getBool( "--log-to-console" ) )
+		{
+			myLog.removeHandler( console );
+		}
+	}
+	else
 	{
 		myLog.info( result.getParseResult() );
 	}
 
-	if( ! parser.getBool( "--log-to-console" ) )
-	{
-		myLog.removeHandler( console );
-	}
 
 	Message.setTopicRoot( myParser.getString( "--topic" ) );
 

@@ -3,10 +3,7 @@
 
 package hap;
 
-import cmdparser4j.CmdParser4J;
-import cmdparser4j.IParseResult;
-import cmdparser4j.SystemOutputParseResult;
-import cmdparser4j.SystemOutputUsageFormatter;
+import cmdparser4j.*;
 import hap.message.Message;
 import hap.modulemonitor.ModuleMonitor;
 
@@ -28,6 +25,8 @@ private CmdParser4J myParser;
 private Path myModDir;
 private Path myWorkDir;
 private String myBroker;
+private final XMLConfigurationReader myCfgReader;
+
 ///////////////////////////////////////////////////////////////////////////
 //
 //
@@ -38,13 +37,25 @@ public Core( String[] args )
 	myArgs = args;
 	myResult = new SystemOutputParseResult();
 	myParser = new CmdParser4J( myResult );
+	myCfgReader = new XMLConfigurationReader( myResult );
+
 	myParser.accept( "--broker" ).asString( 1 ).describedAs( "The DNS or IP of the MQTT broker" ).setMandatory().withAlias( "-b" );
 	myParser.accept( "--topic" ).asString( 1 ).describedAs( "The root topic for this instance" ).setMandatory().withAlias( "-r" );
 	myParser.accept( "--config" ).asString( 1 ).describedAs( "Full path to the configuration" ).setMandatory().withAlias( "-c" );
 	myParser.accept( "--working-dir" ).asString( 1 ).describedAs( "The working directory" ).withAlias( "-w" );
 	myParser.accept( "--module-dir" ).asString( 1 ).describedAs( "Directory containing modules" ).withAlias( "-m" );
-	myParser.accept( "--log-to-console" ).asSingleBoolean().describedAs( "If specified, logging to console will be enabled" ).withAlias( "-l" );
+	myParser.accept( "--log-to-console" ).asBoolean(1).describedAs( "If specified, logging to console will be enabled" ).withAlias( "-l" );
+	myParser.accept( "--log-to-file" ).asBoolean( 1 ).describedAs( "If specified, logging to file will be enabled" ).withAlias( "-f" );
+	myParser.accept( "--log-level" ).asString( 1 ).describedAs( "Specifies the log level" ).withAlias( "-ll" );
 	myParser.accept( "--help" ).asSingleBoolean().describedAs( "Print help text" ).withAlias( "-?" );
+
+	myCfgReader.setMatcher( "--broker", new XMLConfigurationReader.NodeMatcher( Core.class.getName() + "/MQTT/Broker" ) );
+	myCfgReader.setMatcher( "--topic", new XMLConfigurationReader.NodeMatcher( Core.class.getName() + "/MQTT/Topic" ) );
+	myCfgReader.setMatcher( "--working-dir", new XMLConfigurationReader.NodeMatcher( Core.class.getName() + "/Core/WorkingDirectory" ) );
+	myCfgReader.setMatcher( "--module-dir", new XMLConfigurationReader.NodeMatcher( Core.class.getName() + "/Core/ModuleDirectory" ) );
+	myCfgReader.setMatcher( "--log-to-console", new XMLConfigurationReader.NodeMatcher( Core.class.getName() + "/Core/Logging", "console" ) );
+	myCfgReader.setMatcher( "--log-to-file", new XMLConfigurationReader.NodeMatcher( Core.class.getName() + "/Core/Logging", "file" ) );
+	myCfgReader.setMatcher( "--log-level", new XMLConfigurationReader.NodeMatcher( Core.class.getName() + "/Core/Logging/Level" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -103,43 +114,49 @@ private boolean setup()
 		Logger.getGlobal().removeHandler( h );
 	}
 
-	Level level = Level.FINEST;
-	myLog.setLevel( level );
-	ConsoleHandler console = new ConsoleHandler();
-	console.setFormatter( new LogFormatter() );
-	console.setLevel( level );
-	myLog.addHandler( console );
-
-	boolean res = myParser.parse( myArgs );
+	boolean res = myParser.parse( "--config", myCfgReader, myArgs );
 
 	if( res )
 	{
+		String lvl = myParser.getString( "--log-level", 0, "info" );
+		Level level = Level.parse( lvl.toUpperCase() );
+		myLog.setLevel( level );
+		ConsoleHandler console = new ConsoleHandler();
+		console.setFormatter( new LogFormatter() );
+		console.setLevel( level );
+		myLog.addHandler( console );
+
 		if( myParser.getBool( "--help" ) )
 		{
 			SystemOutputUsageFormatter usage = new SystemOutputUsageFormatter( "HAP::Core" );
 			myParser.getUsage( usage );
 			myLog.info( usage.toString() );
-		} else
+		}
+		else
 		{
-			myWorkDir = Paths.get( myParser.getString( "--working-dir", 0, Paths.get( SysUtil.getDirectoryOfJar( Core.class ), "data" ).toAbsolutePath().toString() ) );
-			myModDir = Paths.get( myParser.getString( "--module-dir", 0, Paths.get( SysUtil.getDirectoryOfJar( Core.class ), "modules" ).toAbsolutePath().toString() ) );
+			myWorkDir = Paths.get( SysUtil.getFullOrRelativePath( Core.class, myParser.getString( "--working-dir", 0, "data" ) ) );
+			myModDir = Paths.get( SysUtil.getFullOrRelativePath( Core.class, myParser.getString( "--module-dir", 0, "modules" ) ) );
 			myBroker = myParser.getString( "--broker" );
 
 			if( Files.exists( myWorkDir ) )
 			{
-				try
+				if( myParser.getBool( "--log-to-file" ) )
 				{
-					FileHandler fh = new FileHandler( Paths.get( myWorkDir.toString(), "HAPCore.log" ).toString(), 1024 * 1024, 10, true );
-					fh.setFormatter( new LogFormatter() );
-					fh.setLevel( level );
-					myLog.addHandler( fh );
+					try
+					{
+						FileHandler fh = new FileHandler( Paths.get( myWorkDir.toString(), "HAPCore.log" ).toString(), 1024 * 1024, 10, true );
+						fh.setFormatter( new LogFormatter() );
+						fh.setLevel( level );
+						myLog.addHandler( fh );
+					}
+					catch( IOException e )
+					{
+						res = false;
+						myLog.severe( e.getMessage() );
+					}
 				}
-				catch( IOException e )
-				{
-					res = false;
-					myLog.severe( e.getMessage() );
-				}
-			} else
+			}
+			else
 			{
 				myLog.severe( "Working directory does not exist (" + myWorkDir.toString() + ")" );
 				res = false;
@@ -166,14 +183,15 @@ private boolean setup()
 				res = false;
 			}
 		}
-	} else
+
+		if( ! myParser.getBool( "--log-to-console" ) )
+		{
+			myLog.removeHandler( console );
+		}
+	}
+	else
 	{
 		myLog.info( myResult.getParseResult() );
-	}
-
-	if( ! myParser.getBool( "--log-to-console" ) )
-	{
-		myLog.removeHandler( console );
 	}
 
 	return res;
