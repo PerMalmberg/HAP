@@ -8,21 +8,24 @@ import hap.communication.Communicator;
 import onewire.OneWire;
 
 
-public class DiscoverNetwork extends OwBaseState {
+public class DiscoverNetwork extends OwBaseState
+{
 
-	public DiscoverNetwork(Communicator com, OneWire oneWire) {
-		super(com, oneWire);
-		new EnterChain<>(this, this::enter);
-	}
+public DiscoverNetwork( Communicator com, OneWire oneWire )
+{
+	super( com, oneWire );
+	new EnterChain<>( this, this::enter );
+}
 
-	public void enter()
+public void enter()
+{
+	if( myOw.getDiscovery().discoverTree() )
 	{
-		if( myOw.getDiscovery().discoverTree() ) {
-			myCom.getLogger().info("Found " + myOw.getDiscovery().getNetwork().getAllDevices().keySet().size() + " devices");
-			myCom.setState(new ReadValueState(myCom, myOw));
-		}
-		else {
-			myOw.terminate();
-		}
+		myCom.getLogger().info( "Found " + myOw.getDiscovery().getNetwork().getAllDevices().keySet().size() + " devices" );
+		myCom.setState( new ReadValueState( myCom, myOw ) );
+	} else
+	{
+		myOw.terminate();
 	}
+}
 }

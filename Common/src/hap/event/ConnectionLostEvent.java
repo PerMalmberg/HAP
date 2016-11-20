@@ -1,19 +1,23 @@
 package hap.event;
 
-public class ConnectionLostEvent extends EventBase {
+public class ConnectionLostEvent extends EventBase
+{
 
-	public ConnectionLostEvent(Throwable e) {
-		myThrowable = e;
-	}
+private final Throwable myThrowable;
 
-	@Override
-	public void visit(IEventListener listener) {
-		listener.accept(this);
-	}
+public ConnectionLostEvent( Throwable e )
+{
+	myThrowable = e;
+}
 
-	private final Throwable myThrowable;
+@Override
+public void visit( IEventListener listener )
+{
+	listener.accept( this );
+}
 
-	public Throwable getThrowable() {
-		return myThrowable;
-	}
+public Throwable getThrowable()
+{
+	return myThrowable;
+}
 }

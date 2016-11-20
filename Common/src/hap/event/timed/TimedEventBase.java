@@ -1,18 +1,19 @@
 package hap.event.timed;
 
 
-public abstract class TimedEventBase {
-	public TimedEventBase(ITimedEventListener target)
-	{
-		myTarget = target;
-	}
+public abstract class TimedEventBase
+{
+protected ITimedEventListener myTarget;
 
-	public void execute()
-	{
-		visit(myTarget);
-	}
+public TimedEventBase( ITimedEventListener target )
+{
+	myTarget = target;
+}
 
-	protected abstract void visit(ITimedEventListener listener);
+public void execute()
+{
+	visit( myTarget );
+}
 
-	protected ITimedEventListener myTarget;
+protected abstract void visit( ITimedEventListener listener );
 }

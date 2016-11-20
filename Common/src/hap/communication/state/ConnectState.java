@@ -12,45 +12,54 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.util.logging.Logger;
 
-public class ConnectState extends CommState {
+public class ConnectState extends CommState
+{
 
-	public ConnectState(Communicator com) {
-		super(com);
-		myLog = com.getLogger();
-		new EnterChain<>(this, this::enter);
-	}
+private Logger myLog;
 
-	private void enter() {
-		try {
+public ConnectState( Communicator com )
+{
+	super( com );
+	myLog = com.getLogger();
+	new EnterChain<>( this, this::enter );
+}
 
-			if( myCom.getClient().isConnected() ) {
-				myCom.getClient().disconnect();
-			}
+private void enter()
+{
+	try
+	{
 
-			MqttConnectOptions connOpts = new MqttConnectOptions();
-			connOpts.setCleanSession(true);
-			connOpts.setAutomaticReconnect(true);
-			connOpts.setConnectionTimeout(5);
-			myCom.getClient().connect(connOpts, null, myCom);
-
-		} catch (MqttException e) {
-			myLog.severe("Exception during connect: " + e.getMessage());
-			myLog.severe("Reason " + e.getReasonCode());
-			myLog.severe("Cause " + e.getCause());
+		if( myCom.getClient().isConnected() )
+		{
+			myCom.getClient().disconnect();
 		}
-	}
 
-	@Override
-	public void accept(SuccessEvent e) {
-		myLog.finest("Connected to broker");
-		myCom.setState( new SubscribeState(myCom));
-	}
+		MqttConnectOptions connOpts = new MqttConnectOptions();
+		connOpts.setCleanSession( true );
+		connOpts.setAutomaticReconnect( true );
+		connOpts.setConnectionTimeout( 5 );
+		myCom.getClient().connect( connOpts, null, myCom );
 
-	@Override
-	public void accept(FailureEvent e) {
-		myLog.severe( e.toString() );
-		enter(); // Retry
 	}
+	catch( MqttException e )
+	{
+		myLog.severe( "Exception during connect: " + e.getMessage() );
+		myLog.severe( "Reason " + e.getReasonCode() );
+		myLog.severe( "Cause " + e.getCause() );
+	}
+}
 
-	private Logger myLog;
+@Override
+public void accept( SuccessEvent e )
+{
+	myLog.finest( "Connected to broker" );
+	myCom.setState( new SubscribeState( myCom ) );
+}
+
+@Override
+public void accept( FailureEvent e )
+{
+	myLog.severe( e.toString() );
+	enter(); // Retry
+}
 }

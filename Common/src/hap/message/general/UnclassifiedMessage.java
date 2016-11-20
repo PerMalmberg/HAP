@@ -6,13 +6,16 @@ package hap.message.general;
 import hap.message.IMessageListener;
 import hap.message.Message;
 
-public class UnclassifiedMessage extends Message {
-	public UnclassifiedMessage(String topic, byte[] payload, QOS qos, boolean retained) {
-		super(topic, payload, qos, retained);
-	}
+public class UnclassifiedMessage extends Message
+{
+public UnclassifiedMessage( String topic, byte[] payload, QOS qos, boolean retained )
+{
+	super( topic, payload, qos, retained );
+}
 
-	@Override
-	public void visit(IMessageListener listener) {
-		listener.accept( this );
-	}
+@Override
+public void visit( IMessageListener listener )
+{
+	listener.accept( this );
+}
 }

@@ -5,8 +5,9 @@ package hap.communication;
 
 import hap.message.Message;
 
-public interface IPublisher {
-	void publish(String topic, byte[] payload, Message.QOS qos, boolean retained);
+public interface IPublisher
+{
+void publish( String topic, byte[] payload, Message.QOS qos, boolean retained );
 
-	void publish(Message m);
+void publish( Message m );
 }

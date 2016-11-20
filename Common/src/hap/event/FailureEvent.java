@@ -2,33 +2,38 @@ package hap.event;
 
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 
-public class FailureEvent extends EventBase {
-	public FailureEvent(IMqttToken token, Throwable throwable) {
-		myToken = token;
-		myThrowable = throwable;
-	}
+public class FailureEvent extends EventBase
+{
+private final IMqttToken myToken;
+private final Throwable myThrowable;
 
-	@Override
-	public void visit(IEventListener listener) {
-		listener.accept(this);
-	}
+public FailureEvent( IMqttToken token, Throwable throwable )
+{
+	myToken = token;
+	myThrowable = throwable;
+}
 
-	private final IMqttToken myToken;
-	private final Throwable myThrowable;
+@Override
+public void visit( IEventListener listener )
+{
+	listener.accept( this );
+}
 
-	public IMqttToken getToken() {
-		return myToken;
-	}
+public IMqttToken getToken()
+{
+	return myToken;
+}
 
-	public Throwable getThrowable() {
-		return myThrowable;
-	}
+public Throwable getThrowable()
+{
+	return myThrowable;
+}
 
-	@Override
-	public String toString()
-	{
-		String s = "";
-		s += getThrowable() == null ? "" : getThrowable().getCause();
-		return s;
-	}
+@Override
+public String toString()
+{
+	String s = "";
+	s += getThrowable() == null ? "" : getThrowable().getCause();
+	return s;
+}
 }

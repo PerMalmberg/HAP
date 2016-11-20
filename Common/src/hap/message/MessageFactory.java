@@ -8,61 +8,73 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-public class MessageFactory {
-	public Message Create(String topic, MqttMessage msg)
+public class MessageFactory
+{
+private static Logger myLog = Logger.getLogger( "HAPCore" );
+private HashMap<String, Constructor<?>> ctor = new HashMap<>();
+
+public Message Create( String topic, MqttMessage msg )
+{
+	Message m = null;
+
+	if( topic.contains( ControlTopic.CONTROL_TOPIC ) )
 	{
-		Message m = null;
 
-		if( topic.contains(ControlTopic.CONTROL_TOPIC)) {
+		try
+		{
+			String[] part = topic.split( "/" );
+			if( part.length > 0 )
+			{
+				Constructor<?> classToInstantiate = null;
 
-			try {
-				String[] part = topic.split("/");
-				if (part.length > 0) {
-					Constructor<?> classToInstantiate = null;
-
-					String possibleClassName = part[part.length - 1];
-					if (ctor.containsKey(possibleClassName)) {
-						classToInstantiate = ctor.get(possibleClassName);
-					} else {
-						Class<?> clazz = findClass(possibleClassName, "hap.message.cmd.", "hap.message.response.");
-						if (clazz != null) {
-							classToInstantiate = clazz.getConstructor(String.class, byte[].class, Message.QOS.class, boolean.class);
-							ctor.put(possibleClassName, classToInstantiate);
-						}
-					}
-
-					if (classToInstantiate != null) {
-						m = (Message) classToInstantiate.newInstance(topic, msg.getPayload(), Message.QOS.fromInt(msg.getQos()), msg.isRetained());
+				String possibleClassName = part[part.length - 1];
+				if( ctor.containsKey( possibleClassName ) )
+				{
+					classToInstantiate = ctor.get( possibleClassName );
+				} else
+				{
+					Class<?> clazz = findClass( possibleClassName, "hap.message.cmd.", "hap.message.response." );
+					if( clazz != null )
+					{
+						classToInstantiate = clazz.getConstructor( String.class, byte[].class, Message.QOS.class, boolean.class );
+						ctor.put( possibleClassName, classToInstantiate );
 					}
 				}
-			} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException | IllegalArgumentException ex) {
-				myLog.finest(ex.getClass().getName() + ": " + ex.getMessage());
+
+				if( classToInstantiate != null )
+				{
+					m = (Message) classToInstantiate.newInstance( topic, msg.getPayload(), Message.QOS.fromInt( msg.getQos() ), msg.isRetained() );
+				}
 			}
 		}
-		else {
-			m = new UnclassifiedMessage( topic, msg.getPayload(),Message.QOS.fromInt(msg.getQos()), msg.isRetained() );
-		}
-
-		return m;
-	}
-
-	private Class<?> findClass( String name, String... packageName ) {
-		Class<?> clazz = null;
-
-		for( int i = 0; clazz == null && i < packageName.length; ++i )
+		catch( NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException | IllegalArgumentException ex )
 		{
-			try {
-				clazz = Class.forName( packageName[i] + name );
-			}
-			catch (ClassNotFoundException ex )
-			{
-				myLog.finest("No matching class: " + ex.getMessage());
-			}
+			myLog.finest( ex.getClass().getName() + ": " + ex.getMessage() );
 		}
-
-		return clazz;
+	} else
+	{
+		m = new UnclassifiedMessage( topic, msg.getPayload(), Message.QOS.fromInt( msg.getQos() ), msg.isRetained() );
 	}
 
-	private HashMap<String, Constructor<?>> ctor = new HashMap<>();
-	private static Logger myLog = Logger.getLogger("HAPCore");
+	return m;
+}
+
+private Class<?> findClass( String name, String... packageName )
+{
+	Class<?> clazz = null;
+
+	for( int i = 0; clazz == null && i < packageName.length; ++ i )
+	{
+		try
+		{
+			clazz = Class.forName( packageName[i] + name );
+		}
+		catch( ClassNotFoundException ex )
+		{
+			myLog.finest( "No matching class: " + ex.getMessage() );
+		}
+	}
+
+	return clazz;
+}
 }

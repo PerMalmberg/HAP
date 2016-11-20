@@ -10,16 +10,19 @@ import hap.message.response.PingResponse;
 import onewire.OneWire;
 
 
-public class OwBaseState extends CommState {
-	public OwBaseState(Communicator com, OneWire oneWire) {
-		super(com);
-		myOw = oneWire;
-	}
+public class OwBaseState extends CommState
+{
+protected final OneWire myOw;
 
-	@Override
-	public void accept(Ping msg) {
-		publish(new PingResponse(OneWire.class.getName()));
-	}
+public OwBaseState( Communicator com, OneWire oneWire )
+{
+	super( com );
+	myOw = oneWire;
+}
 
-	protected final OneWire myOw;
+@Override
+public void accept( Ping msg )
+{
+	publish( new PingResponse( OneWire.class.getName() ) );
+}
 }

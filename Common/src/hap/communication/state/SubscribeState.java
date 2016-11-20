@@ -5,29 +5,32 @@ import hap.communication.Communicator;
 import hap.event.SuccessEvent;
 import hap.message.ControlTopic;
 import hap.message.Message;
-import org.eclipse.paho.client.mqttv3.IMqttToken;
 
 import java.util.logging.Logger;
 
-public class SubscribeState extends CommState {
+public class SubscribeState extends CommState
+{
 
-	public SubscribeState(Communicator com) {
-		super(com);
-		myLog = com.getLogger();
-		new EnterChain<>(this, this::subscribe);
-	}
+private final String ctrlTopic = ControlTopic.getControlTopic( "/#" );
+private Logger myLog;
 
-	private void subscribe() {
-		myCom.subscribe(ctrlTopic, Message.QOS.AtMostOnce);
-	}
+public SubscribeState( Communicator com )
+{
+	super( com );
+	myLog = com.getLogger();
+	new EnterChain<>( this, this::subscribe );
+}
 
-	@Override
-	public void accept(SuccessEvent e) {
-		// Pass control to the applications entry state
-		myLog.finest("Subscribed to control topic: " + ctrlTopic);
-		myCom.setState(myCom.getStateProvider().createEntryState(myCom));
-	}
+private void subscribe()
+{
+	myCom.subscribe( ctrlTopic, Message.QOS.AtMostOnce );
+}
 
-	private final String ctrlTopic = ControlTopic.getControlTopic("/#");
-	private Logger myLog;
+@Override
+public void accept( SuccessEvent e )
+{
+	// Pass control to the applications entry state
+	myLog.finest( "Subscribed to control topic: " + ctrlTopic );
+	myCom.setState( myCom.getStateProvider().createEntryState( myCom ) );
+}
 }

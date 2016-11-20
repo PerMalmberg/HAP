@@ -3,26 +3,30 @@ package hap.event;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 
-public class MessageEvent extends EventBase {
-	@Override
-	public void visit(IEventListener listener) {
-		listener.accept(this);
-	}
+public class MessageEvent extends EventBase
+{
+private final String myTopic;
+private final MqttMessage myMsg;
 
-	public MessageEvent( String topic, MqttMessage msg )
-	{
-		myTopic = topic;
-		myMsg = msg;
-	}
+public MessageEvent( String topic, MqttMessage msg )
+{
+	myTopic = topic;
+	myMsg = msg;
+}
 
-	private final String myTopic;
-	private final MqttMessage myMsg;
+@Override
+public void visit( IEventListener listener )
+{
+	listener.accept( this );
+}
 
-	public String getTopic() {
-		return myTopic;
-	}
+public String getTopic()
+{
+	return myTopic;
+}
 
-	public MqttMessage getMsg() {
-		return myMsg;
-	}
+public MqttMessage getMsg()
+{
+	return myMsg;
+}
 }

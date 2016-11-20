@@ -3,20 +3,23 @@ package hap.event;
 
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 
-public class SuccessEvent extends EventBase {
-	@Override
-	public void visit(IEventListener listener) {
-		listener.accept(this);
-	}
+public class SuccessEvent extends EventBase
+{
+private final IMqttToken myToken;
 
-	public SuccessEvent( IMqttToken token )
-	{
-		myToken = token;
-	}
+public SuccessEvent( IMqttToken token )
+{
+	myToken = token;
+}
 
-	private final IMqttToken myToken;
+@Override
+public void visit( IEventListener listener )
+{
+	listener.accept( this );
+}
 
-	public IMqttToken getToken() {
-		return myToken;
-	}
+public IMqttToken getToken()
+{
+	return myToken;
+}
 }

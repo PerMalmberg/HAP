@@ -1,14 +1,17 @@
 package hap.event.timed;
 
-public class PingTimeoutEvent extends TimedEventBase {
+public class PingTimeoutEvent extends TimedEventBase
+{
 
-	public PingTimeoutEvent(ITimedEventListener target) {
-		super(target);
-	}
+public PingTimeoutEvent( ITimedEventListener target )
+{
+	super( target );
+}
 
-	@Override
-	protected void visit(ITimedEventListener listener) {
-		listener.accept(this);
-	}
+@Override
+protected void visit( ITimedEventListener listener )
+{
+	listener.accept( this );
+}
 
 }

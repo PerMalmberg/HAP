@@ -3,6 +3,45 @@
   <component name="ProjectCodeStyleSettingsManager">
     <option name="PER_PROJECT_SETTINGS">
       <value>
+        <MarkdownNavigatorCodeStyleSettings>
+          <option name="RIGHT_MARGIN" value="72" />
+        </MarkdownNavigatorCodeStyleSettings>
+        <codeStyleSettings language="JAVA">
+          <option name="BRACE_STYLE" value="2" />
+          <option name="CLASS_BRACE_STYLE" value="2" />
+          <option name="METHOD_BRACE_STYLE" value="2" />
+          <option name="DO_NOT_INDENT_TOP_LEVEL_CLASS_MEMBERS" value="true" />
+          <option name="CATCH_ON_NEW_LINE" value="true" />
+          <option name="FINALLY_ON_NEW_LINE" value="true" />
+          <option name="SPACE_AROUND_UNARY_OPERATOR" value="true" />
+          <option name="SPACE_WITHIN_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_METHOD_CALL_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_METHOD_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_IF_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_WHILE_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_FOR_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_TRY_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_CATCH_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_SWITCH_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_SYNCHRONIZED_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_ARRAY_INITIALIZER_BRACES" value="true" />
+          <option name="SPACE_BEFORE_IF_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_WHILE_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_FOR_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_TRY_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_CATCH_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_SWITCH_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_SYNCHRONIZED_PARENTHESES" value="false" />
+          <option name="KEEP_SIMPLE_CLASSES_IN_ONE_LINE" value="true" />
+          <option name="IF_BRACE_FORCE" value="3" />
+          <option name="DOWHILE_BRACE_FORCE" value="3" />
+          <option name="WHILE_BRACE_FORCE" value="3" />
+          <option name="FOR_BRACE_FORCE" value="3" />
+          <indentOptions>
+            <option name="USE_TAB_CHARACTER" value="true" />
+            <option name="SMART_TABS" value="true" />
+          </indentOptions>
+        </codeStyleSettings>
         <codeStyleSettings language="XML">
           <indentOptions>
             <option name="USE_TAB_CHARACTER" value="true" />
