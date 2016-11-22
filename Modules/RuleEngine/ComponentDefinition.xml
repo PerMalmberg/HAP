@@ -1,0 +1,44 @@
+<!-- 
+
+Component is the base node for all rules. 
+The instanceId is used to identify the specific instance.
+
+A component is a composite so it may contain other components in its Components-node.
+
+-->
+<Component instanceId="">
+	<Imports>
+		<!-- A component can import other components by loading the entire tree into its own Components-node at runtime.
+			While loading imports, it must be checked that the same file isn't loaded recursively.
+		-->
+		<Import src="NameOfFileContainingComponents"/>
+	</Imports>
+	<Components>
+		<!-- Components from which this component is built. -->
+	<Components>	
+	<!-- The type is the fully qualified class name of the Java class 
+		The implementation must provide the following public interface:
+		* Inputs and their type
+		* Outputs and their type
+	-->
+	<Type>package.JavaClassName</Type>
+	<Wires>
+		<!-- Wires are stored only with the component it originates from
+			i.e. 'Output' is always on the current component instance. 
+			There is no limit to how many inputs or outputs a component can have. 
+			An input can have one of the following types:
+			* boolean
+			* int
+			* double
+			* string
+			
+			Only inputs and outputs of the same type can be connected.
+			
+			-->
+		<Wire Output="NameOfLocalOutput" Target="Instance id of component to connect wire to" Input="NameOfRemoteInput"/>
+		<Wire Output="NameOfLocalOutput2" Target="Instance id of component to connect wire to" Input="NameOfRemoteInput2"/>
+	</Wires>
+	<Meta>
+		<!-- The meta tag is where the component itself can store its configuration in any format it needs -->
+	</Meta>
+</Component>

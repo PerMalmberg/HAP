@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/HAP.iml" filepath="$PROJECT_DIR$/HAP.iml" />
       <module fileurl="file://$PROJECT_DIR$/externals/JOwShell/JOwShell.iml" filepath="$PROJECT_DIR$/externals/JOwShell/JOwShell.iml" />
       <module fileurl="file://$PROJECT_DIR$/Modules/OneWire/OneWire.iml" filepath="$PROJECT_DIR$/Modules/OneWire/OneWire.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Modules/RuleEngine/RuleEngine.iml" filepath="$PROJECT_DIR$/Modules/RuleEngine/RuleEngine.iml" />
     </modules>
   </component>
 </project>
