@@ -15,7 +15,7 @@ A component is a composite so it may contain other components in its Components-
 	</Imports>
 	<Components>
 		<!-- Components from which this component is built. -->
-	<Components>	
+	</Components>
 	<!-- The type is the fully qualified class name of the Java class 
 		The implementation must provide the following public interface:
 		* Inputs and their type
