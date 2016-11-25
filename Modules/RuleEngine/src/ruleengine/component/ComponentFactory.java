@@ -27,7 +27,6 @@ public class ComponentFactory implements IComponentFactory
 	private final XPathFactory myXPathFac = XPathFactory.newInstance();
 	private final IXPathReader xPathReader = new XPathReader();
 	private final Stack<String> myLoadedFiles = new Stack<>();
-	private final HashMap<String, List<String>> myFileMapping = new HashMap<>();
 	private final Logger myLogger = Logger.getLogger( ComponentFactory.class.getName() );
 
 	///////////////////////////////////////////////////////////////////////////
@@ -56,42 +55,20 @@ public class ComponentFactory implements IComponentFactory
 
 		if( componentData != null )
 		{
-			myLoadedFiles.add( componentData.getAbsolutePath() );
-
-			boolean crossLoadFound = false;
-
 			// If a file ever loads a file that it itself was loaded by we must abort
-			List<String> map = myFileMapping.get( componentData.getAbsolutePath() );
-			if( map == null )
-			{
-				// No one has loaded this file yet, so mark it as loaded by itself
-				List<String> list = new ArrayList<>( );
-				list.add( componentData.getAbsolutePath() );
-				myFileMapping.put( componentData.getAbsolutePath(), list );
-			}
-			else
-			{
-				// Someone has loaded this file before, check if they both reference each other
-				if( map.contains( componentData.getAbsolutePath() ))
-				{
-					crossLoadFound = true;
-				}
-				else
-				{
-					map.add( componentData.getAbsolutePath() );
-				}
-			}
+			boolean crossLoadFound = myLoadedFiles.contains( componentData.getAbsolutePath() );
 
 			if( ! crossLoadFound )
 			{
+				myLoadedFiles.add( componentData.getAbsolutePath() );
 				String data = loadFile( componentData );
 				if( data != null)
 				{
 					c = create( data );
 				}
+				myLoadedFiles.remove( myLoadedFiles.lastElement() );
 			}
 
-			myLoadedFiles.remove( myLoadedFiles.lastElement() );
 		}
 
 		return c;
