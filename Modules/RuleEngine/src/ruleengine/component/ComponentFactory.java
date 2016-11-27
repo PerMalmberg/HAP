@@ -4,13 +4,17 @@
 package ruleengine.component;
 
 import org.xml.sax.InputSource;
-import ruleengine.xpath.IXPathReader;
-import ruleengine.xpath.XPathReader;
+import org.xml.sax.SAXException;
+import ruleengine.component.composite.CompositeComponent;
+import ruleengine.component.data.ComponentDef;
+import ruleengine.component.data.CompositeDef;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,14 +22,14 @@ import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Stack;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class ComponentFactory implements IComponentFactory
 {
 	private HashMap<String, String> myFiles = new HashMap<>();
-	private final XPathFactory myXPathFac = XPathFactory.newInstance();
-	private final IXPathReader xPathReader = new XPathReader();
 	private final Stack<String> myLoadedFiles = new Stack<>();
 	private final Logger myLogger = Logger.getLogger( ComponentFactory.class.getName() );
 
@@ -35,40 +39,77 @@ public class ComponentFactory implements IComponentFactory
 	//
 	///////////////////////////////////////////////////////////////////////////
 	@Override
-	public IComponent create( File componentData )
+	public CompositeComponent create( File compositeFile )
 	{
-		IComponent c = null;
+		CompositeComponent cc = null;
 
-		if( ! componentData.isAbsolute() )
+		if( ! compositeFile.isAbsolute() )
 		{
 			// Try to find the file in the directory the last loaded file is located.
 			if( myLoadedFiles.size() > 0 )
 			{
 				File last = new File( myLoadedFiles.lastElement() );
-				componentData = Paths.get( last.getParent(), componentData.toString() ).toFile();
+				compositeFile = Paths.get( last.getParent(), compositeFile.toString() ).toFile();
 			}
 			else
 			{
-				componentData = null;
+				compositeFile = null;
 			}
 		}
 
-		if( componentData != null )
+		if( compositeFile != null )
 		{
 			// If a file ever loads a file that it itself was loaded by we must abort
-			boolean crossLoadFound = myLoadedFiles.contains( componentData.getAbsolutePath() );
+			boolean crossLoadFound = myLoadedFiles.contains( compositeFile.getAbsolutePath() );
 
 			if( ! crossLoadFound )
 			{
-				myLoadedFiles.add( componentData.getAbsolutePath() );
-				String data = loadFile( componentData );
-				if( data != null)
+				myLoadedFiles.add( compositeFile.getAbsolutePath() );
+				String data = loadFile( compositeFile );
+				if( data != null )
 				{
-					c = create( data );
+					cc = create( data );
 				}
 				myLoadedFiles.remove( myLoadedFiles.lastElement() );
 			}
 
+		}
+
+		return cc;
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	//
+	//
+	//
+	///////////////////////////////////////////////////////////////////////////
+	@Override
+	public IComponent create( ComponentDef def, CompositeComponent cc  )
+	{
+		Component c = null;
+
+		try
+		{
+			// Create an instance of the component with the id and data as arguments.
+			Class<?> componentClass = Class.forName( def.getNativeType() );
+			if( componentClass != null )
+			{
+				Constructor<?> ctor = componentClass.getConstructor( UUID.class );
+				c = (Component) ctor.newInstance( UUID.fromString( def.getInstanceId() ) );
+
+				// Let the component load itself and any sub components
+				if( ! c.loadComponentFromData( def ) )
+				{
+					c = null;
+				}
+				else {
+					c.setup( cc );
+				}
+			}
+		}
+		catch( ClassNotFoundException | NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e )
+		{
+			myLogger.severe( e.getMessage() );
 		}
 
 		return c;
@@ -80,91 +121,35 @@ public class ComponentFactory implements IComponentFactory
 	//
 	///////////////////////////////////////////////////////////////////////////
 	@Override
-	public IComponent create( String componentData )
+	public CompositeComponent create( String compositeData )
 	{
-		IComponent c = null;
+		CompositeComponent cc = null;
 
-		// First, get the type of the component we want to load
-		String type = getType( componentData );
-		if( type != null )
-		{
-			// Get the id of the component
-			UUID id = getId( componentData );
-
-			if( id != null )
-			{
-				try
-				{
-					// Create an instance of the component with the id and data as arguments.
-					Class<?> componentClass = Class.forName( type );
-					if( componentClass != null )
-					{
-						Constructor<?> ctor = componentClass.getConstructor( UUID.class );
-						c = (IComponent) ctor.newInstance( id );
-
-						// Let the component load itself and any sub components
-						if( ! c.loadComponentFromData( componentData, this, xPathReader ) )
-						{
-							c = null;
-						}
-					}
-				}
-				catch( ClassNotFoundException | NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e )
-				{
-					myLogger.severe( e.getMessage() );
-				}
-			}
-		}
-
-		return c;
-	}
-
-	///////////////////////////////////////////////////////////////////////////
-	//
-	//
-	//
-	///////////////////////////////////////////////////////////////////////////
-	private UUID getId( String componentData )
-	{
-		UUID id = null;
-
-		XPath path = myXPathFac.newXPath();
 		try
 		{
-			String theId = (String) path.evaluate( "/Component/@instanceId", new InputSource( new StringReader( componentData ) ), XPathConstants.STRING );
-			if( theId != null )
+			JAXBContext jc = JAXBContext.newInstance( CompositeDef.class );
+			Unmarshaller u = jc.createUnmarshaller();
+
+			// TODO: QQQ schema location to be determined at runtime
+			SchemaFactory schemaFactory = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
+			Schema schema = schemaFactory.newSchema( new File( "d:\\git\\HAP\\Modules\\RuleEngine\\schema\\CompositeDefinition.xsd" ) );
+			u.setSchema( schema );
+
+			CompositeDef data = (CompositeDef) u.unmarshal( new InputSource( new StringReader( compositeData ) ) );
+			cc = new CompositeComponent();
+			if( ! cc.loadCompositeFromData( data, this ) )
 			{
-				id = UUID.fromString( theId );
+				cc = null;
 			}
 		}
-		catch( XPathExpressionException e )
+		catch( JAXBException | SAXException e )
 		{
-			myLogger.severe( e.toString() );
+			cc = null;
+			e.printStackTrace();
 		}
 
-		return id;
-	}
 
-	///////////////////////////////////////////////////////////////////////////
-	//
-	//
-	//
-	///////////////////////////////////////////////////////////////////////////
-	private String getType( String componentData )
-	{
-		String type = null;
-
-		XPath path = myXPathFac.newXPath();
-		try
-		{
-			type = (String) path.evaluate( "/Component/Type", new InputSource( new StringReader( componentData ) ), XPathConstants.STRING );
-		}
-		catch( XPathExpressionException e )
-		{
-			myLogger.severe( e.toString() );
-		}
-
-		return type;
+		return cc;
 	}
 
 

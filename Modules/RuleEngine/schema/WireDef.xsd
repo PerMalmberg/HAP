@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:include schemaLocation="UUID.xsd"/>
+	<xs:complexType name="WireDef">
+		<xs:attribute name="sourceComponent" type="UUID"/>
+		<xs:attribute name="sourceOutput" type="xs:string"/>
+		<xs:attribute name="targetComponent" type="UUID"/>
+		<xs:attribute name="targetInput" type="xs:string"/>
+		<xs:attribute name="type" type="xs:string"/>
+	</xs:complexType>
+</xs:schema>

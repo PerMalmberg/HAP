@@ -1,0 +1,21 @@
+<Component instanceId="123456ba-ddb5-4934-90f0-924c9aa2ed95">
+	<Type>ruleengine.component.composite.CompositeComponent</Type>
+	<Imports>
+		<Import src="PassThroughTestComp.xml"/>
+	</Imports>
+	<Components>
+		<Component>
+
+		</Component>
+	</Components>
+	<Inputs>
+		<Boolean>
+
+		</Boolean>
+	</Inputs>
+	<Outputs>
+		<Boolean>
+
+		</Boolean>
+	</Outputs>
+</Component>

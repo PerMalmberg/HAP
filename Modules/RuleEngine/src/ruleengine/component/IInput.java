@@ -3,6 +3,10 @@
 
 package ruleengine.component;
 
+import java.util.UUID;
+
 public interface IInput
 {
+	String getName();
+	UUID getId();
 }

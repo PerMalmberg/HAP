@@ -1,0 +1,1 @@
+xjc.exe -p ruleengine.component.data -d ../src/ .

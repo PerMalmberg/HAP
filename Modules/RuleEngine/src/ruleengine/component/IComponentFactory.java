@@ -3,11 +3,16 @@
 
 package ruleengine.component;
 
+import ruleengine.component.composite.CompositeComponent;
+import ruleengine.component.data.ComponentDef;
+
 import java.io.File;
 
 public interface IComponentFactory
 {
-	IComponent create( String componentData );
+	CompositeComponent create( String componentData );
 
-	IComponent create( File componentData );
+	CompositeComponent create( File componentData );
+
+	IComponent create( ComponentDef c, CompositeComponent cc  );
 }

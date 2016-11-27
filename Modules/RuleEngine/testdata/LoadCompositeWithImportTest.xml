@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompositeDef>
+	<Components/>
+	<Imports>
+		<Import src="MinimalComposite.xml" instanceId="333633ba-ddb5-4934-90f0-774c9aa2ed95"/>
+	</Imports>
+	<Wires/>
+</CompositeDef>

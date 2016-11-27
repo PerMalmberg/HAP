@@ -3,6 +3,11 @@
 
 package ruleengine.component;
 
+import java.util.UUID;
+
 public interface IOutput
 {
+	void disconnectAll();
+	String getName();
+	UUID getId();
 }

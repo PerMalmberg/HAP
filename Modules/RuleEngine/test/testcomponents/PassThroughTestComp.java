@@ -4,27 +4,35 @@
 package testcomponents;
 
 import ruleengine.component.BooleanInput;
+import ruleengine.component.BooleanOutput;
 import ruleengine.component.Component;
 import ruleengine.component.composite.CompositeComponent;
 
 import java.util.UUID;
 
-public class TestComponent extends Component
+public class PassthroughTestComp extends Component
 {
-	public TestComponent( UUID id )
+	public PassthroughTestComp( UUID id)
 	{
-		super( id );
+		super(id);
 	}
+
+	private BooleanOutput out;
 
 	@Override
 	public void setup( CompositeComponent cc )
 	{
-		addInput( new BooleanInput( getId(), "A", this ) );
+		BooleanInput in = new BooleanInput( getId(), "In", this );
+		out = new BooleanOutput( getId(), "Out", this );
+		addInput( in );
+		addOutput( out );
 	}
 
 	@Override
 	public void inputChanged( BooleanInput input )
 	{
-
+		out.set( input.getValue() );
 	}
+
+
 }

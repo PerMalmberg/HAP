@@ -3,7 +3,6 @@
 
 package ruleengine.xpath;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -30,13 +29,14 @@ public class XPathReader implements IXPathReader
 		try
 		{
 			NodeList map = (NodeList) xPath.evaluate( path, new InputSource( new StringReader( startNode ) ), XPathConstants.NODESET );
-			for( int i = 0; i < map.getLength(); ++i )
+			for( int i = 0; i < map.getLength(); ++ i )
 			{
 				Node item = map.item( i );
 				NamedNodeMap attr = item.getAttributes();
 				Node src = attr.getNamedItem( "src" );
-				if( src != null ) {
-					values.add(src.getTextContent() );
+				if( src != null )
+				{
+					values.add( src.getTextContent() );
 				}
 
 
@@ -49,4 +49,24 @@ public class XPathReader implements IXPathReader
 
 		return values;
 	}
+
+	@Override
+	public NodeList getSubNodes( String path, String startNode )
+	{
+		NodeList nodes = null;
+
+		XPath xPath = myXPathFac.newXPath();
+
+		try {
+			nodes = (NodeList)xPath.evaluate( path, new InputSource( new StringReader( startNode ) ), XPathConstants.NODESET );
+		}
+		catch( XPathExpressionException e )
+		{
+			e.printStackTrace();
+		}
+
+		return nodes;
+	}
+
+
 }

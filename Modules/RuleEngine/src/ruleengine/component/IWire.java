@@ -3,9 +3,9 @@
 
 package ruleengine.component;
 
+import ruleengine.component.composite.CompositeComponent;
+
 public interface IWire
 {
-	String getName();
-	IOutput getOutput();
-	IInput getInput();
+	boolean connect( CompositeComponent cc );
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:include schemaLocation="UUID.xsd"/>
+	<xs:include schemaLocation="Component.xsd"/>
+	<xs:include schemaLocation="WireDef.xsd"/>
+	<xs:element name="CompositeDef">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Components" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ComponentDef" type="ComponentDef" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Imports" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Import" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="src" type="xs:string"/>
+									<xs:attribute name="instanceId" type="UUID"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Wires" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="WireDef" type="WireDef" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

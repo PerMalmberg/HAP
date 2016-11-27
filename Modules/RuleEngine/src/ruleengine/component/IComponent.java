@@ -3,17 +3,21 @@
 
 package ruleengine.component;
 
-import ruleengine.xpath.IXPathReader;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 public interface IComponent
 {
-	HashMap<String, IOutput> getOutputs();
-	HashMap<String, IInput> getInputs();
+	HashMap<String, BooleanOutput> getBooleanOutputs();
+
+	HashMap<String, BooleanInput> getBooleanInputs();
+
 	UUID getId();
-	List<IWire> getWires();
-	boolean loadComponentFromData( String componentData, IComponentFactory factory, IXPathReader reader );
+
+	int getSubComponentCount();
+
+	void inputChanged( Input<?> input );
+
+	String getName();
+
 }

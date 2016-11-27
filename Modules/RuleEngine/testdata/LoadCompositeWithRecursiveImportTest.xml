@@ -1,0 +1,7 @@
+<CompositeDef>
+	<Components/>
+	<Imports>
+		<Import src="LoadCompositeWithRecursiveImportTest.xml"/>
+	</Imports>
+	<Wires/>
+</CompositeDef>

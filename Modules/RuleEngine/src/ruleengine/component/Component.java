@@ -3,69 +3,60 @@
 
 package ruleengine.component;
 
-import ruleengine.xpath.IXPathReader;
+import ruleengine.component.composite.CompositeComponent;
+import ruleengine.component.data.ComponentDef;
 
-import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 public abstract class Component implements IComponent
 {
 	private final UUID myInstanceId;
-	private final HashMap<UUID, IComponent> mySubComponent = new HashMap<>();
-
-
-	public Component()
-	{
-		myInstanceId = UUID.randomUUID();
-	}
+	protected final HashMap<String, BooleanInput> myBooleanInput = new HashMap<>();
+	protected final HashMap<String, BooleanOutput> myBooleanOutput = new HashMap<>();
+	private String myName;
 
 	public Component( UUID id )
 	{
 		myInstanceId = id;
 	}
 
-	@Override
-	public boolean loadComponentFromData( String componentData, IComponentFactory factory, IXPathReader reader )
+	// Called during creation of component. Use it to add in- and outputs.
+	public abstract void setup( CompositeComponent cc );
+
+	public void addInput( BooleanInput input )
 	{
-		List<String> imports = getImports( componentData, reader );
-
-		boolean res = true;
-
-		for( int i = 0; res && i < imports.size(); ++ i )
-		{
-			String file = imports.get( i );
-			IComponent c = factory.create( new File( file ) );
-
-			if( c == null )
-			{
-				res = false;
-			}
-			else
-			{
-				mySubComponent.put( c.getId(), c );
-			}
-		}
-
-		return res;
+		myBooleanInput.put( input.getName(), input );
 	}
 
-	public List<String> getImports( String componentData, IXPathReader reader )
+	public void addOutput( BooleanOutput output )
 	{
-		return reader.getTextValues( "/Component/Imports/*", componentData );
+		myBooleanOutput.put( output.getName(), output );
+	}
+
+	public void inputChanged( Input<?> input )
+	{
+		input.signal( this );
+	}
+
+	public abstract void inputChanged( BooleanInput input );
+
+	@Override
+	public int getSubComponentCount()
+	{
+		return 0;
 	}
 
 	@Override
-	public HashMap<String, IOutput> getOutputs()
+	public HashMap<String, BooleanOutput> getBooleanOutputs()
 	{
-		return null;
+		return myBooleanOutput;
 	}
 
 	@Override
-	public HashMap<String, IInput> getInputs()
+	public HashMap<String, BooleanInput> getBooleanInputs()
 	{
-		return null;
+		return myBooleanInput;
 	}
 
 	@Override
@@ -74,10 +65,16 @@ public abstract class Component implements IComponent
 		return myInstanceId;
 	}
 
-
 	@Override
-	public List<IWire> getWires()
+	public String getName()
 	{
-		return null;
+		return myName;
+	}
+
+	public boolean loadComponentFromData( ComponentDef def )
+	{
+		myName = def.getName();
+
+		return true;
 	}
 }
