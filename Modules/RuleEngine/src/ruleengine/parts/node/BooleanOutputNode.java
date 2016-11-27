@@ -1,12 +1,12 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package ruleengine.component.node;
+package ruleengine.parts.node;
 
-import ruleengine.component.BooleanInput;
-import ruleengine.component.BooleanOutput;
-import ruleengine.component.Component;
-import ruleengine.component.composite.CompositeComponent;
+import ruleengine.parts.BooleanInput;
+import ruleengine.parts.BooleanOutput;
+import ruleengine.parts.Component;
+import ruleengine.parts.composite.CompositeComponent;
 
 import java.util.UUID;
 

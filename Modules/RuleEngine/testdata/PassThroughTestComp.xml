@@ -1,8 +1,8 @@
 <CompositeDef>
 	<Components>
 		<ComponentDef nativeType="testcomponents.PassthroughTestComp" instanceId="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95"/>
-		<ComponentDef nativeType="ruleengine.component.node.BooleanInputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2ed95" name="MyInput"/>
-		<ComponentDef nativeType="ruleengine.component.node.BooleanOutputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2edaa" name="MyOutput"/>
+		<ComponentDef nativeType="ruleengine.parts.node.BooleanInputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2ed95" name="MyInput"/>
+		<ComponentDef nativeType="ruleengine.parts.node.BooleanOutputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2edaa" name="MyOutput"/>
 	</Components>
 	<Imports/>
 	<Wires>

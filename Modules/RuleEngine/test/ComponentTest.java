@@ -3,9 +3,11 @@
 
 import hap.SysUtil;
 import org.junit.Test;
-import ruleengine.component.ComponentFactory;
-import ruleengine.component.IComponent;
-import ruleengine.component.composite.CompositeComponent;
+import ruleengine.parts.BooleanInput;
+import ruleengine.parts.BooleanOutput;
+import ruleengine.parts.ComponentFactory;
+import ruleengine.parts.IComponent;
+import ruleengine.parts.composite.CompositeComponent;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -62,5 +64,26 @@ public class ComponentTest
 		c.getBooleanInputs().get( "MyInput" ).set( false );
 		assertFalse( c.getBooleanOutputs().get( "MyOutput" ).getValue() );
 	}
+
+	@Test
+	public void testAndComponent()
+	{
+		CompositeComponent c = loadComponent( "TestAndComponent.xml" );
+
+		BooleanInput a = c.getBooleanInputs().get( "A" );
+		BooleanInput b = c.getBooleanInputs().get( "B" );
+		BooleanOutput out = c.getBooleanOutputs().get( "Out" );
+
+		assertFalse( out.getValue() );
+		a.set(true);
+		assertFalse( out.getValue() );
+		b.set(true);
+		assertTrue( out.getValue() );
+		a.set(false);
+		assertFalse( out.getValue() );
+		b.set(false);
+		assertFalse( out.getValue() );
+	}
+
 }
 

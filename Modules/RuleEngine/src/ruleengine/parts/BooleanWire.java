@@ -1,7 +1,7 @@
-package ruleengine.component;
+package ruleengine.parts;
 
-import ruleengine.component.composite.CompositeComponent;
-import ruleengine.component.data.WireDef;
+import ruleengine.parts.composite.CompositeComponent;
+import ruleengine.parts.data.WireDef;
 
 import java.util.UUID;
 

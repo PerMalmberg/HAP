@@ -1,13 +1,12 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package ruleengine.component;
+package ruleengine.parts;
 
 import java.util.UUID;
 
-public interface IOutput
+public interface IInput
 {
-	void disconnectAll();
 	String getName();
 	UUID getId();
 }

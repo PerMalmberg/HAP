@@ -1,1 +1,1 @@
-xjc.exe -p ruleengine.component.data -d ../src/ .
+xjc.exe -p ruleengine.parts.data -d ../src/ .

@@ -1,7 +1,7 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package ruleengine.component;
+package ruleengine.parts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +16,12 @@ public class Output<T> implements IOutput
 	private IComponent myParent;
 	private int myCallCount = 0;
 
-	public Output( UUID id, String name, IComponent parent )
+	public Output( UUID id, String name, IComponent parent, T defaultValue )
 	{
 		myId = id;
 		myName = name;
 		myParent = parent;
+		myValue = defaultValue;
 	}
 
 	public void set( T value )

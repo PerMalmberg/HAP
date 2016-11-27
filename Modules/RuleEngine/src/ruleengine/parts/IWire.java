@@ -1,9 +1,9 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package ruleengine.component;
+package ruleengine.parts;
 
-import ruleengine.component.composite.CompositeComponent;
+import ruleengine.parts.composite.CompositeComponent;
 
 public interface IWire
 {

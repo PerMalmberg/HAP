@@ -1,13 +1,13 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package ruleengine.component;
+package ruleengine.parts;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import ruleengine.component.composite.CompositeComponent;
-import ruleengine.component.data.ComponentDef;
-import ruleengine.component.data.CompositeDef;
+import ruleengine.parts.composite.CompositeComponent;
+import ruleengine.parts.data.ComponentDef;
+import ruleengine.parts.data.CompositeDef;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -90,14 +90,14 @@ public class ComponentFactory implements IComponentFactory
 
 		try
 		{
-			// Create an instance of the component with the id and data as arguments.
+			// Create an instance of the parts with the id and data as arguments.
 			Class<?> componentClass = Class.forName( def.getNativeType() );
 			if( componentClass != null )
 			{
 				Constructor<?> ctor = componentClass.getConstructor( UUID.class );
 				c = (Component) ctor.newInstance( UUID.fromString( def.getInstanceId() ) );
 
-				// Let the component load itself and any sub components
+				// Let the parts load itself
 				if( ! c.loadComponentFromData( def ) )
 				{
 					c = null;

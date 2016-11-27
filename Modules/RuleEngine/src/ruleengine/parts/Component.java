@@ -1,10 +1,10 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package ruleengine.component;
+package ruleengine.parts;
 
-import ruleengine.component.composite.CompositeComponent;
-import ruleengine.component.data.ComponentDef;
+import ruleengine.parts.composite.CompositeComponent;
+import ruleengine.parts.data.ComponentDef;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -21,7 +21,7 @@ public abstract class Component implements IComponent
 		myInstanceId = id;
 	}
 
-	// Called during creation of component. Use it to add in- and outputs.
+	// Called during creation of parts. Use it to add in- and outputs.
 	public abstract void setup( CompositeComponent cc );
 
 	public void addInput( BooleanInput input )

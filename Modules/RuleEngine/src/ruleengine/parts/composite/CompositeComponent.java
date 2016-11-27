@@ -1,13 +1,13 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package ruleengine.component.composite;
+package ruleengine.parts.composite;
 
-import ruleengine.component.*;
-import ruleengine.component.data.ComponentDef;
-import ruleengine.component.data.CompositeDef;
-import ruleengine.component.data.CompositeDef.Imports.Import;
-import ruleengine.component.data.WireDef;
+import ruleengine.parts.*;
+import ruleengine.parts.data.ComponentDef;
+import ruleengine.parts.data.CompositeDef;
+import ruleengine.parts.data.CompositeDef.Imports.Import;
+import ruleengine.parts.data.WireDef;
 
 import java.io.File;
 import java.util.ArrayList;
