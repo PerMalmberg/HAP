@@ -3,8 +3,8 @@
 
 package testcomponents;
 
-import ruleengine.parts.BooleanInput;
-import ruleengine.parts.BooleanOutput;
+import ruleengine.parts.input.BooleanInput;
+import ruleengine.parts.output.BooleanOutput;
 import ruleengine.parts.Component;
 import ruleengine.parts.composite.CompositeComponent;
 
@@ -22,8 +22,8 @@ public class PassthroughTestComp extends Component
 	@Override
 	public void setup( CompositeComponent cc )
 	{
-		BooleanInput in = new BooleanInput( getId(), "In", this );
-		out = new BooleanOutput( getId(), "Out", this );
+		BooleanInput in = new BooleanInput( "In", this );
+		out = new BooleanOutput( "Out", this );
 		addInput( in );
 		addOutput( out );
 	}

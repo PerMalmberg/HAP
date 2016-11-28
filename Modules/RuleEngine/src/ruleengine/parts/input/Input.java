@@ -1,22 +1,21 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package ruleengine.parts;
+package ruleengine.parts.input;
 
-import java.util.UUID;
+import ruleengine.parts.Component;
+import ruleengine.parts.IComponent;
 
 public abstract class Input<T> implements IInput
 {
 	private T myValue;
 	private String myName;
 	private IComponent myParent;
-	private UUID myId;
 
-	public Input( UUID id, String name, IComponent parent, T defaultValue )
+	public Input( String name, IComponent parent, T defaultValue )
 	{
 		myName = name;
 		myParent = parent;
-		myId = id;
 		myValue = defaultValue;
 	}
 
@@ -37,11 +36,6 @@ public abstract class Input<T> implements IInput
 		return myName;
 	}
 
-	@Override
-	public UUID getId()
-	{
-		return myId;
-	}
 
 	public abstract void signal( Component component );
 }

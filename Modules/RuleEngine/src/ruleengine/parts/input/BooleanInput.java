@@ -1,15 +1,16 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package ruleengine.parts;
+package ruleengine.parts.input;
 
-import java.util.UUID;
+import ruleengine.parts.Component;
+import ruleengine.parts.IComponent;
 
 public class BooleanInput extends Input<Boolean>
 {
-	public BooleanInput( UUID id, String name, IComponent parent )
+	public BooleanInput( String name, IComponent parent )
 	{
-		super( id, name, parent, false );
+		super( name, parent, false );
 	}
 
 	@Override

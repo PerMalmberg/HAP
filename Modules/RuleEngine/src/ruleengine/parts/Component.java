@@ -5,6 +5,13 @@ package ruleengine.parts;
 
 import ruleengine.parts.composite.CompositeComponent;
 import ruleengine.parts.data.ComponentDef;
+import ruleengine.parts.input.BooleanInput;
+import ruleengine.parts.input.DoubleInput;
+import ruleengine.parts.input.Input;
+import ruleengine.parts.input.StringInput;
+import ruleengine.parts.output.BooleanOutput;
+import ruleengine.parts.output.DoubleOutput;
+import ruleengine.parts.output.StringOutput;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -14,6 +21,10 @@ public abstract class Component implements IComponent
 	private final UUID myInstanceId;
 	protected final HashMap<String, BooleanInput> myBooleanInput = new HashMap<>();
 	protected final HashMap<String, BooleanOutput> myBooleanOutput = new HashMap<>();
+	protected final HashMap<String, DoubleInput> myDoubleInput = new HashMap<>();
+	protected final HashMap<String, DoubleOutput> myDoubleOutput = new HashMap<>();
+	protected final HashMap<String, StringInput> myStringInput = new HashMap<>();
+	protected final HashMap<String, StringOutput> myStringOutput = new HashMap<>();
 	private String myName;
 
 	public Component( UUID id )
@@ -29,9 +40,27 @@ public abstract class Component implements IComponent
 		myBooleanInput.put( input.getName(), input );
 	}
 
+	public void addInput( DoubleInput input )
+	{
+		myDoubleInput.put( input.getName(), input );
+	}
+
+	public void addInput( StringInput input )
+	{
+		myStringInput.put( input.getName(), input );
+	}
+
 	public void addOutput( BooleanOutput output )
 	{
 		myBooleanOutput.put( output.getName(), output );
+	}
+	public void addOutput( DoubleOutput output )
+	{
+		myDoubleOutput.put( output.getName(), output );
+	}
+	public void addOutput( StringOutput output )
+	{
+		myStringOutput.put( output.getName(), output );
 	}
 
 	public void inputChanged( Input<?> input )
@@ -39,7 +68,18 @@ public abstract class Component implements IComponent
 		input.signal( this );
 	}
 
-	public abstract void inputChanged( BooleanInput input );
+	public void inputChanged( BooleanInput input )
+	{
+	}
+
+	public void inputChanged( DoubleInput input )
+	{
+	}
+
+	public void inputChanged( StringInput input )
+	{
+	}
+
 
 	@Override
 	public int getSubComponentCount()
@@ -57,6 +97,30 @@ public abstract class Component implements IComponent
 	public HashMap<String, BooleanInput> getBooleanInputs()
 	{
 		return myBooleanInput;
+	}
+
+	@Override
+	public HashMap<String, DoubleInput> getDoubleInputs()
+	{
+		return myDoubleInput;
+	}
+
+	@Override
+	public HashMap<String, DoubleOutput> getDoubleOutputs()
+	{
+		return myDoubleOutput;
+	}
+
+	@Override
+	public HashMap<String, StringInput> getStringInputs()
+	{
+		return myStringInput;
+	}
+
+	@Override
+	public HashMap<String, StringOutput> getStringOutputs()
+	{
+		return myStringOutput;
 	}
 
 	@Override

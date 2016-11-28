@@ -4,6 +4,10 @@
 package ruleengine.parts.composite;
 
 import ruleengine.parts.*;
+import ruleengine.parts.Wire.BooleanWire;
+import ruleengine.parts.Wire.DoubleWire;
+import ruleengine.parts.Wire.IWire;
+import ruleengine.parts.Wire.StringWire;
 import ruleengine.parts.data.ComponentDef;
 import ruleengine.parts.data.CompositeDef;
 import ruleengine.parts.data.CompositeDef.Imports.Import;
@@ -17,7 +21,7 @@ import java.util.UUID;
 
 public class CompositeComponent extends Component
 {
-	private final List<BooleanWire> myWire = new ArrayList<>();
+	private final List<IWire> myWire = new ArrayList<>();
 
 	public CompositeComponent()
 	{
@@ -41,12 +45,6 @@ public class CompositeComponent extends Component
 
 	@Override
 	public void setup( CompositeComponent cc )
-	{
-
-	}
-
-	@Override
-	public void inputChanged( BooleanInput input )
 	{
 
 	}
@@ -80,21 +78,33 @@ public class CompositeComponent extends Component
 		for( int i = 0; res && i < wires.size(); ++ i )
 		{
 			WireDef wire = wires.get( i );
+			IWire w = null;
 			if( "boolean".equals( wire.getType() ) )
 			{
-				BooleanWire w = new BooleanWire( wire );
+				w = new BooleanWire( wire );
+			}
+			else if( "double".equals( wire.getType() ))
+			{
+				w = new DoubleWire( wire );
+			}
+			else if( "string".equals( wire.getType() ))
+			{
+				w = new StringWire( wire );
+			}
+			else {
+				res = false;
+			}
+
+			if( w != null )
+			{
 				res = w.connect( this );
 				myWire.add( w );
-			}
-			else
-			{
-				// TODO: Other wire types
 			}
 		}
 
 		if( ! res )
 		{
-			myWire.forEach( BooleanWire::disconnect );
+			myWire.forEach( IWire::disconnect );
 		}
 
 		return res;

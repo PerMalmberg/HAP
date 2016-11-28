@@ -3,19 +3,19 @@
 
 package ruleengine.parts.node;
 
-import ruleengine.parts.input.BooleanInput;
-import ruleengine.parts.output.BooleanOutput;
-import ruleengine.parts.Component;
+import ruleengine.parts.*;
 import ruleengine.parts.composite.CompositeComponent;
+import ruleengine.parts.input.DoubleInput;
+import ruleengine.parts.output.DoubleOutput;
 
 import java.util.UUID;
 
 
-public class BooleanInputNode extends Component
+public class DoubleInputNode extends Component
 {
-	private BooleanOutput out;
+	private DoubleOutput out;
 
-	public BooleanInputNode( UUID id )
+	public DoubleInputNode( UUID id )
 	{
 		super( id );
 	}
@@ -23,8 +23,8 @@ public class BooleanInputNode extends Component
 	@Override
 	public void setup( CompositeComponent cc )
 	{
-		BooleanInput in = new BooleanInput( getName(), this );
-		out = new BooleanOutput( getName(), this );
+		DoubleInput in = new DoubleInput( getName(), this );
+		out = new DoubleOutput( getName(), this );
 
 		addInput( in );
 		addOutput( out );
@@ -34,7 +34,7 @@ public class BooleanInputNode extends Component
 	}
 
 	@Override
-	public void inputChanged( BooleanInput input )
+	public void inputChanged( DoubleInput input )
 	{
 		out.set( input.getValue() );
 	}

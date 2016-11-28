@@ -3,17 +3,19 @@
 
 import hap.SysUtil;
 import org.junit.Test;
-import ruleengine.parts.BooleanInput;
-import ruleengine.parts.BooleanOutput;
-import ruleengine.parts.ComponentFactory;
-import ruleengine.parts.IComponent;
+import ruleengine.parts.*;
 import ruleengine.parts.composite.CompositeComponent;
+import ruleengine.parts.input.BooleanInput;
+import ruleengine.parts.input.DoubleInput;
+import ruleengine.parts.input.StringInput;
+import ruleengine.parts.output.BooleanOutput;
+import ruleengine.parts.output.DoubleOutput;
+import ruleengine.parts.output.StringOutput;
 
 import java.io.File;
 import java.nio.file.Paths;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 public class ComponentTest
@@ -75,14 +77,54 @@ public class ComponentTest
 		BooleanOutput out = c.getBooleanOutputs().get( "Out" );
 
 		assertFalse( out.getValue() );
-		a.set(true);
+		a.set( true );
 		assertFalse( out.getValue() );
-		b.set(true);
+		b.set( true );
 		assertTrue( out.getValue() );
-		a.set(false);
+		a.set( false );
 		assertFalse( out.getValue() );
-		b.set(false);
+		b.set( false );
 		assertFalse( out.getValue() );
+	}
+
+	@Test
+	public void testAddComponent()
+	{
+		CompositeComponent c = loadComponent( "TestAddComponent.xml" );
+
+		DoubleInput a = c.getDoubleInputs().get( "A" );
+		DoubleInput b = c.getDoubleInputs().get( "B" );
+		DoubleOutput out = c.getDoubleOutputs().get( "Out" );
+
+		assertTrue( Double.isNaN( out.getValue() ) );
+		a.set( 0d );
+		assertTrue( Double.isNaN( out.getValue() ) );
+		b.set( 0d );
+		assertEquals( 0, out.getValue(), 0.0 );
+		a.set( 5.5 );
+		assertEquals( 5.5, out.getValue(), 0.0 );
+		b.set( 4.5 );
+		assertEquals( 10, out.getValue(), 0.0 );
+	}
+
+	@Test
+	public void testConcatenateComponent()
+	{
+		CompositeComponent c = loadComponent( "TestConcatenateComponent.xml" );
+
+		StringInput a = c.getStringInputs().get( "A" );
+		StringInput b = c.getStringInputs().get( "B" );
+		StringOutput out = c.getStringOutputs().get( "Out" );
+
+		assertEquals( null, out.getValue() );
+		a.set( "" );
+		assertEquals( null, out.getValue() );
+		b.set( "" );
+		assertEquals( "", out.getValue() );
+		a.set( "ABCD" );
+		assertEquals( "ABCD", out.getValue() );
+		b.set( "EFGH" );
+		assertEquals( "ABCDEFGH", out.getValue() );
 	}
 
 }

@@ -3,8 +3,8 @@
 
 package ruleengine.component.bool;
 
-import ruleengine.parts.BooleanInput;
-import ruleengine.parts.BooleanOutput;
+import ruleengine.parts.input.BooleanInput;
+import ruleengine.parts.output.BooleanOutput;
 import ruleengine.parts.Component;
 import ruleengine.parts.composite.CompositeComponent;
 
@@ -24,9 +24,9 @@ public class And extends Component
 	@Override
 	public void setup( CompositeComponent cc )
 	{
-		inA = new BooleanInput( getId(), "A", this );
-		inB = new BooleanInput( getId(), "B", this );
-		out = new BooleanOutput( getId(), "Out", this );
+		inA = new BooleanInput( "A", this );
+		inB = new BooleanInput( "B", this );
+		out = new BooleanOutput( "Out", this );
 		addInput( inA );
 		addInput( inB );
 		addOutput( out );

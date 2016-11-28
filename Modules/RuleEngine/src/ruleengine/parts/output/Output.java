@@ -1,24 +1,24 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package ruleengine.parts;
+package ruleengine.parts.output;
+
+import ruleengine.parts.IComponent;
+import ruleengine.parts.input.Input;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Output<T> implements IOutput
 {
 	private T myValue;
 	private List<Input<T>> myRemote = new ArrayList<>();
 	private String myName;
-	private UUID myId;
 	private IComponent myParent;
 	private int myCallCount = 0;
 
-	public Output( UUID id, String name, IComponent parent, T defaultValue )
+	public Output( String name, IComponent parent, T defaultValue )
 	{
-		myId = id;
 		myName = name;
 		myParent = parent;
 		myValue = defaultValue;
@@ -45,12 +45,12 @@ public class Output<T> implements IOutput
 		return myValue;
 	}
 
-	void connect( Input<T> remote )
+	public void connect( Input<T> remote )
 	{
 		myRemote.add( remote );
 	}
 
-	void disconnect( Input<T> remote )
+	public void disconnect( Input<T> remote )
 	{
 		myRemote.remove( remote );
 	}
@@ -67,9 +67,4 @@ public class Output<T> implements IOutput
 		return myName;
 	}
 
-	@Override
-	public UUID getId()
-	{
-		return myId;
-	}
 }

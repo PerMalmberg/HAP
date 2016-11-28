@@ -3,7 +3,7 @@
 
 package testcomponents;
 
-import ruleengine.parts.BooleanInput;
+import ruleengine.parts.input.BooleanInput;
 import ruleengine.parts.Component;
 import ruleengine.parts.composite.CompositeComponent;
 
@@ -19,12 +19,6 @@ public class TestComponent extends Component
 	@Override
 	public void setup( CompositeComponent cc )
 	{
-		addInput( new BooleanInput( getId(), "A", this ) );
-	}
-
-	@Override
-	public void inputChanged( BooleanInput input )
-	{
-
+		addInput( new BooleanInput( "A", this ) );
 	}
 }

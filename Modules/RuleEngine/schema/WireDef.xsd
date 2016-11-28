@@ -6,6 +6,12 @@
 		<xs:attribute name="sourceOutput" type="xs:string"/>
 		<xs:attribute name="targetComponent" type="UUID"/>
 		<xs:attribute name="targetInput" type="xs:string"/>
-		<xs:attribute name="type" type="xs:string"/>
+		<xs:attribute name="type">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="boolean|string|double"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 </xs:schema>
