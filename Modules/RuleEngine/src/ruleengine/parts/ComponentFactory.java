@@ -144,7 +144,6 @@ public class ComponentFactory implements IComponentFactory
 		}
 		catch( JAXBException | SAXException e )
 		{
-			cc = null;
 			e.printStackTrace();
 		}
 

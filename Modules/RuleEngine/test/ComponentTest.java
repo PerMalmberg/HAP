@@ -1,10 +1,15 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import hap.SysUtil;
 import org.junit.Test;
-import ruleengine.parts.*;
+import org.xml.sax.InputSource;
+import ruleengine.parts.ComponentFactory;
+import ruleengine.parts.IComponent;
 import ruleengine.parts.composite.CompositeComponent;
+import ruleengine.parts.data.CompositeDef;
 import ruleengine.parts.input.BooleanInput;
 import ruleengine.parts.input.DoubleInput;
 import ruleengine.parts.input.StringInput;
@@ -12,7 +17,11 @@ import ruleengine.parts.output.BooleanOutput;
 import ruleengine.parts.output.DoubleOutput;
 import ruleengine.parts.output.StringOutput;
 
-import java.io.File;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.*;
 import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
@@ -125,6 +134,75 @@ public class ComponentTest
 		assertEquals( "ABCD", out.getValue() );
 		b.set( "EFGH" );
 		assertEquals( "ABCDEFGH", out.getValue() );
+	}
+
+	@Test
+	public void testLoadViaJSON() throws JAXBException, IOException
+	{
+		// Read the XML data
+		JAXBContext jc = JAXBContext.newInstance( CompositeDef.class );
+		Unmarshaller u = jc.createUnmarshaller();
+		File src = Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class ), "RuleEngine/TestAddComponent.xml" ).toFile();
+
+		String contents = null;
+		try( FileInputStream fis = new FileInputStream( src ) )
+		{
+			byte[] data = new byte[(int) src.length()];
+			int readData = fis.read( data );
+			if( readData > 0 )
+			{
+				contents = new String( data, "UTF-8" );
+			}
+		}
+
+		assertNotNull( contents );
+
+		// Create the JAXB data object
+		CompositeDef rawData = (CompositeDef) u.unmarshal( new InputSource( new StringReader( contents ) ) );
+
+		// Transform the JAXB to JSON
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable( SerializationFeature.INDENT_OUTPUT );
+		StringWriter sw = new StringWriter();
+		mapper.writeValue( sw, rawData );
+		String json = sw.toString();
+
+		// Create JAXB from JSON
+		CompositeDef fromJSON = mapper.readValue( json, CompositeDef.class );
+		Marshaller m = jc.createMarshaller();
+
+		// Write JAXB to XML-file
+		File xmlFile = Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class ), "fromJson.xml" ).toFile();
+		if( xmlFile.exists()) {
+			assertTrue( xmlFile.delete() );
+		}
+
+		try( FileOutputStream fs = new FileOutputStream( xmlFile ) )
+		{
+			m.marshal( fromJSON, fs );
+		}
+
+		// Create composite component from written data
+		CompositeComponent c = f.create( xmlFile );
+
+		if( xmlFile.exists()) {
+			assertTrue( xmlFile.delete() );
+		}
+
+		// Perform tests on CC
+		DoubleInput a = c.getDoubleInputs().get( "A" );
+		DoubleInput b = c.getDoubleInputs().get( "B" );
+		DoubleOutput out = c.getDoubleOutputs().get( "Out" );
+
+		assertTrue( Double.isNaN( out.getValue() ) );
+		a.set( 0d );
+		assertTrue( Double.isNaN( out.getValue() ) );
+		b.set( 0d );
+		assertEquals( 0, out.getValue(), 0.0 );
+		a.set( 5.5 );
+		assertEquals( 5.5, out.getValue(), 0.0 );
+		b.set( 4.5 );
+		assertEquals( 10, out.getValue(), 0.0 );
 	}
 
 }
