@@ -1,7 +1,0 @@
-package model
-
-
-class Components
-{
-
-}

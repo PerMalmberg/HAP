@@ -1,7 +1,14 @@
-package view
+package hap.ruleengine.editor.view
 
+import hap.ruleengine.editor.view.ComponentView
 import javafx.scene.layout.BorderPane
 import tornadofx.*
+import tornadofx.canvas
+import tornadofx.center
+import tornadofx.menu
+import tornadofx.menubar
+import tornadofx.menuitem
+import tornadofx.top
 import kotlin.system.exitProcess
 
 

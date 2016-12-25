@@ -1,4 +1,4 @@
-package view
+package hap.ruleengine.editor.view
 
 import javafx.scene.control.ScrollPane
 import tornadofx.Fragment
