@@ -2,7 +2,7 @@
 <CompositeDef>
 	<Components/>
 	<Imports>
-		<Import src="MinimalComposite.xml" instanceId="333633ba-ddb5-4934-90f0-774c9aa2ed95"/>
+		<Import src="MinimalComposite.xml" instanceId="333633ba-ddb5-4934-90f0-774c9aa2ed95" name="A minimal composite"/>
 	</Imports>
 	<Wires/>
 </CompositeDef>

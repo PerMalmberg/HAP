@@ -1,6 +1,6 @@
 package hap.ruleengine.editor.view
 
-import hap.ruleengine.editor.view.ComponentView
+import hap.ruleengine.editor.view.ComponentPalletView
 import javafx.scene.layout.BorderPane
 import tornadofx.*
 import tornadofx.canvas
@@ -28,7 +28,7 @@ class MainView : View("My View") {
                     }
                 }
             }
-            left(ComponentView::class)
+            left(ComponentPalletView::class)
             center {
                 canvas {
 

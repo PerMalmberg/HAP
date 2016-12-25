@@ -130,6 +130,7 @@ public class CompositeComponent extends Component
 			}
 			else
 			{
+				cc.setName( imp.getName() );
 				myComponent.put( UUID.fromString( imp.getInstanceId() ), cc );
 			}
 		}

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:include schemaLocation="UUID.xsd"/>
+	<xs:include schemaLocation="ComponentName.xsd"/>
 	<xs:complexType name="ComponentDef">
 		<xs:attribute name="nativeType">
 			<xs:simpleType>
@@ -10,12 +11,6 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="instanceId" type="UUID"/>
-		<xs:attribute name="name" use="optional" default="">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:minLength value="0"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="name" type="ComponentName" use="optional" default=""/>
 	</xs:complexType>
 </xs:schema>

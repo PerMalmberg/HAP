@@ -132,7 +132,14 @@ public abstract class Component implements IComponent
 	@Override
 	public String getName()
 	{
-		return myName;
+		// A top-level composite has no name
+		return myName == null ? "" : myName;
+	}
+
+	@Override
+	public void setName( String name )
+	{
+		myName = name;
 	}
 
 	public boolean loadComponentFromData( ComponentDef def )

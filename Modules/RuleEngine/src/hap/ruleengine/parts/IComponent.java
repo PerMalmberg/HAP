@@ -35,5 +35,6 @@ public interface IComponent
 	void inputChanged( Input<?> input );
 
 	String getName();
+	void setName( String name );
 
 }

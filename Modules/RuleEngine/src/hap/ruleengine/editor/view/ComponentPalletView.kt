@@ -6,8 +6,10 @@ import tornadofx.scrollpane
 import tornadofx.text
 
 
-class ComponentView : Fragment() {
+class ComponentPalletView : Fragment() {
     override val root = ScrollPane()
+
+
 
     init {
         with(root)
