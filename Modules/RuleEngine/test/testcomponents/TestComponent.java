@@ -3,9 +3,9 @@
 
 package testcomponents;
 
-import ruleengine.parts.input.BooleanInput;
-import ruleengine.parts.Component;
-import ruleengine.parts.composite.CompositeComponent;
+import hap.ruleengine.parts.input.BooleanInput;
+import hap.ruleengine.parts.Component;
+import hap.ruleengine.parts.composite.CompositeComponent;
 
 import java.util.UUID;
 
