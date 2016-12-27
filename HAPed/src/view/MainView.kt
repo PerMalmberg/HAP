@@ -1,14 +1,10 @@
-package hap.ruleengine.editor.view
+package view
 
 import hap.ruleengine.editor.view.ComponentPalletView
+import hap.ruleengine.editor.view.DrawingSurface
+import hap.ruleengine.editor.view.PropertyView
 import javafx.scene.layout.BorderPane
 import tornadofx.*
-import tornadofx.canvas
-import tornadofx.center
-import tornadofx.menu
-import tornadofx.menubar
-import tornadofx.menuitem
-import tornadofx.top
 import kotlin.system.exitProcess
 
 
@@ -16,9 +12,9 @@ class MainView : View("My View") {
     override val root = BorderPane()
 
     init {
+
+
         with(root) {
-            this.minWidth = 800.0
-            this.minHeight = 800.0
 
             top {
                 menubar {
@@ -29,13 +25,8 @@ class MainView : View("My View") {
                 }
             }
             left(ComponentPalletView::class)
-            center {
-                canvas {
-
-                }
-            }
+            center(DrawingSurface::class)
             right(PropertyView::class)
-
         }
     }
 }
