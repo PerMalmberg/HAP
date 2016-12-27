@@ -1,58 +1,24 @@
 package hap.ruleengine.editor.view
 
-import javafx.scene.control.ScrollPane
+import hap.ruleengine.editor.view.parts.ComponentView
+import hap.ruleengine.editor.viewmodel.ComponentVM
+import tornadofx.DataGrid
 import tornadofx.Fragment
-import tornadofx.button
-import tornadofx.vbox
+import tornadofx.plusAssign
+import tornadofx.stackpane
 
 
 class ComponentPalletView : Fragment() {
-    override val root = ScrollPane()
-
+    override val root = DataGrid<ComponentVM>(listOf(ComponentVM(null),ComponentVM(null),ComponentVM(null)))
 
     init {
-        root.vbarPolicy = ScrollPane.ScrollBarPolicy.ALWAYS
-
         with(root)
         {
-            vbox {
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
-                button { }
+            setPrefSize(200.0, 0.0)
+            cellCache {
+                stackpane {
+                    this += ComponentView(0.0, 0.0, it)
+                }
             }
         }
     }
