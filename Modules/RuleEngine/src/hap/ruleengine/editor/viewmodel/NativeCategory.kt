@@ -5,6 +5,6 @@ import tornadofx.observable
 import java.util.*
 
 
-class NativeCategory constructor(category: String) {
+class NativeCategory constructor(val category: String) {
     val components: ObservableList<ComponentVM> = ArrayList<ComponentVM>().observable()
 }

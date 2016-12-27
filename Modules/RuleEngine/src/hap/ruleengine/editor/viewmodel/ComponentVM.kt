@@ -9,11 +9,7 @@ import tornadofx.Controller
 ///////////////////////////////////////////////////////////////////////////////
 
 
-class ComponentVM constructor(val myComponent : IComponent?) : Controller() {
+class ComponentVM constructor(val myComponent : IComponent) : Controller() {
 
-
-
-    init {
-
-    }
+    val name : String = myComponent.name
 }

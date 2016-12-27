@@ -21,7 +21,7 @@ class DrawingSurface : Fragment() {
 
         with(root) {
             group {
-                this += hap.ruleengine.editor.view.parts.ComponentView(100.0, 100.0, ComponentVM(null))
+                //this += hap.ruleengine.editor.view.parts.ComponentView(100.0, 100.0, ComponentVM(null))
             }
         }
     }

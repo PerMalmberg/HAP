@@ -4,6 +4,7 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import hap.SysUtil;
+import hap.ruleengine.parts.CompositeSerializer;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 import hap.ruleengine.parts.ComponentFactory;
@@ -134,6 +135,19 @@ public class ComponentTest
 		assertEquals( "ABCD", out.getValue() );
 		b.set( "EFGH" );
 		assertEquals( "ABCDEFGH", out.getValue() );
+	}
+
+	@Test
+	public void testStoreComponent()
+	{
+		CompositeComponent c = loadComponent( "TestConcatenateComponent.xml" );
+		File output = Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class ), "RuleEngine/" + "stored.xml" ).toFile();
+		if( output.exists()) {
+			output.delete();
+		}
+
+		CompositeSerializer cs = new CompositeSerializer();
+		assertTrue( cs.serialize( c, output ) );
 	}
 
 	@Test

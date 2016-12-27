@@ -1,25 +1,37 @@
 package hap.ruleengine.editor.view
 
 import hap.ruleengine.editor.view.parts.ComponentView
-import hap.ruleengine.editor.viewmodel.ComponentVM
-import tornadofx.DataGrid
-import tornadofx.Fragment
-import tornadofx.plusAssign
-import tornadofx.stackpane
+import hap.ruleengine.editor.viewmodel.ComponentPallet
+import hap.ruleengine.editor.viewmodel.NativeCategory
+import javafx.scene.control.TitledPane
+import tornadofx.*
 
 
 class ComponentPalletView : Fragment() {
-    override val root = DataGrid<ComponentVM>(listOf(ComponentVM(null),ComponentVM(null),ComponentVM(null)))
+
+    val pallet: ComponentPallet by inject()
+
+    override val root = listview<NativeCategory>() {
+        cellCache {
+            TitledPane(it.category,
+                    listview(it.components) { // TODO: Use titledpane-builder when TornadoFx is updated to >=1.5.10 https://kotlinlang.slack.com/files/edvin/F3K326W6P/cleaner__but_a_bit_more_advanced__and_requires_snapshot_.kt
+                        cellCache {
+                            stackpane {
+                                this += ComponentView(0.0, 0.0, it)
+                            }
+                        }
+                    }).apply {
+                pallet.categoryExpanded(it.category).bind(this.expandedProperty())
+            }
+        }
+    }
 
     init {
         with(root)
         {
-            setPrefSize(200.0, 0.0)
-            cellCache {
-                stackpane {
-                    this += ComponentView(0.0, 0.0, it)
-                }
-            }
+            items = pallet.categories.observable()
         }
     }
+
+
 }

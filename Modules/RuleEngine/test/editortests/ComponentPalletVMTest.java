@@ -5,7 +5,7 @@ import hap.ruleengine.editor.viewmodel.ComponentPallet;
 import hap.ruleengine.editor.viewmodel.NativeCategory;
 import org.junit.Test;
 
-import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,7 +19,7 @@ public class ComponentPalletVMTest
 	{
 		assertTrue( pallet.loadComponents() );
 
-		HashMap<String, NativeCategory> cat = pallet.getPallet();
+		List<NativeCategory> cat = pallet.getCategories();
 
 		assertEquals( 4, cat.size() );
 	}

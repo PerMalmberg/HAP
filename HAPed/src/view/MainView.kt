@@ -8,7 +8,7 @@ import tornadofx.*
 import kotlin.system.exitProcess
 
 
-class MainView : View("My View") {
+class MainView : View("HAPed") {
     override val root = BorderPane()
 
     init {
