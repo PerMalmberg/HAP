@@ -4,10 +4,8 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import hap.SysUtil;
-import hap.ruleengine.parts.CompositeSerializer;
-import org.junit.Test;
-import org.xml.sax.InputSource;
 import hap.ruleengine.parts.ComponentFactory;
+import hap.ruleengine.parts.CompositeSerializer;
 import hap.ruleengine.parts.IComponent;
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.data.CompositeDef;
@@ -17,6 +15,8 @@ import hap.ruleengine.parts.input.StringInput;
 import hap.ruleengine.parts.output.BooleanOutput;
 import hap.ruleengine.parts.output.DoubleOutput;
 import hap.ruleengine.parts.output.StringOutput;
+import org.junit.Test;
+import org.xml.sax.InputSource;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -24,6 +24,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -35,7 +36,7 @@ public class ComponentTest
 	private CompositeComponent loadComponent( String data )
 	{
 		File src = Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class ), "RuleEngine/" + data ).toFile();
-		return f.create( src );
+		return f.create( src, UUID.randomUUID() );
 	}
 
 	@Test
@@ -127,6 +128,11 @@ public class ComponentTest
 	{
 		CompositeComponent c = loadComponent( "TestConcatenateComponent.xml" );
 
+		testConcatenate( c );
+	}
+
+	private void testConcatenate( CompositeComponent c )
+	{
 		StringInput a = c.getStringInputs().get( "A" );
 		StringInput b = c.getStringInputs().get( "B" );
 		StringOutput out = c.getStringOutputs().get( "Out" );
@@ -146,13 +152,19 @@ public class ComponentTest
 	public void testStoreComponent()
 	{
 		CompositeComponent c = loadComponent( "TestConcatenateComponent.xml" );
-		File output = Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class ), "RuleEngine/" + "stored.xml" ).toFile();
-		if( output.exists()) {
-			output.delete();
+		File output = Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class ), "RuleEngine/stored.xml" ).toFile();
+		if( output.exists() )
+		{
+			assertTrue( output.delete() );
 		}
 
 		CompositeSerializer cs = new CompositeSerializer();
 		assertTrue( cs.serialize( c, output ) );
+
+		CompositeComponent cat = f.create( output.getAbsoluteFile(), UUID.randomUUID() );
+		testConcatenate( cat );
+
+		assertTrue( output.delete() );
 	}
 
 	@Test
@@ -192,7 +204,8 @@ public class ComponentTest
 
 		// Write JAXB to XML-file
 		File xmlFile = Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class ), "fromJson.xml" ).toFile();
-		if( xmlFile.exists()) {
+		if( xmlFile.exists() )
+		{
 			assertTrue( xmlFile.delete() );
 		}
 
@@ -202,9 +215,10 @@ public class ComponentTest
 		}
 
 		// Create composite component from written data
-		CompositeComponent c = f.create( xmlFile );
+		CompositeComponent c = f.create( xmlFile, UUID.randomUUID() );
 
-		if( xmlFile.exists()) {
+		if( xmlFile.exists() )
+		{
 			assertTrue( xmlFile.delete() );
 		}
 

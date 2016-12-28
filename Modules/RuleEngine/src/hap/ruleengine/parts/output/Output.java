@@ -4,6 +4,8 @@
 package hap.ruleengine.parts.output;
 
 import hap.ruleengine.parts.IComponent;
+import hap.ruleengine.parts.data.CompositeDef;
+import hap.ruleengine.parts.data.WireDef;
 import hap.ruleengine.parts.input.Input;
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ public class Output<T> implements IOutput
 	private IComponent myParent;
 	private int myCallCount = 0;
 
-	public Output( String name, IComponent parent, T defaultValue )
+	Output( String name, IComponent parent, T defaultValue )
 	{
 		myName = name;
 		myParent = parent;
@@ -67,4 +69,18 @@ public class Output<T> implements IOutput
 		return myName;
 	}
 
+	@Override
+	public void store( CompositeDef data )
+	{
+		for( Input<T> remote : myRemote )
+		{
+			WireDef wire = new WireDef();
+			wire.setSourceComponent( myParent.getId().toString() );
+			wire.setSourceOutput( getName() );
+			wire.setTargetComponent( remote.getParent().getId().toString() );
+			wire.setTargetInput( remote.getName() );
+			wire.setType( this.getClass().getSimpleName().replace( "Output", "Wire" ) );
+			data.getWires().getWireDef().add( wire );
+		}
+	}
 }

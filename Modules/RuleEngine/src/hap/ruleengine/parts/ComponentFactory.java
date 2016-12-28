@@ -40,7 +40,7 @@ public class ComponentFactory implements IComponentFactory
 	//
 	///////////////////////////////////////////////////////////////////////////
 	@Override
-	public CompositeComponent create( File compositeFile )
+	public CompositeComponent create( File compositeFile, UUID uid )
 	{
 		CompositeComponent cc = null;
 
@@ -69,7 +69,7 @@ public class ComponentFactory implements IComponentFactory
 				String data = loadFile( compositeFile );
 				if( data != null )
 				{
-					cc = create( data );
+					cc = create( data, uid, compositeFile );
 				}
 				myLoadedFiles.remove( myLoadedFiles.lastElement() );
 			}
@@ -122,7 +122,7 @@ public class ComponentFactory implements IComponentFactory
 	//
 	///////////////////////////////////////////////////////////////////////////
 	@Override
-	public CompositeComponent create( String compositeData )
+	public CompositeComponent create( String compositeData, UUID compositeUid, File sourceFile )
 	{
 		CompositeComponent cc = null;
 
@@ -137,7 +137,7 @@ public class ComponentFactory implements IComponentFactory
 			u.setSchema( schema );
 
 			CompositeDef data = (CompositeDef) u.unmarshal( new InputSource( new StringReader( compositeData ) ) );
-			cc = new CompositeComponent();
+			cc = new CompositeComponent(compositeUid, sourceFile.getName() );
 			if( ! cc.loadCompositeFromData( data, this ) )
 			{
 				cc = null;

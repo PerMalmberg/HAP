@@ -3,6 +3,7 @@
 
 package hap.ruleengine.parts;
 
+import hap.ruleengine.parts.data.CompositeDef;
 import hap.ruleengine.parts.input.BooleanInput;
 import hap.ruleengine.parts.input.DoubleInput;
 import hap.ruleengine.parts.input.Input;
@@ -37,4 +38,5 @@ public interface IComponent
 	String getName();
 	void setName( String name );
 
+	void store( CompositeDef data );
 }

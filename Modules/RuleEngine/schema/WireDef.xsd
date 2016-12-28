@@ -9,7 +9,7 @@
 		<xs:attribute name="type">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
-					<xs:pattern value="boolean|string|double"/>
+					<xs:pattern value="BooleanWire|StringWire|DoubleWire"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>

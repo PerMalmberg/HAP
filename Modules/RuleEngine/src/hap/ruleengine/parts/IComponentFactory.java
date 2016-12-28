@@ -7,12 +7,13 @@ import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.data.ComponentDef;
 
 import java.io.File;
+import java.util.UUID;
 
 public interface IComponentFactory
 {
-	CompositeComponent create( String componentData );
+	CompositeComponent create( String compositeData, UUID compositeUid, File sourceFile );
 
-	CompositeComponent create( File componentData );
+	CompositeComponent create( File componentData, UUID uid );
 
-	IComponent create( ComponentDef c, CompositeComponent cc  );
+	IComponent create( ComponentDef c, CompositeComponent cc );
 }

@@ -3,7 +3,9 @@
 
 package hap.ruleengine.parts.composite;
 
-import hap.ruleengine.parts.*;
+import hap.ruleengine.parts.Component;
+import hap.ruleengine.parts.IComponent;
+import hap.ruleengine.parts.IComponentFactory;
 import hap.ruleengine.parts.Wire.BooleanWire;
 import hap.ruleengine.parts.Wire.DoubleWire;
 import hap.ruleengine.parts.Wire.IWire;
@@ -22,16 +24,19 @@ import java.util.UUID;
 public class CompositeComponent extends Component
 {
 	private final List<IWire> myWire = new ArrayList<>();
+	private final String mySourceFile;
 
 	public CompositeComponent()
 	{
 		super( UUID.randomUUID() );
 		myData = new CompositeDef();
+		mySourceFile = null;
 	}
 
-	public CompositeComponent( UUID id )
+	public CompositeComponent( UUID id, String sourceFile )
 	{
 		super( id );
+		mySourceFile = sourceFile;
 	}
 
 	private CompositeDef myData;
@@ -41,6 +46,17 @@ public class CompositeComponent extends Component
 	public int getSubComponentCount()
 	{
 		return myComponent.size();
+	}
+
+	@Override
+	public void store( CompositeDef data )
+	{
+		// A composite component stores itself (as an Import)
+		Import imp = new Import();
+		imp.setName( getName() );
+		imp.setInstanceId( getId().toString() );
+		imp.setSrc( mySourceFile );
+		data.getImports().getImport().add( imp );
 	}
 
 	@Override
@@ -79,19 +95,20 @@ public class CompositeComponent extends Component
 		{
 			WireDef wire = wires.get( i );
 			IWire w = null;
-			if( "boolean".equals( wire.getType() ) )
+			if( BooleanWire.class.getSimpleName().equals( wire.getType() ) )
 			{
 				w = new BooleanWire( wire );
 			}
-			else if( "double".equals( wire.getType() ))
+			else if( DoubleWire.class.getSimpleName().equals( wire.getType() ) )
 			{
 				w = new DoubleWire( wire );
 			}
-			else if( "string".equals( wire.getType() ))
+			else if( StringWire.class.getSimpleName().equals( wire.getType() ) )
 			{
 				w = new StringWire( wire );
 			}
-			else {
+			else
+			{
 				res = false;
 			}
 
@@ -123,7 +140,7 @@ public class CompositeComponent extends Component
 		for( int i = 0; res && i < imports.size(); ++ i )
 		{
 			Import imp = imports.get( i );
-			CompositeComponent cc = factory.create( new File( imp.getSrc() ) );
+			CompositeComponent cc = factory.create( new File( imp.getSrc() ), UUID.fromString( imp.getInstanceId() ) );
 			if( cc == null )
 			{
 				res = false;
@@ -175,5 +192,19 @@ public class CompositeComponent extends Component
 	public IComponent getComponent( UUID uuid )
 	{
 		return myComponent.get( uuid );
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	//
+	//
+	//
+	///////////////////////////////////////////////////////////////////////////
+	public void serialize( CompositeDef data )
+	{
+		for( UUID uid : myComponent.keySet() )
+		{
+			IComponent comp = myComponent.get( uid );
+			comp.store( data );
+		}
 	}
 }

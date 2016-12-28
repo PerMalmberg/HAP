@@ -3,7 +3,10 @@
 
 package hap.ruleengine.parts.input;
 
+import hap.ruleengine.parts.IComponent;
+
 public interface IInput
 {
 	String getName();
+	IComponent getParent();
 }

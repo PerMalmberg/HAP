@@ -12,7 +12,7 @@ public abstract class Input<T> implements IInput
 	private String myName;
 	private IComponent myParent;
 
-	public Input( String name, IComponent parent, T defaultValue )
+	Input( String name, IComponent parent, T defaultValue )
 	{
 		myName = name;
 		myParent = parent;
@@ -36,6 +36,8 @@ public abstract class Input<T> implements IInput
 		return myName;
 	}
 
+	@Override
+	public IComponent getParent() { return myParent; }
 
 	public abstract void signal( Component component );
 }

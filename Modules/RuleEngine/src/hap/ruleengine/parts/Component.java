@@ -5,6 +5,7 @@ package hap.ruleengine.parts;
 
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.data.ComponentDef;
+import hap.ruleengine.parts.data.CompositeDef;
 import hap.ruleengine.parts.input.BooleanInput;
 import hap.ruleengine.parts.input.DoubleInput;
 import hap.ruleengine.parts.input.Input;
@@ -19,12 +20,12 @@ import java.util.UUID;
 public abstract class Component implements IComponent
 {
 	private final UUID myInstanceId;
-	protected final HashMap<String, BooleanInput> myBooleanInput = new HashMap<>();
-	protected final HashMap<String, BooleanOutput> myBooleanOutput = new HashMap<>();
-	protected final HashMap<String, DoubleInput> myDoubleInput = new HashMap<>();
-	protected final HashMap<String, DoubleOutput> myDoubleOutput = new HashMap<>();
-	protected final HashMap<String, StringInput> myStringInput = new HashMap<>();
-	protected final HashMap<String, StringOutput> myStringOutput = new HashMap<>();
+	private final HashMap<String, BooleanInput> myBooleanInput = new HashMap<>();
+	private final HashMap<String, BooleanOutput> myBooleanOutput = new HashMap<>();
+	private final HashMap<String, DoubleInput> myDoubleInput = new HashMap<>();
+	private final HashMap<String, DoubleOutput> myDoubleOutput = new HashMap<>();
+	private final HashMap<String, StringInput> myStringInput = new HashMap<>();
+	private final HashMap<String, StringOutput> myStringOutput = new HashMap<>();
 	private String myName;
 
 	public Component( UUID id )
@@ -54,10 +55,12 @@ public abstract class Component implements IComponent
 	{
 		myBooleanOutput.put( output.getName(), output );
 	}
+
 	public void addOutput( DoubleOutput output )
 	{
 		myDoubleOutput.put( output.getName(), output );
 	}
+
 	public void addOutput( StringOutput output )
 	{
 		myStringOutput.put( output.getName(), output );
@@ -142,10 +145,41 @@ public abstract class Component implements IComponent
 		myName = name;
 	}
 
-	public boolean loadComponentFromData( ComponentDef def )
+	boolean loadComponentFromData( ComponentDef def )
 	{
 		myName = def.getName();
 
 		return true;
+	}
+
+	@Override
+	public void store( CompositeDef data )
+	{
+		// A component stores itself and any wires on its outputs
+		ComponentDef def = new ComponentDef();
+		def.setInstanceId( getId().toString() );
+		def.setName( getName() );
+		def.setNativeType( this.getClass().getName() );
+
+		data.getComponents().getComponentDef().add( def );
+		storeWires( data );
+	}
+
+	private void storeWires( CompositeDef data )
+	{
+		for( BooleanOutput output : myBooleanOutput.values() )
+		{
+			output.store( data );
+		}
+
+		for( DoubleOutput output : myDoubleOutput.values() )
+		{
+			output.store( data );
+		}
+
+		for( StringOutput output : myStringOutput.values() )
+		{
+			output.store( data );
+		}
 	}
 }
