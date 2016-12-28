@@ -39,21 +39,26 @@ public class ComponentTest
 	}
 
 	@Test
-	public void loadComposite()
-	{
-		IComponent c = loadComponent( "MinimalComposite.xml" );
-		assertTrue( c != null );
-		assertTrue( c.getId() != null );
-	}
-
-
-	@Test
 	public void loadCompositeWithImportTest()
 	{
 		IComponent c = loadComponent( "LoadCompositeWithImportTest.xml" );
 		assertTrue( c != null );
 		assertTrue( c.getId() != null );
-		assertTrue( c.getSubComponentCount() == 1 );
+		assertTrue( c.getSubComponentCount() == 4 );
+
+		BooleanInput a = c.getBooleanInputs().get( "A" );
+		BooleanInput b = c.getBooleanInputs().get( "B" );
+		BooleanOutput out = c.getBooleanOutputs().get( "Out" );
+
+		assertFalse( out.getValue() );
+		a.set( true );
+		assertFalse( out.getValue() );
+		b.set( true );
+		assertTrue( out.getValue() );
+		a.set( false );
+		assertFalse( out.getValue() );
+		b.set( false );
+		assertFalse( out.getValue() );
 	}
 
 

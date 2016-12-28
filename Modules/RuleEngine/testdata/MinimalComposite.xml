@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CompositeDef>
-	<Components>
-		<ComponentDef nativeType="testcomponents.TestComponent" instanceId="2bb633ba-ddb5-4934-90f0-924c9aa2ed95"/>
-	</Components>
-	<Imports/>
-	<Wires/>
-</CompositeDef>
