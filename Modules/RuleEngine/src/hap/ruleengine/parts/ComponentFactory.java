@@ -3,6 +3,7 @@
 
 package hap.ruleengine.parts;
 
+import hap.SysUtil;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import hap.ruleengine.parts.composite.CompositeComponent;
@@ -130,9 +131,9 @@ public class ComponentFactory implements IComponentFactory
 			JAXBContext jc = JAXBContext.newInstance( CompositeDef.class );
 			Unmarshaller u = jc.createUnmarshaller();
 
-			// TODO: QQQ schema location to be determined at runtime
 			SchemaFactory schemaFactory = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
-			Schema schema = schemaFactory.newSchema( new File( "d:\\git\\HAP\\Modules\\RuleEngine\\schema\\CompositeDefinition.xsd" ) );
+			String schemaPath = SysUtil.getFullOrRelativePath( CompositeComponent.class, "RuleEngine\\CompositeDefinition.xsd" );
+			Schema schema = schemaFactory.newSchema( new File( schemaPath ) );
 			u.setSchema( schema );
 
 			CompositeDef data = (CompositeDef) u.unmarshal( new InputSource( new StringReader( compositeData ) ) );
