@@ -14,8 +14,8 @@ class ComponentPalletView : Fragment() {
         prefWidth = 300.0
         cellCache {
             TitledPane(it.category,
-                    listview(it.components) { // TODO: Use titledpane-builder when TornadoFx is updated to >=1.5.10 https://kotlinlang.slack.com/files/edvin/F3K326W6P/cleaner__but_a_bit_more_advanced__and_requires_snapshot_.kt
-                        cellCache { // TODO: Use cellFragment https://kotlinlang.slack.com/files/edvin/F3K326W6P/cleaner__but_a_bit_more_advanced__and_requires_snapshot_.kt
+                    listview(it.components) {
+                        cellCache {
                             stackpane {
                                 this += ComponentView(0.0, 0.0, it)
                             }

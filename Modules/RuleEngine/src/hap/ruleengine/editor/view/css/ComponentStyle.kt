@@ -17,12 +17,10 @@ class ComponentStyle : Stylesheet() {
 
     init {
         input {
-            fill = c("#005555")
             alignment = Pos.TOP_CENTER
         }
 
         output {
-            fill = c("#000055")
             alignment = Pos.TOP_CENTER
         }
 
