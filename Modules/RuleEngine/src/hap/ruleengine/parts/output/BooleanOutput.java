@@ -7,8 +7,13 @@ import hap.ruleengine.parts.IComponent;
 
 public class BooleanOutput extends Output<Boolean>
 {
+	public BooleanOutput( String name, IComponent parent, boolean isVisibleOnCompoent )
+	{
+		super( name, parent, false, isVisibleOnCompoent );
+	}
+
 	public BooleanOutput( String name, IComponent parent )
 	{
-		super( name, parent, false );
+		super( name, parent, false, true );
 	}
 }

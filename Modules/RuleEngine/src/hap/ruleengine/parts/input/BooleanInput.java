@@ -8,9 +8,14 @@ import hap.ruleengine.parts.IComponent;
 
 public class BooleanInput extends Input<Boolean>
 {
+	public BooleanInput( String name, IComponent parent, boolean isVisibleInComponent )
+	{
+		super( name, parent, false, isVisibleInComponent );
+	}
+
 	public BooleanInput( String name, IComponent parent )
 	{
-		super( name, parent, false );
+		super( name, parent, false, true );
 	}
 
 	@Override

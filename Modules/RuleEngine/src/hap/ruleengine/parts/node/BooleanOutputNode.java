@@ -24,7 +24,7 @@ public class BooleanOutputNode extends Component
 	public void setup( CompositeComponent cc )
 	{
 		BooleanInput in = new BooleanInput( getName(), this );
-		out = new BooleanOutput( getName(), this );
+		out = new BooleanOutput( getName(), this, false );
 		addInput( in );
 		addOutput( out );
 

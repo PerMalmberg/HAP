@@ -7,8 +7,13 @@ import hap.ruleengine.parts.IComponent;
 
 public class StringOutput extends Output<String>
 {
+	public StringOutput( String name, IComponent parent , boolean isVisibleOnComponent)
+	{
+		super( name, parent, null, isVisibleOnComponent );
+	}
+
 	public StringOutput( String name, IComponent parent )
 	{
-		super( name, parent, null );
+		super( name, parent, null, true );
 	}
 }

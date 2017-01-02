@@ -23,7 +23,7 @@ public class DoubleInputNode extends Component
 	@Override
 	public void setup( CompositeComponent cc )
 	{
-		DoubleInput in = new DoubleInput( getName(), this );
+		DoubleInput in = new DoubleInput( getName(), this, false );
 		out = new DoubleOutput( getName(), this );
 
 		addInput( in );

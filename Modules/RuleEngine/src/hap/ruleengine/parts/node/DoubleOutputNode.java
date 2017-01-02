@@ -24,7 +24,7 @@ public class DoubleOutputNode extends Component
 	public void setup( CompositeComponent cc )
 	{
 		DoubleInput in = new DoubleInput( getName(), this );
-		out = new DoubleOutput( getName(), this );
+		out = new DoubleOutput( getName(), this, false );
 		addInput( in );
 		addOutput( out );
 

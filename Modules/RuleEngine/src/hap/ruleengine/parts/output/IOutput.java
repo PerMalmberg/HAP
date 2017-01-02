@@ -4,11 +4,11 @@
 package hap.ruleengine.parts.output;
 
 import hap.ruleengine.parts.data.CompositeDef;
+import hap.ruleengine.parts.IConnectionPoint;
 
-public interface IOutput
+public interface IOutput extends IConnectionPoint
 {
 	void disconnectAll();
-	String getName();
 
 	void store( CompositeDef data );
 }

@@ -8,16 +8,12 @@ import tornadofx.*
 
 class ComponentView constructor(y: Double, x: Double, vm: ComponentVM) : Fragment() {
 
-
     override val root = group {
         borderpane {
             left {
                 group {
                     for (input in vm.inputs) {
-                        stackpane {
-                            layoutY = input.index * ( 2.0 * connectionPointSize ) + connectionPointSize
-                            this += InputView(input)
-                        }
+                        this += InputView(input)
                     }
                 }
             }
@@ -34,23 +30,14 @@ class ComponentView constructor(y: Double, x: Double, vm: ComponentVM) : Fragmen
                 }
             }
 
-            /*right {
+            right {
                 group {
-                    for (i in 0..5) {
-                        hbox {
-                            layoutY = i * (connectionPointSize * 2)
+                    for (output in vm.outputs) {
+                        this += OutputView(output)
 
-                            rectangle(0.0, 0.0, connectionPointSize, connectionPointSize) {
-                                addClass(ComponentStyle.output)
-                            }
-
-                            text("Test text " + i.toString()) {
-                                addClass(ComponentStyle.connectionPointText)
-                            }
-                        }
                     }
                 }
-            }*/
+            }
         }
     }
 

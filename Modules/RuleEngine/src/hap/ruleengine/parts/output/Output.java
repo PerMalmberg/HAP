@@ -3,6 +3,7 @@
 
 package hap.ruleengine.parts.output;
 
+import hap.ruleengine.parts.ConnectionPoint;
 import hap.ruleengine.parts.IComponent;
 import hap.ruleengine.parts.data.CompositeDef;
 import hap.ruleengine.parts.data.WireDef;
@@ -11,17 +12,16 @@ import hap.ruleengine.parts.input.Input;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Output<T> implements IOutput
+public class Output<T> extends ConnectionPoint implements IOutput
 {
 	private T myValue;
 	private List<Input<T>> myRemote = new ArrayList<>();
-	private String myName;
 	private IComponent myParent;
 	private int myCallCount = 0;
 
-	Output( String name, IComponent parent, T defaultValue )
+	Output( String name, IComponent parent, T defaultValue, boolean isVisibleOnComponent )
 	{
-		myName = name;
+		super(name, isVisibleOnComponent);
 		myParent = parent;
 		myValue = defaultValue;
 	}
@@ -61,12 +61,6 @@ public class Output<T> implements IOutput
 	public void disconnectAll()
 	{
 		myRemote.clear();
-	}
-
-	@Override
-	public String getName()
-	{
-		return myName;
 	}
 
 	@Override

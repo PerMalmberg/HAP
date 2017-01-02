@@ -8,9 +8,15 @@ import hap.ruleengine.parts.IComponent;
 
 public class StringInput extends Input<String>
 {
+	public StringInput( String name, IComponent parent, boolean isVisibleInComponent
+	)
+	{
+		super( name, parent, null, isVisibleInComponent );
+	}
+
 	public StringInput( String name, IComponent parent )
 	{
-		super( name, parent, null );
+		super( name, parent, null, true );
 	}
 
 	@Override

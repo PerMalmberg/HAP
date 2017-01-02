@@ -8,9 +8,14 @@ import hap.ruleengine.parts.IComponent;
 
 public class DoubleInput extends Input<Double>
 {
+	public DoubleInput( String name, IComponent parent, boolean isVisibleInComponent )
+	{
+		super( name, parent, Double.NaN, isVisibleInComponent );
+	}
+
 	public DoubleInput( String name, IComponent parent )
 	{
-		super( name, parent, Double.NaN );
+		super( name, parent, Double.NaN, true );
 	}
 
 	@Override

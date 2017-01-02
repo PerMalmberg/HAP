@@ -23,7 +23,7 @@ public class BooleanInputNode extends Component
 	@Override
 	public void setup( CompositeComponent cc )
 	{
-		BooleanInput in = new BooleanInput( getName(), this );
+		BooleanInput in = new BooleanInput( getName(), this, false );
 		out = new BooleanOutput( getName(), this );
 
 		addInput( in );

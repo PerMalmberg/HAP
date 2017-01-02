@@ -24,7 +24,7 @@ public class StringOutputNode extends Component
 	public void setup( CompositeComponent cc )
 	{
 		StringInput in = new StringInput( getName(), this );
-		out = new StringOutput( getName(), this );
+		out = new StringOutput( getName(), this, false );
 		addInput( in );
 		addOutput( out );
 

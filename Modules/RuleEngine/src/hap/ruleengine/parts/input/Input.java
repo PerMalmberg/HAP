@@ -4,17 +4,18 @@
 package hap.ruleengine.parts.input;
 
 import hap.ruleengine.parts.Component;
+import hap.ruleengine.parts.ConnectionPoint;
 import hap.ruleengine.parts.IComponent;
 
-public abstract class Input<T> implements IInput
+public abstract class Input<T> extends ConnectionPoint implements IInput
 {
 	private T myValue;
-	private String myName;
+
 	private IComponent myParent;
 
-	Input( String name, IComponent parent, T defaultValue )
+	Input( String name, IComponent parent, T defaultValue, boolean visibleOnComponent )
 	{
-		myName = name;
+		super(name, visibleOnComponent);
 		myParent = parent;
 		myValue = defaultValue;
 	}
@@ -28,12 +29,6 @@ public abstract class Input<T> implements IInput
 	public T getValue()
 	{
 		return myValue;
-	}
-
-	@Override
-	public String getName()
-	{
-		return myName;
 	}
 
 	@Override
