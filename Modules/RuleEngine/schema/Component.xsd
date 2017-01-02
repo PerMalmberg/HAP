@@ -12,5 +12,7 @@
 		</xs:attribute>
 		<xs:attribute name="instanceId" type="UUID"/>
 		<xs:attribute name="name" type="ComponentName" use="optional" default=""/>
+		<xs:attribute name="X" type="xs:double" use="optional" default="50.0"/>
+		<xs:attribute name="Y" type="xs:double" use="optional" default="50.0"/>
 	</xs:complexType>
 </xs:schema>

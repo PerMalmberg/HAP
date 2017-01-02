@@ -27,6 +27,8 @@ public abstract class Component implements IComponent
 	private final HashMap<String, StringInput> myStringInput = new HashMap<>();
 	private final HashMap<String, StringOutput> myStringOutput = new HashMap<>();
 	private String myName;
+	private double X = 0.0;
+	private double Y = 0.0;
 
 	public Component( UUID id )
 	{
@@ -83,6 +85,29 @@ public abstract class Component implements IComponent
 	{
 	}
 
+	@Override
+	public double getX()
+	{
+		return X;
+	}
+
+	@Override
+	public void setX(double x)
+	{
+		X = x;
+	}
+
+	@Override
+	public double getY()
+	{
+		return Y;
+	}
+
+	@Override
+	public void setY(double y)
+	{
+		Y = y;
+	}
 
 	@Override
 	public int getSubComponentCount()
@@ -148,7 +173,8 @@ public abstract class Component implements IComponent
 	boolean loadComponentFromData( ComponentDef def )
 	{
 		myName = def.getName();
-
+		X = def.getX();
+		Y = def.getY();
 		return true;
 	}
 
@@ -160,6 +186,8 @@ public abstract class Component implements IComponent
 		def.setInstanceId( getId().toString() );
 		def.setName( getName() );
 		def.setNativeType( this.getClass().getName() );
+		def.setX( X );
+		def.setY( Y );
 
 		data.getComponents().getComponentDef().add( def );
 		storeWires( data );

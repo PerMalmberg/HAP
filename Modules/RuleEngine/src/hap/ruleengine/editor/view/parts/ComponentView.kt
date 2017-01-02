@@ -10,6 +10,9 @@ class ComponentView constructor(x: Double, y: Double, vm: ComponentVM) : Fragmen
 
     override val root = group {
         borderpane {
+            layoutXProperty().bind( vm.x )
+            layoutYProperty().bind( vm.y )
+
             left {
                 group {
                     for (input in vm.inputs) {
@@ -34,7 +37,6 @@ class ComponentView constructor(x: Double, y: Double, vm: ComponentVM) : Fragmen
                 group {
                     for (output in vm.outputs) {
                         this += OutputView(output)
-
                     }
                 }
             }
@@ -46,8 +48,8 @@ class ComponentView constructor(x: Double, y: Double, vm: ComponentVM) : Fragmen
 
         with(root)
         {
-            this.layoutX = x
-            this.layoutY = y
+            vm.x.value = x
+            vm.y.value = y
         }
     }
 }

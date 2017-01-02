@@ -1,6 +1,6 @@
 <CompositeDef>
 	<Components>
-		<ComponentDef nativeType="hap.ruleengine.component.string.Concatenate" instanceId="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95"/>
+		<ComponentDef nativeType="hap.ruleengine.component.string.Concatenate" instanceId="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95" X="45.0" Y="90.0"/>
 		<ComponentDef nativeType="hap.ruleengine.parts.node.StringInputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2ed95" name="A"/>
 		<ComponentDef nativeType="hap.ruleengine.parts.node.StringInputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2eeee" name="B"/>
 		<ComponentDef nativeType="hap.ruleengine.parts.node.StringOutputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2edaa" name="Out"/>
