@@ -4,6 +4,7 @@
 package hap.ruleengine.parts;
 
 import hap.SysUtil;
+import org.jetbrains.annotations.NotNull;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import hap.ruleengine.parts.composite.CompositeComponent;
@@ -104,6 +105,7 @@ public class ComponentFactory implements IComponentFactory
 					c = null;
 				}
 				else {
+					cc.addComponent( c );
 					c.setup( cc );
 				}
 			}
@@ -114,6 +116,15 @@ public class ComponentFactory implements IComponentFactory
 		}
 
 		return c;
+	}
+
+	@Override
+	public IComponent createFromName( @NotNull String componentType, @NotNull CompositeComponent parent )
+	{
+		ComponentDef def = new ComponentDef();
+		def.setNativeType( componentType );
+		def.setInstanceId( UUID.randomUUID().toString() );
+		return create( def, parent );
 	}
 
 	///////////////////////////////////////////////////////////////////////////

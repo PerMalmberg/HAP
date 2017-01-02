@@ -1,12 +1,12 @@
 package hap.ruleengine.editor.view.parts
 
 import hap.ruleengine.editor.view.css.ComponentStyle
-import hap.ruleengine.editor.viewmodel.ComponentVM
+import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import javafx.scene.layout.StackPane
 import tornadofx.*
 
 
-class ComponentView constructor(y: Double, x: Double, vm: ComponentVM) : Fragment() {
+class ComponentView constructor(x: Double, y: Double, vm: ComponentVM) : Fragment() {
 
     override val root = group {
         borderpane {

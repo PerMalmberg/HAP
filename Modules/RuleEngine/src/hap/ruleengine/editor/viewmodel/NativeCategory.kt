@@ -1,5 +1,6 @@
 package hap.ruleengine.editor.viewmodel
 
+import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import javafx.collections.ObservableList
 import tornadofx.observable
 import java.util.*

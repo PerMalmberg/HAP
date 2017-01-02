@@ -1,7 +1,7 @@
 package hap.ruleengine.editor.view.parts
 
 import hap.ruleengine.editor.view.css.ComponentStyle
-import hap.ruleengine.editor.viewmodel.OutputVM
+import hap.ruleengine.editor.viewmodel.parts.OutputVM
 import tornadofx.*
 
 

@@ -173,7 +173,7 @@ public class CompositeComponent extends Component
 			IComponent comp = factory.create( def, this );
 			if( comp != null )
 			{
-				myComponent.put( comp.getId(), comp );
+				addComponent( comp );
 			}
 			else
 			{
@@ -206,5 +206,10 @@ public class CompositeComponent extends Component
 			IComponent comp = myComponent.get( uid );
 			comp.store( data );
 		}
+	}
+
+	public void addComponent( IComponent c )
+	{
+		myComponent.put( c.getId(), c );
 	}
 }

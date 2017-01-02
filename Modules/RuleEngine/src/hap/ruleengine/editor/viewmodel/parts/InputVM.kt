@@ -1,4 +1,4 @@
-package hap.ruleengine.editor.viewmodel
+package hap.ruleengine.editor.viewmodel.parts
 
 import hap.ruleengine.parts.IConnectionPoint
 import javafx.scene.paint.Color

@@ -1,7 +1,7 @@
 package hap.ruleengine.editor.view.parts
 
 import hap.ruleengine.editor.view.css.ComponentStyle
-import hap.ruleengine.editor.viewmodel.InputVM
+import hap.ruleengine.editor.viewmodel.parts.InputVM
 import tornadofx.*
 
 const val connectionPointSize : Double = 6.0

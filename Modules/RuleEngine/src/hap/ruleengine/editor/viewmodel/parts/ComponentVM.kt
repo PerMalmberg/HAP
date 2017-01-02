@@ -1,5 +1,7 @@
-package hap.ruleengine.editor.viewmodel
+package hap.ruleengine.editor.viewmodel.parts
 
+import hap.ruleengine.editor.viewmodel.parts.InputVM
+import hap.ruleengine.editor.viewmodel.parts.OutputVM
 import hap.ruleengine.parts.IComponent
 import hap.ruleengine.parts.IConnectionPoint
 import hap.ruleengine.parts.input.BooleanInput
@@ -65,4 +67,6 @@ class ComponentVM constructor(myComponent: IComponent) : Controller() {
                 is StringOutput -> Color.DEEPPINK
                 else -> Color.RED
             }
+
+    val  componentType: String = myComponent.javaClass.name
 }

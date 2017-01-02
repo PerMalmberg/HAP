@@ -40,6 +40,15 @@ public class ComponentTest
 	}
 
 	@Test
+	public void createComponentFromNameTest()
+	{
+		CompositeComponent cc = new CompositeComponent( UUID.randomUUID(), null );
+		IComponent c = f.createFromName( "hap.ruleengine.component.bool.And", cc );
+		assertNotNull( c );
+		assertEquals( 1, cc.getSubComponentCount() );
+	}
+
+	@Test
 	public void loadCompositeWithImportTest()
 	{
 		IComponent c = loadComponent( "LoadCompositeWithImportTest.xml" );

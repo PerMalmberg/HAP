@@ -1,5 +1,6 @@
 package hap.ruleengine.editor.viewmodel
 
+import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.parts.ComponentFactory
 import hap.ruleengine.parts.IComponent
 import hap.ruleengine.parts.composite.CompositeComponent
