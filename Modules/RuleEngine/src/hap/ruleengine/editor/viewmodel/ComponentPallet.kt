@@ -71,7 +71,7 @@ class ComponentPallet : Controller() {
     ///////////////////////////////////////////////////////////////////////////////
     private fun CreateVMForComponent(category: String, component: IComponent) {
         val vm = ComponentVM(component)
-        var cat = categories.find() {
+        var cat = categories.find {
             it.category == category
         }
 

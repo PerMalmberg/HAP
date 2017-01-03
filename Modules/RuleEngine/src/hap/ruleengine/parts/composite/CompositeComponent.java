@@ -16,10 +16,7 @@ import hap.ruleengine.parts.data.CompositeDef.Imports.Import;
 import hap.ruleengine.parts.data.WireDef;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class CompositeComponent extends Component
 {
@@ -41,6 +38,8 @@ public class CompositeComponent extends Component
 
 	private CompositeDef myData;
 	private final HashMap<UUID, IComponent> myComponent = new HashMap<>();
+
+	public Collection<IComponent> getComponents() { return myComponent.values(); }
 
 	@Override
 	public int getSubComponentCount()
