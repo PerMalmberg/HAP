@@ -7,4 +7,5 @@ interface IDrawingSurfaceView {
     fun clearComponents()
     fun add(cv: ComponentView)
     fun sceneToLocal(sceneX: Double, sceneY: Double): Point2D
+    fun drawWires()
 }

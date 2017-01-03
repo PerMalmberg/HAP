@@ -10,25 +10,29 @@ import javafx.scene.input.TransferMode
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import tornadofx.*
+import java.util.*
 
 class DrawingSurface : Fragment(), IDrawingSurfaceView {
+    private val vm: DrawingSurfaceVM by inject()
+    private var rect: Rectangle by singleAssign()
+    private var group: Group by singleAssign()
+    val components: HashMap<UUID, ComponentView> = HashMap()
+
+
     override fun sceneToLocal(sceneX: Double, sceneY: Double): Point2D {
         return root.sceneToLocal(sceneX, sceneY)
     }
 
-    private var group: Group by singleAssign()
-    private var rect : Rectangle by singleAssign()
-
     override fun add(cv: ComponentView) {
         group += cv
+        components.put(cv.vm.component.id, cv)
     }
 
     override fun clearComponents() {
         group.children.clear()
+        components.clear()
         group += rect
     }
-
-    val vm: DrawingSurfaceVM by inject()
 
     override val root = scrollpane {
         stackpane {
@@ -58,5 +62,12 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
 
     init {
         vm.view = this
+    }
+
+    override fun drawWires() {
+        components.map {
+            val (key, component) = it
+            component.drawWires(this)
+        }
     }
 }

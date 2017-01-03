@@ -20,9 +20,9 @@ import java.util.*
 //
 //
 ///////////////////////////////////////////////////////////////////////////////
-class ComponentVM constructor(myComponent: IComponent) : ViewModel() {
+class ComponentVM constructor( val component: IComponent) : ViewModel() {
 
-    val name: String = myComponent.name
+    val name: String = component.name
     val inputs: ArrayList<InputVM> = ArrayList()
     val outputs: ArrayList<OutputVM> = ArrayList()
 
@@ -32,24 +32,24 @@ class ComponentVM constructor(myComponent: IComponent) : ViewModel() {
     ///////////////////////////////////////////////////////////////////////////////
     init {
         var index = 0
-        myComponent.booleanInputs.values.filter { it.isVisibleOnComponent }.map {
+        component.booleanInputs.values.filter { it.isVisibleOnComponent }.map {
             inputs.add(InputVM(index++, getColor(it), it))
         }
-        myComponent.doubleInputs.values.filter { it.isVisibleOnComponent }.map {
+        component.doubleInputs.values.filter { it.isVisibleOnComponent }.map {
             inputs.add(InputVM(index++, getColor(it), it))
         }
-        myComponent.stringInputs.values.filter { it.isVisibleOnComponent }.map {
+        component.stringInputs.values.filter { it.isVisibleOnComponent }.map {
             inputs.add(InputVM(index++, getColor(it), it))
         }
 
         index = 0
-        myComponent.booleanOutputs.values.filter { it.isVisibleOnComponent }.map {
+        component.booleanOutputs.values.filter { it.isVisibleOnComponent }.map {
             outputs.add(OutputVM(index++, getColor(it), it))
         }
-        myComponent.doubleOutputs.values.filter { it.isVisibleOnComponent }.map {
+        component.doubleOutputs.values.filter { it.isVisibleOnComponent }.map {
             outputs.add(OutputVM(index++, getColor(it), it))
         }
-        myComponent.stringOutputs.values.filter { it.isVisibleOnComponent }.map {
+        component.stringOutputs.values.filter { it.isVisibleOnComponent }.map {
             outputs.add(OutputVM(index++, getColor(it), it))
         }
     }
@@ -69,7 +69,7 @@ class ComponentVM constructor(myComponent: IComponent) : ViewModel() {
                 else -> Color.RED
             }
 
-    val componentType: String = myComponent.javaClass.name
-    val x = bind { myComponent.observable(IComponent::getX, IComponent::setX) }
-    val y = bind { myComponent.observable(IComponent::getY, IComponent::setY) }
+    val componentType: String = component.javaClass.name
+    val x = bind { component.observable(IComponent::getX, IComponent::setX) }
+    val y = bind { component.observable(IComponent::getY, IComponent::setY) }
 }

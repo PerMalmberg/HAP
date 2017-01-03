@@ -2,10 +2,7 @@ package hap.ruleengine.editor.view.css
 
 import javafx.geometry.Pos
 import javafx.scene.paint.Color
-import tornadofx.Stylesheet
-import tornadofx.c
-import tornadofx.cssclass
-import tornadofx.px
+import tornadofx.*
 
 class ComponentStyle : Stylesheet() {
     companion object input {
@@ -13,6 +10,7 @@ class ComponentStyle : Stylesheet() {
         val output by cssclass()
         val connectionPointText by cssclass()
         val center by cssclass()
+        val centerSelected by cssclass()
     }
 
     init {
@@ -32,6 +30,10 @@ class ComponentStyle : Stylesheet() {
 
         center {
             fill = Color.GRAY
+        }
+
+        centerSelected {
+            borderColor = multi(box(Color.ORANGE))
         }
     }
 }

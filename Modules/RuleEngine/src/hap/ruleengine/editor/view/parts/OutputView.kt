@@ -5,7 +5,7 @@ import hap.ruleengine.editor.viewmodel.parts.OutputVM
 import tornadofx.*
 
 
-class OutputView constructor(vm: OutputVM) : Fragment() {
+class OutputView constructor(val vm: OutputVM) : Fragment() {
     override val root =
             hbox {
                 // TODO: Why are inputs and outputs aligned to top and not offset by connectionPointSize ?

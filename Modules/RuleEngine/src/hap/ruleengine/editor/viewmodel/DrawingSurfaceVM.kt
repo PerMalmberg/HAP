@@ -6,12 +6,9 @@ import hap.ruleengine.editor.viewmodel.event.OpenCompositeFromFile
 import hap.ruleengine.editor.viewmodel.event.StartComponentCreation
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.parts.ComponentFactory
-import hap.ruleengine.parts.IComponent
 import hap.ruleengine.parts.composite.CompositeComponent
-import javafx.scene.Group
 import javafx.stage.FileChooser
 import tornadofx.ViewModel
-import tornadofx.plusAssign
 import tornadofx.singleAssign
 import java.util.*
 
@@ -58,6 +55,9 @@ class DrawingSurfaceVM : ViewModel() {
         currentCC.components
                 .map { ComponentView(it.x, it.y, ComponentVM(it)) }
                 .forEach { view.add(it) }
+
+        // Once all components are visualized, draw the wires.
+        view.drawWires()
     }
 
     var view: IDrawingSurfaceView by singleAssign()

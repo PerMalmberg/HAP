@@ -12,17 +12,15 @@ import hap.ruleengine.parts.input.Input;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Output<T> extends ConnectionPoint implements IOutput
+public abstract class Output<T> extends ConnectionPoint implements IOutput
 {
 	private T myValue;
 	private List<Input<T>> myRemote = new ArrayList<>();
-	private IComponent myParent;
 	private int myCallCount = 0;
 
 	Output( String name, IComponent parent, T defaultValue, boolean isVisibleOnComponent )
 	{
-		super(name, isVisibleOnComponent);
-		myParent = parent;
+		super(name, parent, isVisibleOnComponent);
 		myValue = defaultValue;
 	}
 
