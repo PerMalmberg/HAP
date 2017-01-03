@@ -9,6 +9,8 @@ import hap.ruleengine.parts.ComponentFactory
 import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.stage.FileChooser
 import tornadofx.ViewModel
+import tornadofx.find
+import tornadofx.plusAssign
 import tornadofx.singleAssign
 import java.util.*
 
@@ -29,8 +31,10 @@ class DrawingSurfaceVM : ViewModel() {
             if (c != null) {
                 // Component has been created, now visualize it.
                 val localPosition = view.sceneToLocal(it.sceneX, it.sceneY)
-                val cv = ComponentView(localPosition.x, localPosition.y, ComponentVM(c))
-                view.add(cv)
+                val vm = ComponentVM(c)
+                vm.x.value = localPosition.x
+                vm.y.value = localPosition.y
+                view.add(vm)
             }
         }
 
@@ -53,8 +57,12 @@ class DrawingSurfaceVM : ViewModel() {
     private fun visulize() {
         // Visualize all components in the current composite
         currentCC.components
-                .map { ComponentView(it.x, it.y, ComponentVM(it)) }
-                .forEach { view.add(it) }
+                .map {
+                    val vm = ComponentVM(it)
+                    vm.x.value = it.x
+                    vm.y.value = it.y
+                    view.add(vm)
+                }
 
         // Once all components are visualized, draw the wires.
         view.drawWires()

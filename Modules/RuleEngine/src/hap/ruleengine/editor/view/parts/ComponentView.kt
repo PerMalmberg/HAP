@@ -4,14 +4,14 @@ import hap.ruleengine.editor.view.css.ComponentStyle
 import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
 import hap.ruleengine.editor.viewmodel.event.SelectComponent
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
-import javafx.event.EventHandler
 import javafx.scene.layout.StackPane
 import tornadofx.*
 import java.util.*
 
 
-class ComponentView constructor(x: Double, y: Double, val vm: ComponentVM) : Fragment() {
+class ComponentView : Fragment() {
 
+    val vm: ComponentVM by param()
     private val myOutputs: ArrayList<OutputView> = ArrayList()
     private val myInputs: ArrayList<InputView> = ArrayList()
 
@@ -39,7 +39,7 @@ class ComponentView constructor(x: Double, y: Double, val vm: ComponentVM) : Fra
                         heightProperty().bind(p.heightProperty())
                         addClass(ComponentStyle.center)
 
-                        onMouseClicked = EventHandler {
+                        setOnMouseClicked  {
                             fire(SelectComponent(vm))
                         }
 
@@ -68,12 +68,6 @@ class ComponentView constructor(x: Double, y: Double, val vm: ComponentVM) : Fra
 
     init {
         importStylesheet(ComponentStyle::class)
-
-        with(root)
-        {
-            vm.x.value = x
-            vm.y.value = y
-        }
     }
 
     fun drawWires( surface : IDrawingSurfaceView)

@@ -21,7 +21,7 @@ class ComponentPalletView : Fragment() {
                         cellCache {
                             stackpane {
                                 val vm = it
-                                this += ComponentView(0.0, 0.0, it)
+                                this += find<ComponentView>( "vm" to it)
                                 onDragDetected = EventHandler {
                                     this.startFullDrag()
                                     fire(StartComponentCreation(vm.componentType))

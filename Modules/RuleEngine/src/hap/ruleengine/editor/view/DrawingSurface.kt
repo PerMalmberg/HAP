@@ -4,6 +4,7 @@ import hap.ruleengine.editor.view.parts.ComponentView
 import hap.ruleengine.editor.viewmodel.DrawingSurfaceVM
 import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
 import hap.ruleengine.editor.viewmodel.event.EndComponentCreation
+import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import javafx.geometry.Point2D
 import javafx.scene.Group
 import javafx.scene.input.TransferMode
@@ -23,7 +24,8 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
         return root.sceneToLocal(sceneX, sceneY)
     }
 
-    override fun add(cv: ComponentView) {
+    override fun add(vm: ComponentVM) {
+        val cv = find<ComponentView>("vm" to vm)
         group += cv
         components.put(cv.vm.component.id, cv)
     }
