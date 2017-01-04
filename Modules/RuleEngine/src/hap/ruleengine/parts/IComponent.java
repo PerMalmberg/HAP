@@ -48,4 +48,7 @@ public interface IComponent
 	void store( CompositeDef data );
 
 	List<IWire> getWires();
+
+	boolean isVisualized();
+	void setVisualized();
 }

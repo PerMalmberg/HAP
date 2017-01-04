@@ -32,6 +32,7 @@ public abstract class Component implements IComponent
 	private String myName;
 	private double X = 0.0;
 	private double Y = 0.0;
+	private boolean myIsVisualized = false;
 
 	public Component( UUID id )
 	{
@@ -218,5 +219,16 @@ public abstract class Component implements IComponent
 	public List<IWire> getWires()
 	{
 		return new ArrayList<IWire>();
+	}
+
+	@Override
+	public boolean isVisualized()
+	{
+		return myIsVisualized;
+	}
+
+	@Override
+	public void setVisualized() {
+		myIsVisualized = true;
 	}
 }

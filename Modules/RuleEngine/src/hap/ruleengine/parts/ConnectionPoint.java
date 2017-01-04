@@ -26,8 +26,17 @@ public abstract class ConnectionPoint implements IConnectionPoint
 	}
 
 	@Override
-	public boolean isVisibleWhenParentIsVisualized()
+	public boolean isVisible()
 	{
-		return myIsVisibleWhenParentIsVisualized;
+		boolean res;
+
+		if( myParent.isVisualized()) {
+			res = myIsVisibleWhenParentIsVisualized;
+		}
+		else {
+			res = true;
+		}
+
+		return res;
 	}
 }

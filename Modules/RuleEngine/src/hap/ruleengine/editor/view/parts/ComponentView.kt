@@ -21,7 +21,7 @@ class ComponentView : Fragment() {
 
             left {
                 group {
-                    vm.inputs.filter { it.connectionPoint.isVisibleWhenParentIsVisualized }.map {
+                    vm.inputs.filter { it.connectionPoint.isVisible }.map {
                         val inp = InputView(it)
                         myInputs.add(inp)
                         this += inp
@@ -55,7 +55,7 @@ class ComponentView : Fragment() {
 
             right {
                 group {
-                    vm.outputs.filter { it.connectionPoint.isVisibleWhenParentIsVisualized }.map {
+                    vm.outputs.filter { it.connectionPoint.isVisible }.map {
                         val out = OutputView(it)
                         myOutputs.add(out)
                         this += out

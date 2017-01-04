@@ -31,6 +31,10 @@ class ComponentVM constructor( val component: IComponent) : ViewModel() {
     //
     ///////////////////////////////////////////////////////////////////////////////
     init {
+        // Mark the component as visualized so that inputs/outputs that should not be
+        // shown are handled correctly. Specifically, this applies to nodes.
+        component.setVisualized()
+
         var index = 0
         component.booleanInputs.values.map {
             inputs.add(InputVM(index++, getColor(it), it))
