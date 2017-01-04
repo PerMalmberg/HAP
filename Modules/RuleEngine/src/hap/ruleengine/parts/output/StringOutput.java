@@ -7,9 +7,9 @@ import hap.ruleengine.parts.IComponent;
 
 public class StringOutput extends Output<String>
 {
-	public StringOutput( String name, IComponent parent , boolean isVisibleOnComponent)
+	public StringOutput( String name, IComponent parent , boolean isVisibleWhenParentIsVisualized)
 	{
-		super( name, parent, null, isVisibleOnComponent );
+		super( name, parent, null, isVisibleWhenParentIsVisualized );
 	}
 
 	public StringOutput( String name, IComponent parent )

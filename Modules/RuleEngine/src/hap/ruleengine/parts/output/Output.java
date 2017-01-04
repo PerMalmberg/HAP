@@ -18,9 +18,9 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 	private List<Input<T>> myRemote = new ArrayList<>();
 	private int myCallCount = 0;
 
-	Output( String name, IComponent parent, T defaultValue, boolean isVisibleOnComponent )
+	Output( String name, IComponent parent, T defaultValue, boolean isVisibleWhenParentIsVisualized )
 	{
-		super(name, parent, isVisibleOnComponent);
+		super(name, parent, isVisibleWhenParentIsVisualized);
 		myValue = defaultValue;
 	}
 

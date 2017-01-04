@@ -7,9 +7,9 @@ import hap.ruleengine.parts.IComponent;
 
 public class DoubleOutput extends Output<Double>
 {
-	public DoubleOutput( String name, IComponent parent, boolean isVisibleOnComponent )
+	public DoubleOutput( String name, IComponent parent, boolean isVisibleWhenParentIsVisualized )
 	{
-		super( name, parent, Double.NaN, isVisibleOnComponent );
+		super( name, parent, Double.NaN, isVisibleWhenParentIsVisualized );
 	}
 
 	public DoubleOutput( String name, IComponent parent )

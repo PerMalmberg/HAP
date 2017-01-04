@@ -1,19 +1,16 @@
 package hap.ruleengine.parts;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 public abstract class ConnectionPoint implements IConnectionPoint
 {
 	private String myName;
-	private final boolean myIsVisibleOnComponent;
+	private final boolean myIsVisibleWhenParentIsVisualized;
 	protected IComponent myParent;
 
-	public ConnectionPoint( String name, IComponent parent, boolean isVisibleOnComponent )
+	public ConnectionPoint( String name, IComponent parent, boolean isVisibleWhenParentIsVisualized )
 	{
 		myName = name;
 		myParent = parent;
-		myIsVisibleOnComponent = isVisibleOnComponent;
+		myIsVisibleWhenParentIsVisualized = isVisibleWhenParentIsVisualized;
 	}
 
 	@Override
@@ -29,14 +26,8 @@ public abstract class ConnectionPoint implements IConnectionPoint
 	}
 
 	@Override
-	public boolean isVisibleOnComponent()
+	public boolean isVisibleWhenParentIsVisualized()
 	{
-		return myIsVisibleOnComponent;
-	}
-
-	@Override
-	public UUID getComponentId()
-	{
-		return myParent.getId();
+		return myIsVisibleWhenParentIsVisualized;
 	}
 }

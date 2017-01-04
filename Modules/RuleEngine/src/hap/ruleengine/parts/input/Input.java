@@ -13,9 +13,9 @@ public abstract class Input<T> extends ConnectionPoint implements IInput
 
 	private IComponent myParent;
 
-	Input( String name, IComponent parent, T defaultValue, boolean visibleOnComponent )
+	Input( String name, IComponent parent, T defaultValue, boolean isVisibleWhenParentIsVisualized )
 	{
-		super(name, parent, visibleOnComponent);
+		super(name, parent, isVisibleWhenParentIsVisualized);
 		myParent = parent;
 		myValue = defaultValue;
 	}
