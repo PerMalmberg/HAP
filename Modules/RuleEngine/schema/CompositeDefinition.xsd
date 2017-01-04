@@ -21,6 +21,8 @@
 									<xs:attribute name="src" type="xs:string"/>
 									<xs:attribute name="instanceId" type="UUID" use="required"/>
 									<xs:attribute name="name" type="ComponentName" use="optional" default=""/>
+									<xs:attribute name="X" type="xs:double" use="optional" default="0.0"/>
+									<xs:attribute name="Y" type="xs:double" use="optional" default="0.0"/>
 								</xs:complexType>
 							</xs:element>
 						</xs:sequence>

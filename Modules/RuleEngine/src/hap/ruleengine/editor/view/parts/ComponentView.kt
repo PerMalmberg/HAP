@@ -1,10 +1,8 @@
 package hap.ruleengine.editor.view.parts
 
 import hap.ruleengine.editor.view.css.ComponentStyle
-import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
 import hap.ruleengine.editor.viewmodel.event.SelectComponent
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
-import hap.ruleengine.parts.Wire.IWire
 import javafx.scene.layout.StackPane
 import tornadofx.*
 import java.util.*
@@ -23,8 +21,8 @@ class ComponentView : Fragment() {
 
             left {
                 group {
-                    for (input in vm.inputs) {
-                        val inp = InputView(input)
+                    vm.inputs.filter { it.connectionPoint.isVisibleOnComponent }.map {
+                        val inp = InputView(it)
                         myInputs.add(inp)
                         this += inp
                     }
@@ -57,8 +55,8 @@ class ComponentView : Fragment() {
 
             right {
                 group {
-                    for (output in vm.outputs) {
-                        val out = OutputView(output)
+                    vm.outputs.filter { it.connectionPoint.isVisibleOnComponent }.map {
+                        val out = OutputView(it)
                         myOutputs.add(out)
                         this += out
                     }

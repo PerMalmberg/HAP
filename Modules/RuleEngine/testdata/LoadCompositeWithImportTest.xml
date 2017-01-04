@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CompositeDef>
 	<Components>
-		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanInputNode" instanceId="11111111-ddb5-4934-90f0-924c9bb2ed95" name="A"/>
-		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanInputNode" instanceId="22222222-ddb5-4934-90f0-924c9bb2eeee" name="B"/>
-		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanOutputNode" instanceId="44444444-ddb5-4934-90f0-924c9bb2edaa" name="Out"/>
+		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanInputNode" instanceId="11111111-ddb5-4934-90f0-924c9bb2ed95" name="A" X="10.0" Y="10.0"/>
+		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanInputNode" instanceId="22222222-ddb5-4934-90f0-924c9bb2eeee" name="B" X="10.0" Y="50.0"/>
+		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanOutputNode" instanceId="44444444-ddb5-4934-90f0-924c9bb2edaa" name="Out" X="50.0" Y="30.0"/>
 	</Components>
 	<Imports>
-		<Import src="TestAndComponent.xml" instanceId="33333333-ddb5-4934-90f0-774c9aa2ed95" name="A minimal composite"/>
+		<Import src="TestAndComponent.xml" instanceId="33333333-ddb5-4934-90f0-774c9aa2ed95" name="A minimal composite"  X="30.0" Y="30.0"/>
 	</Imports>
 	<Wires>
 		<WireDef sourceComponent="11111111-ddb5-4934-90f0-924c9bb2ed95" sourceOutput="A" targetComponent="33333333-ddb5-4934-90f0-774c9aa2ed95" targetInput="A" type="BooleanWire"/>

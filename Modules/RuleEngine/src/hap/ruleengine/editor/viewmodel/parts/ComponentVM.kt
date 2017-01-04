@@ -32,24 +32,24 @@ class ComponentVM constructor( val component: IComponent) : ViewModel() {
     ///////////////////////////////////////////////////////////////////////////////
     init {
         var index = 0
-        component.booleanInputs.values.filter { it.isVisibleOnComponent }.map {
+        component.booleanInputs.values.map {
             inputs.add(InputVM(index++, getColor(it), it))
         }
-        component.doubleInputs.values.filter { it.isVisibleOnComponent }.map {
+        component.doubleInputs.values.map {
             inputs.add(InputVM(index++, getColor(it), it))
         }
-        component.stringInputs.values.filter { it.isVisibleOnComponent }.map {
+        component.stringInputs.values.map {
             inputs.add(InputVM(index++, getColor(it), it))
         }
 
         index = 0
-        component.booleanOutputs.values.filter { it.isVisibleOnComponent }.map {
+        component.booleanOutputs.values.map {
             outputs.add(OutputVM(index++, getColor(it), it))
         }
-        component.doubleOutputs.values.filter { it.isVisibleOnComponent }.map {
+        component.doubleOutputs.values.map {
             outputs.add(OutputVM(index++, getColor(it), it))
         }
-        component.stringOutputs.values.filter { it.isVisibleOnComponent }.map {
+        component.stringOutputs.values.map {
             outputs.add(OutputVM(index++, getColor(it), it))
         }
     }

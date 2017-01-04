@@ -55,6 +55,8 @@ public class CompositeComponent extends Component
 		imp.setName( getName() );
 		imp.setInstanceId( getId().toString() );
 		imp.setSrc( mySourceFile );
+		imp.setX( getX() );
+		imp.setY( getY() );
 		data.getImports().getImport().add( imp );
 	}
 
@@ -147,6 +149,8 @@ public class CompositeComponent extends Component
 			else
 			{
 				cc.setName( imp.getName() );
+				cc.setX( imp.getX() );
+				cc.setY( imp.getY() );
 				myComponent.put( UUID.fromString( imp.getInstanceId() ), cc );
 			}
 		}
