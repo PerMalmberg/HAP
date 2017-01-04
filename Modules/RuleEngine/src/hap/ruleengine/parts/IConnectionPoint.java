@@ -1,5 +1,6 @@
 package hap.ruleengine.parts;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public interface IConnectionPoint

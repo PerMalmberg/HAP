@@ -29,7 +29,7 @@ public class BooleanInputNode extends Component
 		addInput( in );
 		addOutput( out );
 
-		// Add our input to the parent output so it can be accessed from outside.
+		// Add our input to the parent so it can be accessed from outside.
 		cc.addInput( in );
 	}
 

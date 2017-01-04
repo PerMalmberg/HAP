@@ -6,7 +6,8 @@ import tornadofx.*
 
 const val connectionPointSize : Double = 6.0
 
-class InputView constructor(vm: InputVM) : Fragment() {
+class InputView constructor(val vm: InputVM) : Fragment() {
+    // TODO create via find()
     override val root =
             hbox {
                 // TODO: Why are inputs and outputs aligned to top and not offset by connectionPointSize ?

@@ -3,12 +3,12 @@
 		<ComponentDef nativeType="hap.ruleengine.component.numeric.Add" instanceId="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95"/>
 		<ComponentDef nativeType="hap.ruleengine.parts.node.DoubleInputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2ed95" name="A"/>
 		<ComponentDef nativeType="hap.ruleengine.parts.node.DoubleInputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2eeee" name="B"/>
-		<ComponentDef nativeType="hap.ruleengine.parts.node.DoubleOutputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2edaa" name="Out"/>
+		<ComponentDef nativeType="hap.ruleengine.parts.node.DoubleOutputNode" instanceId="2bb63aaa-ddb5-4934-90f0-aaaaaaaaaaaa" name="Out"/>
 	</Components>
 	<Imports/>
 	<Wires>
 		<WireDef sourceComponent="2bb63aaa-ddb5-4934-90f0-924c9bb2ed95" sourceOutput="A" targetComponent="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95" targetInput="A" type="DoubleWire"/>
 		<WireDef sourceComponent="2bb63aaa-ddb5-4934-90f0-924c9bb2eeee" sourceOutput="B" targetComponent="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95" targetInput="B" type="DoubleWire"/>
-		<WireDef sourceComponent="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95" sourceOutput="Out" targetComponent="2bb63aaa-ddb5-4934-90f0-924c9bb2edaa" targetInput="Out" type="DoubleWire"/>
+		<WireDef sourceComponent="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95" sourceOutput="Out" targetComponent="2bb63aaa-ddb5-4934-90f0-aaaaaaaaaaaa" targetInput="Out" type="DoubleWire"/>
 	</Wires>
 </CompositeDef>

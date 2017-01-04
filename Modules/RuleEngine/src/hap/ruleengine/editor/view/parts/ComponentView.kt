@@ -4,6 +4,7 @@ import hap.ruleengine.editor.view.css.ComponentStyle
 import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
 import hap.ruleengine.editor.viewmodel.event.SelectComponent
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
+import hap.ruleengine.parts.Wire.IWire
 import javafx.scene.layout.StackPane
 import tornadofx.*
 import java.util.*
@@ -39,7 +40,7 @@ class ComponentView : Fragment() {
                         heightProperty().bind(p.heightProperty())
                         addClass(ComponentStyle.center)
 
-                        setOnMouseClicked  {
+                        setOnMouseClicked {
                             fire(SelectComponent(vm))
                         }
 
@@ -70,11 +71,11 @@ class ComponentView : Fragment() {
         importStylesheet(ComponentStyle::class)
     }
 
-    fun drawWires( surface : IDrawingSurfaceView)
-    {
-        myOutputs.map {
-            // Get hold of the all the remote component views
+    fun getInputView(nameOfInput: String): InputView? {
+        return myInputs.singleOrNull { nameOfInput == it.vm.name.value }
+    }
 
-        }
+    fun getOutputView(nameOfOutput: String): OutputView? {
+        return myOutputs.singleOrNull { nameOfOutput == it.vm.name.value }
     }
 }

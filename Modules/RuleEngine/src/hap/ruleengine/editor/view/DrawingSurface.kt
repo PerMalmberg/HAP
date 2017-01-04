@@ -5,6 +5,7 @@ import hap.ruleengine.editor.viewmodel.DrawingSurfaceVM
 import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
 import hap.ruleengine.editor.viewmodel.event.EndComponentCreation
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
+import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.geometry.Point2D
 import javafx.scene.Group
 import javafx.scene.input.TransferMode
@@ -15,10 +16,14 @@ import java.util.*
 
 class DrawingSurface : Fragment(), IDrawingSurfaceView {
     private val vm: DrawingSurfaceVM by inject()
+
     private var rect: Rectangle by singleAssign()
     private var group: Group by singleAssign()
     val components: HashMap<UUID, ComponentView> = HashMap()
 
+    private fun getComponentView(id: UUID): ComponentView? {
+        return components.get(id)
+    }
 
     override fun sceneToLocal(sceneX: Double, sceneY: Double): Point2D {
         return root.sceneToLocal(sceneX, sceneY)
@@ -66,10 +71,17 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
         vm.view = this
     }
 
-    override fun drawWires() {
-        components.map {
-            val (key, component) = it
-            component.drawWires(this)
+    override fun drawWires( cc : CompositeComponent) {
+        cc.wires.forEach {
+            val sourceComponent = getComponentView(it.sourceComponent)
+            val sourceOutput = sourceComponent?.getOutputView(it.sourceOutput)
+            val targetComponent = getComponentView(it.targetComponent)
+            val targetInput = targetComponent?.getInputView(it.targetInput)
+
+            if( sourceOutput != null && targetInput != null ) {
+                // TODO
+            }
         }
+
     }
 }

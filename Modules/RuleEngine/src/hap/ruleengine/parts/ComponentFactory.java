@@ -86,7 +86,7 @@ public class ComponentFactory implements IComponentFactory
 	//
 	///////////////////////////////////////////////////////////////////////////
 	@Override
-	public IComponent create( ComponentDef def, CompositeComponent cc  )
+	public IComponent create( ComponentDef def, CompositeComponent cc )
 	{
 		Component c = null;
 
@@ -104,7 +104,8 @@ public class ComponentFactory implements IComponentFactory
 				{
 					c = null;
 				}
-				else {
+				else
+				{
 					cc.addComponent( c );
 					c.setup( cc );
 				}
@@ -148,7 +149,7 @@ public class ComponentFactory implements IComponentFactory
 			u.setSchema( schema );
 
 			CompositeDef data = (CompositeDef) u.unmarshal( new InputSource( new StringReader( compositeData ) ) );
-			cc = new CompositeComponent(compositeUid, sourceFile.getName() );
+			cc = new CompositeComponent( compositeUid, sourceFile.getName() );
 			if( ! cc.loadCompositeFromData( data, this ) )
 			{
 				cc = null;

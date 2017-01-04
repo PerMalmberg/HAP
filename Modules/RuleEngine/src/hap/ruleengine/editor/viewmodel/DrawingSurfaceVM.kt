@@ -1,6 +1,7 @@
 package hap.ruleengine.editor.viewmodel
 
 import hap.ruleengine.editor.view.parts.ComponentView
+
 import hap.ruleengine.editor.viewmodel.event.EndComponentCreation
 import hap.ruleengine.editor.viewmodel.event.OpenCompositeFromFile
 import hap.ruleengine.editor.viewmodel.event.StartComponentCreation
@@ -12,12 +13,14 @@ import tornadofx.ViewModel
 import tornadofx.find
 import tornadofx.plusAssign
 import tornadofx.singleAssign
+import java.io.File
 import java.util.*
-
 class DrawingSurfaceVM : ViewModel() {
     private var currentCC: CompositeComponent = CompositeComponent(UUID.randomUUID(), null)
     private val factory: ComponentFactory = ComponentFactory()
     private var componentToCreate: String = ""
+
+    var view: IDrawingSurfaceView by singleAssign()
 
     init {
         subscribe<StartComponentCreation> {
@@ -42,7 +45,9 @@ class DrawingSurfaceVM : ViewModel() {
             val fc = FileChooser()
             fc.title = "Select composite to open"
             fc.extensionFilters.add(FileChooser.ExtensionFilter("Composite Files", "*.xml"))
-            val file = fc.showOpenDialog(it.window)
+            //val file = fc.showOpenDialog(it.window)
+            // QQQ
+            val file = File("D:/per/HAP/Modules/RuleEngine/testdata/LoadCompositeWithImportTest.xml")
             if (file != null) {
                 val opened = factory.create(file, UUID.randomUUID())
                 if (opened != null) {
@@ -65,8 +70,6 @@ class DrawingSurfaceVM : ViewModel() {
                 }
 
         // Once all components are visualized, draw the wires.
-        view.drawWires()
+        view.drawWires( currentCC )
     }
-
-    var view: IDrawingSurfaceView by singleAssign()
 }

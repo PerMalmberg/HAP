@@ -3,6 +3,7 @@
 
 package hap.ruleengine.parts;
 
+import hap.ruleengine.parts.Wire.IWire;
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.data.ComponentDef;
 import hap.ruleengine.parts.data.CompositeDef;
@@ -14,7 +15,9 @@ import hap.ruleengine.parts.output.BooleanOutput;
 import hap.ruleengine.parts.output.DoubleOutput;
 import hap.ruleengine.parts.output.StringOutput;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public abstract class Component implements IComponent
@@ -92,7 +95,7 @@ public abstract class Component implements IComponent
 	}
 
 	@Override
-	public void setX(double x)
+	public void setX( double x )
 	{
 		X = x;
 	}
@@ -104,7 +107,7 @@ public abstract class Component implements IComponent
 	}
 
 	@Override
-	public void setY(double y)
+	public void setY( double y )
 	{
 		Y = y;
 	}
@@ -209,5 +212,11 @@ public abstract class Component implements IComponent
 		{
 			output.store( data );
 		}
+	}
+
+	@Override
+	public List<IWire> getWires()
+	{
+		return new ArrayList<IWire>();
 	}
 }

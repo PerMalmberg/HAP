@@ -3,6 +3,7 @@
 
 package hap.ruleengine.parts;
 
+import hap.ruleengine.parts.Wire.IWire;
 import hap.ruleengine.parts.data.CompositeDef;
 import hap.ruleengine.parts.input.BooleanInput;
 import hap.ruleengine.parts.input.DoubleInput;
@@ -13,6 +14,7 @@ import hap.ruleengine.parts.output.DoubleOutput;
 import hap.ruleengine.parts.output.StringOutput;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public interface IComponent
@@ -44,4 +46,6 @@ public interface IComponent
 	void setName( String name );
 
 	void store( CompositeDef data );
+
+	List<IWire> getWires();
 }

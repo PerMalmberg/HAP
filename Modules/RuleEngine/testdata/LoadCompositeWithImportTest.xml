@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CompositeDef>
 	<Components>
-		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanInputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2ed95" name="A"/>
-		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanInputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2eeee" name="B"/>
-		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanOutputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2edaa" name="Out"/>
+		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanInputNode" instanceId="11111111-ddb5-4934-90f0-924c9bb2ed95" name="A"/>
+		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanInputNode" instanceId="22222222-ddb5-4934-90f0-924c9bb2eeee" name="B"/>
+		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanOutputNode" instanceId="44444444-ddb5-4934-90f0-924c9bb2edaa" name="Out"/>
 	</Components>
 	<Imports>
-		<Import src="TestAndComponent.xml" instanceId="333633ba-ddb5-4934-90f0-774c9aa2ed95" name="A minimal composite"/>
+		<Import src="TestAndComponent.xml" instanceId="33333333-ddb5-4934-90f0-774c9aa2ed95" name="A minimal composite"/>
 	</Imports>
 	<Wires>
-		<WireDef sourceComponent="2bb63aaa-ddb5-4934-90f0-924c9bb2ed95" sourceOutput="A" targetComponent="333633ba-ddb5-4934-90f0-774c9aa2ed95" targetInput="A" type="BooleanWire"/>
-		<WireDef sourceComponent="2bb63aaa-ddb5-4934-90f0-924c9bb2eeee" sourceOutput="B" targetComponent="333633ba-ddb5-4934-90f0-774c9aa2ed95" targetInput="B" type="BooleanWire"/>
-		<WireDef sourceComponent="333633ba-ddb5-4934-90f0-774c9aa2ed95" sourceOutput="Out" targetComponent="2bb63aaa-ddb5-4934-90f0-924c9bb2edaa" targetInput="Out" type="BooleanWire"/>
+		<WireDef sourceComponent="11111111-ddb5-4934-90f0-924c9bb2ed95" sourceOutput="A" targetComponent="33333333-ddb5-4934-90f0-774c9aa2ed95" targetInput="A" type="BooleanWire"/>
+		<WireDef sourceComponent="22222222-ddb5-4934-90f0-924c9bb2eeee" sourceOutput="B" targetComponent="33333333-ddb5-4934-90f0-774c9aa2ed95" targetInput="B" type="BooleanWire"/>
+		<WireDef sourceComponent="33333333-ddb5-4934-90f0-774c9aa2ed95" sourceOutput="Out" targetComponent="44444444-ddb5-4934-90f0-924c9bb2edaa" targetInput="Out" type="BooleanWire"/>
 	</Wires>
 </CompositeDef>

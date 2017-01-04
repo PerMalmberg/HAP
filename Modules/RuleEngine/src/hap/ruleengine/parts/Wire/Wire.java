@@ -57,4 +57,27 @@ public abstract class Wire<T, In extends Input<T>, Out extends Output<T>> implem
 		}
 	}
 
+	@Override
+	public UUID getSourceComponent()
+	{
+		return UUID.fromString( myDef.getSourceComponent() );
+	}
+
+	@Override
+	public String getSourceOutput()
+	{
+		return myDef.getSourceOutput();
+	}
+
+	@Override
+	public UUID getTargetComponent()
+	{
+		return UUID.fromString( myDef.getTargetComponent() );
+	}
+
+	@Override
+	public String getTargetInput()
+	{
+		return myDef.getTargetInput();
+	}
 }

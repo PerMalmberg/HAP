@@ -211,4 +211,10 @@ public class CompositeComponent extends Component
 	{
 		myComponent.put( c.getId(), c );
 	}
+
+	@Override
+	public List<IWire> getWires()
+	{
+		return myWire;
+	}
 }
