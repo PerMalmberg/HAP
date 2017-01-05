@@ -20,16 +20,18 @@ class ComponentPalletView : Fragment() {
                     listview(it.components) {
                         cellCache {
                             stackpane {
-                                val vm = it
-                                this += find<ComponentView>( "vm" to it)
-                                onDragDetected = EventHandler {
-                                    this.startFullDrag()
-                                    fire(StartComponentCreation(vm.componentType))
-                                    it.consume()
-                                }
+                                group {
+                                    val vm = it
+                                    this += find<ComponentView>("vm" to it)
+                                    onDragDetected = EventHandler {
+                                        this.startFullDrag()
+                                        fire(StartComponentCreation(vm.componentType))
+                                        it.consume()
+                                    }
 
-                                onDragDone = EventHandler {
-                                    fire(StartComponentCreation(""))
+                                    onDragDone = EventHandler {
+                                        fire(StartComponentCreation(""))
+                                    }
                                 }
                             }
                         }
