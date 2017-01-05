@@ -18,15 +18,15 @@ class WireView(val source: OutputView, val target: InputView) : Line() {
     }
 
     private fun setStart(sceneCoordinates: Point2D) {
-        val parentLocal = parent.sceneToLocal(sceneCoordinates)
-        startX = parentLocal.x
-        startY = parentLocal.y
+        val local = parent.sceneToLocal(sceneCoordinates)
+        startX = local.x
+        startY = local.y
     }
 
     private fun setEnd(sceneCoordinates: Point2D) {
-        val parentLocal = parent.sceneToLocal(sceneCoordinates)
-        endX = parentLocal.x
-        endY = parentLocal.y
+        val local = parent.sceneToLocal(sceneCoordinates)
+        endX = local.x
+        endY = local.y
     }
 
     fun updateEndPoints() {
