@@ -71,15 +71,17 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
         vm.view = this
     }
 
-    override fun drawWires( cc : CompositeComponent) {
+    override fun drawWires(cc: CompositeComponent) {
         cc.wires.forEach {
             val sourceComponent = getComponentView(it.sourceComponent)
             val sourceOutput = sourceComponent?.getOutputView(it.sourceOutput)
             val targetComponent = getComponentView(it.targetComponent)
             val targetInput = targetComponent?.getInputView(it.targetInput)
 
-            if( sourceOutput != null && targetInput != null ) {
-                // TODO
+            if (sourceOutput != null && targetInput != null) {
+                val wire = sourceOutput.connect(targetInput)
+                group += wire
+                wire.updateEndPoints()
             }
         }
 

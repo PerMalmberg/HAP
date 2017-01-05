@@ -5,21 +5,32 @@ import hap.ruleengine.editor.viewmodel.parts.OutputVM
 import tornadofx.*
 
 
-class OutputView constructor(val vm: OutputVM) : Fragment() {
-    // TODO create via find()
+class OutputView : ConnectionPointView() {
+    private val vm: OutputVM by param()
+
     override val root =
             hbox {
                 // TODO: Why are inputs and outputs aligned to top and not offset by connectionPointSize ?
-                layoutY = connectionPointSize + vm.index * 2 * connectionPointSize
-                rectangle(0.0, 0.0, connectionPointSize, connectionPointSize)
+                val y = connectionPointSize + vm.index * 2 * connectionPointSize
+                layoutY = y
+
+                rectangle(0.0, y, connectionPointSize, connectionPointSize)
                 {
                     fill = vm.color
                     addClass(ComponentStyle.output)
+                }.apply {
+                    myConnectionPoint = this
                 }
 
                 text {
-                    textProperty().bind( vm.name )
+                    textProperty().bind(vm.name)
                     addClass(ComponentStyle.connectionPointText)
                 }
             }
+
+    fun connect(targetInput: InputView): WireView {
+        return WireView(this, targetInput)
+    }
+
+    val name: String = vm.name.value
 }

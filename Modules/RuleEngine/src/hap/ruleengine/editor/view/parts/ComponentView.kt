@@ -22,7 +22,7 @@ class ComponentView : Fragment() {
             left {
                 group {
                     vm.inputs.filter { it.connectionPoint.isVisible }.map {
-                        val inp = InputView(it)
+                        val inp = find<InputView>("vm" to it)
                         myInputs.add(inp)
                         this += inp
                     }
@@ -56,7 +56,7 @@ class ComponentView : Fragment() {
             right {
                 group {
                     vm.outputs.filter { it.connectionPoint.isVisible }.map {
-                        val out = OutputView(it)
+                        val out = find<OutputView>("vm" to it)
                         myOutputs.add(out)
                         this += out
                     }
@@ -70,10 +70,10 @@ class ComponentView : Fragment() {
     }
 
     fun getInputView(nameOfInput: String): InputView? {
-        return myInputs.singleOrNull { nameOfInput == it.vm.name.value }
+        return myInputs.singleOrNull { nameOfInput == it.name }
     }
 
     fun getOutputView(nameOfOutput: String): OutputView? {
-        return myOutputs.singleOrNull { nameOfOutput == it.vm.name.value }
+        return myOutputs.singleOrNull { nameOfOutput == it.name }
     }
 }
