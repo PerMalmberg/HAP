@@ -1,60 +1,38 @@
 package hap.ruleengine.editor.viewmodel
 
-import hap.ruleengine.editor.viewmodel.event.EndComponentCreation
+import hap.ruleengine.editor.viewmodel.event.DragComponentFromComponentPallet
+import hap.ruleengine.editor.viewmodel.event.MouseDragReleased
 import hap.ruleengine.editor.viewmodel.event.OpenCompositeFromFile
-import hap.ruleengine.editor.viewmodel.event.StartComponentCreation
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
+import hap.ruleengine.editor.viewmodel.userinteraction.UserInteractionFSM
 import hap.ruleengine.parts.ComponentFactory
 import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.application.Platform
-import javafx.stage.FileChooser
 import tornadofx.ViewModel
 import tornadofx.singleAssign
-import java.io.File
 import java.util.*
 
 class DrawingSurfaceVM : ViewModel() {
+    private val interaction = UserInteractionFSM()
     private var currentCC: CompositeComponent = CompositeComponent(UUID.randomUUID(), null)
-    private val factory: ComponentFactory = ComponentFactory()
-    private var componentToCreate: String = ""
 
     var view: IDrawingSurfaceView by singleAssign()
 
     init {
-        subscribe<StartComponentCreation> {
-            componentToCreate = it.componentType
+        subscribeToEvents()
+    }
+
+    private fun subscribeToEvents() {
+        subscribe<DragComponentFromComponentPallet> {
+            interaction.dragComponentFromComponentPallet(it.componentType)
         }
 
-        subscribe<EndComponentCreation> {
-            val c = factory.createFromName(componentToCreate, currentCC)
-            componentToCreate = ""
-
-            if (c != null) {
-                // Component has been created, now visualize it.
-                // Component has been created, now visualize it.
-                val localPosition = view.sceneToLocal(it.sceneX, it.sceneY)
-                val vm = ComponentVM(c)
-                vm.x.value = localPosition.x
-                vm.y.value = localPosition.y
-                view.add(vm)
-            }
+        subscribe<MouseDragReleased> {
+            interaction.mouseDragReleased(it, view, currentCC)
         }
 
         subscribe<OpenCompositeFromFile> {
-            val fc = FileChooser()
-            fc.title = "Select composite to open"
-            fc.extensionFilters.add(FileChooser.ExtensionFilter("Composite Files", "*.xml"))
-            //val file = fc.showOpenDialog(it.window)
-            // QQQ
-            val file = File("d:\\git\\HAP\\Modules\\RuleEngine\\testdata\\LoadCompositeWithImportTest.xml")
-            if (file != null) {
-                val opened = factory.create(file, UUID.randomUUID())
-                if (opened != null) {
-                    view.clearComponents()
-                    currentCC = opened
-                    visualize()
-                }
-            }
+            interaction.openComposite(this, it.window)
         }
     }
 
@@ -72,6 +50,12 @@ class DrawingSurfaceVM : ViewModel() {
         Platform.runLater {
             view.drawWires(currentCC)
         }
+    }
+
+    fun setComposite(cc: CompositeComponent) {
+        view.clearComponents()
+        currentCC = cc
+        visualize()
     }
 
 }

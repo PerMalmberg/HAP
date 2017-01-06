@@ -2,10 +2,9 @@ package hap.ruleengine.editor.view
 
 import hap.ruleengine.editor.view.parts.ComponentView
 import hap.ruleengine.editor.viewmodel.ComponentPallet
-import hap.ruleengine.editor.viewmodel.event.StartComponentCreation
+import hap.ruleengine.editor.viewmodel.event.DragComponentFromComponentPallet
 import javafx.event.EventHandler
 import javafx.scene.control.TitledPane
-import javafx.scene.input.MouseEvent
 import tornadofx.*
 
 
@@ -20,18 +19,14 @@ class ComponentPalletView : Fragment() {
                     listview(it.components) {
                         cellCache {
                             stackpane {
+                                val vm = it
+                                onDragDetected = EventHandler {
+                                    this.startFullDrag()
+                                    fire(DragComponentFromComponentPallet(vm.componentType))
+                                    it.consume()
+                                }
                                 group {
-                                    val vm = it
                                     this += find<ComponentView>("vm" to it)
-                                    onDragDetected = EventHandler {
-                                        this.startFullDrag()
-                                        fire(StartComponentCreation(vm.componentType))
-                                        it.consume()
-                                    }
-
-                                    onDragDone = EventHandler {
-                                        fire(StartComponentCreation(""))
-                                    }
                                 }
                             }
                         }

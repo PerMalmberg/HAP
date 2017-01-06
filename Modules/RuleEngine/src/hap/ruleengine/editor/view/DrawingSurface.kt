@@ -4,7 +4,7 @@ import hap.ruleengine.editor.view.css.ComponentStyle
 import hap.ruleengine.editor.view.parts.ComponentView
 import hap.ruleengine.editor.viewmodel.DrawingSurfaceVM
 import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
-import hap.ruleengine.editor.viewmodel.event.EndComponentCreation
+import hap.ruleengine.editor.viewmodel.event.MouseDragReleased
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.geometry.Point2D
@@ -22,6 +22,7 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
     private var componentLayer: Group by singleAssign()
     private var wireLayer: Group by singleAssign()
     val components: HashMap<UUID, ComponentView> = HashMap()
+    val drawingSize = 5000.0
 
     private fun getComponentView(id: UUID): ComponentView? {
         return components[id]
@@ -51,8 +52,8 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
                 rectangle {
                     layoutX = 0.0
                     layoutY = 0.0
-                    width = 5000.0
-                    height = 5000.0
+                    width = drawingSize
+                    height = drawingSize
                     addClass(ComponentStyle.wireLayerBackground)
                 }.apply {
                     wireBackground = this
@@ -65,15 +66,15 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
                 rectangle {
                     layoutX = 0.0
                     layoutY = 0.0
-                    width = 5000.0
-                    height = 5000.0
+                    width = drawingSize
+                    height = drawingSize
                     addClass(ComponentStyle.drawingBackground)
                 }.apply {
                     drawingBackground = this
                 }
 
                 setOnMouseDragReleased {
-                    fire(EndComponentCreation(it.sceneX, it.sceneY))
+                    fire(MouseDragReleased(it.sceneX, it.sceneY))
                 }
 
                 setOnDragOver {
@@ -82,8 +83,6 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
             }.apply {
                 componentLayer = this
             }
-
-
         }
     }
 

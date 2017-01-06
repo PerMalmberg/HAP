@@ -50,5 +50,6 @@
     </orderEntry>
     <orderEntry type="library" name="no.tornado:tornadofx:1.5.9" level="project" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
+    <orderEntry type="module" module-name="FSM" />
   </component>
 </module>
