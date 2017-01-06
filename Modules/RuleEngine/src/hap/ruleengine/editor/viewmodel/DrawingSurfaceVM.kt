@@ -1,20 +1,18 @@
 package hap.ruleengine.editor.viewmodel
 
-import hap.ruleengine.editor.view.parts.ComponentView
-
 import hap.ruleengine.editor.viewmodel.event.EndComponentCreation
 import hap.ruleengine.editor.viewmodel.event.OpenCompositeFromFile
 import hap.ruleengine.editor.viewmodel.event.StartComponentCreation
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.parts.ComponentFactory
 import hap.ruleengine.parts.composite.CompositeComponent
+import javafx.application.Platform
 import javafx.stage.FileChooser
 import tornadofx.ViewModel
-import tornadofx.find
-import tornadofx.plusAssign
 import tornadofx.singleAssign
 import java.io.File
 import java.util.*
+
 class DrawingSurfaceVM : ViewModel() {
     private var currentCC: CompositeComponent = CompositeComponent(UUID.randomUUID(), null)
     private val factory: ComponentFactory = ComponentFactory()
@@ -33,6 +31,7 @@ class DrawingSurfaceVM : ViewModel() {
 
             if (c != null) {
                 // Component has been created, now visualize it.
+                // Component has been created, now visualize it.
                 val localPosition = view.sceneToLocal(it.sceneX, it.sceneY)
                 val vm = ComponentVM(c)
                 vm.x.value = localPosition.x
@@ -47,19 +46,19 @@ class DrawingSurfaceVM : ViewModel() {
             fc.extensionFilters.add(FileChooser.ExtensionFilter("Composite Files", "*.xml"))
             //val file = fc.showOpenDialog(it.window)
             // QQQ
-            val file = File("D:/per/HAP/Modules/RuleEngine/testdata/LoadCompositeWithImportTest.xml")
+            val file = File("d:\\git\\HAP\\Modules\\RuleEngine\\testdata\\LoadCompositeWithImportTest.xml")
             if (file != null) {
                 val opened = factory.create(file, UUID.randomUUID())
                 if (opened != null) {
                     view.clearComponents()
                     currentCC = opened
-                    visulize()
+                    visualize()
                 }
             }
         }
     }
 
-    private fun visulize() {
+    private fun visualize() {
         // Visualize all components in the current composite
         currentCC.components
                 .map {
@@ -70,6 +69,9 @@ class DrawingSurfaceVM : ViewModel() {
                 }
 
         // Once all components are visualized, draw the wires.
-        view.drawWires( currentCC )
+        Platform.runLater {
+            view.drawWires(currentCC)
+        }
     }
+
 }

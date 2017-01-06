@@ -17,7 +17,8 @@ abstract class ConnectionPointView : Fragment() {
     fun getSceneRelativeCenter(): Point2D
     {
         val bounds = myConnectionPoint.boundsInParent
-        return myConnectionPoint.localToScene( bounds.minX, bounds.minY )
+        val offset = connectionPointSize / 2
+        return myConnectionPoint.localToScene( bounds.minX + offset, bounds.minY + offset )
     }
 }
 

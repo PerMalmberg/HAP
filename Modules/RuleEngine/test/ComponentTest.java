@@ -97,7 +97,7 @@ public class ComponentTest
 	{
 		CompositeComponent c = loadComponent( "TestAndComponent.xml" );
 
-		BooleanInput a = c.getBooleanInputs().get( "A" );
+		BooleanInput a = c.getBooleanInputs().get( "AAA" );
 		BooleanInput b = c.getBooleanInputs().get( "B" );
 		BooleanOutput out = c.getBooleanOutputs().get( "Out" );
 

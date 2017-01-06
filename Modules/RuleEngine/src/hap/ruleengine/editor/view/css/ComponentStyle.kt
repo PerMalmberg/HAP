@@ -11,6 +11,8 @@ class ComponentStyle : Stylesheet() {
         val connectionPointText by cssclass()
         val center by cssclass()
         val centerSelected by cssclass()
+        val drawingBackground by cssclass()
+        val wireLayerBackground by cssclass()
     }
 
     init {
@@ -34,6 +36,14 @@ class ComponentStyle : Stylesheet() {
 
         centerSelected {
             borderColor = multi(box(Color.ORANGE))
+        }
+
+        drawingBackground {
+            fill = Color.TRANSPARENT
+        }
+
+        wireLayerBackground {
+            fill = Color.TRANSPARENT
         }
     }
 }

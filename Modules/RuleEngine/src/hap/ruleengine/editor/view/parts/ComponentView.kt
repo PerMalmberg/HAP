@@ -95,10 +95,6 @@ class ComponentView : Fragment() {
                 }
             }
 
-    init {
-        importStylesheet(ComponentStyle::class)
-    }
-
     fun getInputView(nameOfInput: String): InputView? {
         return myInputs.singleOrNull { nameOfInput == it.name }
     }
