@@ -1,10 +1,13 @@
 package hap.ruleengine.editor.view.parts
 
 import hap.ruleengine.editor.view.css.ComponentStyle
+import hap.ruleengine.editor.viewmodel.event.ComponentDragged
+import hap.ruleengine.editor.viewmodel.event.MouseReleased
 import hap.ruleengine.editor.viewmodel.event.SelectComponent
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.editor.viewmodel.parts.InputVM
 import hap.ruleengine.editor.viewmodel.parts.OutputVM
+import javafx.beans.binding.Bindings
 import javafx.scene.layout.GridPane
 import javafx.scene.paint.Color
 import tornadofx.*
@@ -21,6 +24,14 @@ class ComponentView : Fragment() {
             gridpane {
                 layoutXProperty().bind(vm.x)
                 layoutYProperty().bind(vm.y)
+
+                layoutXProperty().addListener { xValue, old, newValue ->
+                    updateWires()
+                }
+
+                layoutYProperty().addListener { xValue, old, newValue ->
+                    updateWires()
+                }
 
                 val inputs = Stack<InputVM>()
                 inputs.addAll(vm.inputs.filter { it.connectionPoint.isVisible }.reversed())
@@ -77,23 +88,41 @@ class ComponentView : Fragment() {
                     }
 
                     width = 10.0
-                    val p = this.parent as GridPane
-                    heightProperty().bind(p.heightProperty())
-                    addClass(ComponentStyle.center)
+                    heightProperty().bind((this.parent as GridPane).heightProperty())
+                    addClass(ComponentStyle.componentCenter)
 
-                    setOnMouseClicked {
-                        fire(SelectComponent(vm))
+                    if( vm.isSelectable ) {
+                        setOnMouseClicked {
+                            fire(SelectComponent(vm, it.isControlDown))
+                        }
+
+                        setOnMousePressed {
+
+                        }
+
+                        setOnMouseReleased {
+                            fire(MouseReleased)
+                        }
+
+                        setOnMouseDragged {
+                            fire(ComponentDragged(it, vm))
+                        }
                     }
 
-                    subscribe<SelectComponent> {
-                        if (vm === it.component) {
-                            addClass(ComponentStyle.centerSelected)
+                    vm.isSelectedProperty().addListener { observableValue, oldValue, newValue ->
+                        if( newValue ) {
+                            addClass(ComponentStyle.componentSelected)
                         } else {
-                            removeClass(ComponentStyle.centerSelected)
+                            removeClass(ComponentStyle.componentSelected)
                         }
                     }
                 }
             }
+
+    private fun updateWires() {
+        myOutputs.forEach { it.updateWires() }
+        myInputs.forEach { it.updateWires() }
+    }
 
     fun getInputView(nameOfInput: String): InputView? {
         return myInputs.singleOrNull { nameOfInput == it.name }

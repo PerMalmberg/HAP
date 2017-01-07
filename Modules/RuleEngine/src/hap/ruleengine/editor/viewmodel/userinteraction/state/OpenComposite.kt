@@ -1,21 +1,16 @@
 package hap.ruleengine.editor.viewmodel.userinteraction.state
 
-import chainedfsm.FSM
+import chainedfsm.EnterChain
+import chainedfsm.interfaces.IEnter
 import hap.ruleengine.editor.viewmodel.DrawingSurfaceVM
-import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
-import hap.ruleengine.editor.viewmodel.userinteraction.state.NoAction
-import hap.ruleengine.editor.viewmodel.userinteraction.state.UserInteractionState
+import hap.ruleengine.editor.viewmodel.userinteraction.UserInteractionFSM
 import hap.ruleengine.parts.ComponentFactory
 import javafx.stage.FileChooser
 import javafx.stage.Window
 import java.util.*
-import chainedfsm.interfaces.IEnter
-import chainedfsm.EnterChain
 
 
-
-
-class OpenComposite constructor(fsm: FSM<UserInteractionState>, val view: DrawingSurfaceVM, val window: Window) : UserInteractionState(fsm) {
+class OpenComposite constructor(fsm: UserInteractionFSM, val view: DrawingSurfaceVM, val window: Window) : UserInteractionState(fsm) {
 
     private val factory = ComponentFactory()
 
@@ -32,11 +27,11 @@ class OpenComposite constructor(fsm: FSM<UserInteractionState>, val view: Drawin
         if (file != null) {
             val opened = factory.create(file, UUID.randomUUID())
             if (opened != null) {
-                view.setComposite( opened )
+                view.setComposite(opened)
             }
         }
 
-        myFsm.setState(NoAction(myFsm))
+        fsm.setState(NoAction(fsm))
     }
 
 }

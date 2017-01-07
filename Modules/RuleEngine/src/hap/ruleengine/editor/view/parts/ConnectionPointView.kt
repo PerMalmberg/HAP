@@ -20,6 +20,11 @@ abstract class ConnectionPointView : Fragment() {
         val offset = connectionPointSize / 2
         return myConnectionPoint.localToScene( bounds.minX + offset, bounds.minY + offset )
     }
+
+    fun updateWires()
+    {
+        myWire.forEach { it.updateEndPoints() }
+    }
 }
 
 const val connectionPointSize: Double = 6.0

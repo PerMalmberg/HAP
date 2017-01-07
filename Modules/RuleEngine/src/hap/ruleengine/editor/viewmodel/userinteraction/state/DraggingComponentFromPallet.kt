@@ -1,18 +1,16 @@
 package hap.ruleengine.editor.viewmodel.userinteraction.state
 
-import chainedfsm.FSM
 import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
-import hap.ruleengine.editor.viewmodel.event.MouseDragReleased
+import hap.ruleengine.editor.viewmodel.event.MouseDragDropReleased
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
-import hap.ruleengine.editor.viewmodel.userinteraction.state.NoAction
-import hap.ruleengine.editor.viewmodel.userinteraction.state.UserInteractionState
+import hap.ruleengine.editor.viewmodel.userinteraction.UserInteractionFSM
 import hap.ruleengine.parts.ComponentFactory
 import hap.ruleengine.parts.composite.CompositeComponent
 
-class DraggingComponentFromPallet constructor(val componentType: String, fsm: FSM<UserInteractionState>) : UserInteractionState(fsm) {
+class DraggingComponentFromPallet constructor(val componentType: String, fsm: UserInteractionFSM) : UserInteractionState(fsm) {
     private val factory = ComponentFactory()
 
-    override fun mouseDragReleased(event: MouseDragReleased, view: IDrawingSurfaceView, currentCC: CompositeComponent) {
+    override fun mouseDragDropReleased(event: MouseDragDropReleased, view: IDrawingSurfaceView, currentCC: CompositeComponent) {
         val c = factory.createFromName(componentType, currentCC)
         if (c != null) {
             // Component has been created, now visualize it.
@@ -23,6 +21,6 @@ class DraggingComponentFromPallet constructor(val componentType: String, fsm: FS
             view.add(vm)
         }
 
-        myFsm.setState(NoAction(myFsm))
+        fsm.setState(NoAction(fsm))
     }
 }

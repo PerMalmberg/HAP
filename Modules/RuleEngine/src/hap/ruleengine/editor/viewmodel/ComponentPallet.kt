@@ -70,7 +70,7 @@ class ComponentPallet : Controller() {
     //
     ///////////////////////////////////////////////////////////////////////////////
     private fun CreateVMForComponent(category: String, component: IComponent) {
-        val vm = ComponentVM(component)
+        val vm = ComponentVM(component, false)
         var cat = categories.find {
             it.category == category
         }

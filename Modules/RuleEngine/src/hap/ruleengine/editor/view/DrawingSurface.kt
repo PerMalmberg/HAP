@@ -4,7 +4,7 @@ import hap.ruleengine.editor.view.css.ComponentStyle
 import hap.ruleengine.editor.view.parts.ComponentView
 import hap.ruleengine.editor.viewmodel.DrawingSurfaceVM
 import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
-import hap.ruleengine.editor.viewmodel.event.MouseDragReleased
+import hap.ruleengine.editor.viewmodel.event.MouseDragDropReleased
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.geometry.Point2D
@@ -74,7 +74,7 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
                 }
 
                 setOnMouseDragReleased {
-                    fire(MouseDragReleased(it.sceneX, it.sceneY))
+                    fire(MouseDragDropReleased(it.sceneX, it.sceneY))
                 }
 
                 setOnDragOver {
@@ -87,7 +87,7 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
     }
 
     init {
-        vm.view = this
+        vm.init(this)
     }
 
     override fun drawWires(cc: CompositeComponent) {
