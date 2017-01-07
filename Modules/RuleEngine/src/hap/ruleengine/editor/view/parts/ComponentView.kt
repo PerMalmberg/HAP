@@ -8,6 +8,7 @@ import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.editor.viewmodel.parts.InputVM
 import hap.ruleengine.editor.viewmodel.parts.OutputVM
 import javafx.beans.binding.Bindings
+import javafx.scene.input.MouseButton
 import javafx.scene.layout.GridPane
 import javafx.scene.paint.Color
 import tornadofx.*
@@ -93,11 +94,9 @@ class ComponentView : Fragment() {
 
                     if( vm.isSelectable ) {
                         setOnMouseClicked {
-                            fire(SelectComponent(vm, it.isControlDown))
-                        }
-
-                        setOnMousePressed {
-
+                            if( it.button == MouseButton.PRIMARY ) {
+                                fire(SelectComponent(vm, it.isControlDown))
+                            }
                         }
 
                         setOnMouseReleased {
@@ -105,7 +104,13 @@ class ComponentView : Fragment() {
                         }
 
                         setOnMouseDragged {
-                            fire(ComponentDragged(it, vm))
+                            if( it.button == MouseButton.PRIMARY ) {
+                                // Select component if not already selected
+                                if( !vm.isSelected) {
+                                    fire(SelectComponent(vm, it.isControlDown))
+                                }
+                                fire(ComponentDragged(it, vm))
+                            }
                         }
                     }
 

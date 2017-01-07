@@ -16,6 +16,8 @@ import java.util.*
 
 class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<UserInteractionState>(), IUserInteraction {
     private val selectedComponents = HashMap<UUID, ComponentVM>()
+    var skipNextSelectionEvent: Boolean = false
+
     private val pub = Publisher()
 
     init {
@@ -25,37 +27,36 @@ class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<User
     fun getSelectedComponents() = selectedComponents.values.toList()
 
     override fun mouseReleased() {
-        // Reset any action when user release the mouse button
+        // Reset any action when user releases the mouse button
         setState(NoAction(this))
     }
 
     override fun componentDragged(dragged: ComponentDragged) {
-
         currentState.componentDragged(dragged)
     }
 
     override fun selectComponent(component: ComponentVM, addToOrRemoveFromSelection: Boolean ) {
-        val deselected = ArrayList<ComponentVM>()
+        if( !skipNextSelectionEvent) {
+            val deselected = ArrayList<ComponentVM>()
 
-        if(addToOrRemoveFromSelection) {
-            setSelectionState(component, !component.isSelected)
-        }
-        else {
-            // Only one component should be selected
-            selectedComponents.values.forEach {
-                it.isSelected = false
-                deselected.add(it)
+            if (addToOrRemoveFromSelection) {
+                setSelectionState(component, !component.isSelected)
+            } else {
+                // Only the clicked component should remain selected
+                selectedComponents.values.forEach {
+                    it.isSelected = false
+                    deselected.add(it)
+                }
+                selectedComponents.clear()
+
+                setSelectionState(component, true)
             }
-            selectedComponents.clear()
 
-            setSelectionState(component, true)
+            // Let those listening for changes in selected components know of the new selection state
+            pub.fire(SelectedComponentsChanged(selectedComponents, deselected))
         }
 
-        // Let those listening for changes in selected components know of the new selection state
-        pub.fire(SelectedComponentsChanged(selectedComponents, deselected))
-
-        // Any time the user presses a mouse button above a component it potentially means a drag operation is next
-        setState(DraggingComponents(this))
+        skipNextSelectionEvent = false
     }
 
     private fun setSelectionState( component : ComponentVM, isSelected:Boolean)
@@ -74,10 +75,10 @@ class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<User
         currentState.openComposite(surface, window)
     }
 
+
     override fun mouseDragDropReleased(event: MouseDragDropReleased, view: IDrawingSurfaceView, currentCC: CompositeComponent) {
         currentState.mouseDragDropReleased(event, view, currentCC)
     }
-
 
     override fun dragComponentFromComponentPallet(componentType: String) {
         currentState.dragComponentFromComponentPallet(componentType)

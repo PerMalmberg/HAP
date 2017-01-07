@@ -8,6 +8,7 @@ class DraggingComponents constructor(fsm: UserInteractionFSM) : UserInteractionS
 
     override fun componentDragged(dragged: ComponentDragged) {
         val mouseEvent = dragged.event
+        fsm.skipNextSelectionEvent = true
 
         if (!dragStarted) {
             dragStarted = true
