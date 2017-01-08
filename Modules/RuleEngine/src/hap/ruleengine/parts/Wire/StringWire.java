@@ -1,7 +1,9 @@
 package hap.ruleengine.parts.Wire;
 
 import hap.ruleengine.parts.IComponent;
+import hap.ruleengine.parts.input.DoubleInput;
 import hap.ruleengine.parts.input.StringInput;
+import hap.ruleengine.parts.output.DoubleOutput;
 import hap.ruleengine.parts.output.StringOutput;
 import hap.ruleengine.parts.data.WireDef;
 

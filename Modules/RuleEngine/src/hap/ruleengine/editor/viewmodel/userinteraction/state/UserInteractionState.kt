@@ -11,12 +11,20 @@ import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.editor.viewmodel.userinteraction.IUserInteraction
 import hap.ruleengine.editor.viewmodel.userinteraction.UserInteractionFSM
 import hap.ruleengine.parts.ComponentFactory
+import hap.ruleengine.parts.IConnectionPoint
 import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.stage.Window
 import java.util.*
 
 open class UserInteractionState constructor(val fsm: UserInteractionFSM) : EnterLeaveState(), IUserInteraction {
-    private val pub = Publisher()
+
+    override fun mouseEnteredConnectionPoint(connectionPoint: IConnectionPoint?) {
+
+    }
+
+    override fun beginConnectWire(connectionPoint: IConnectionPoint) {
+
+    }
 
     protected fun createComponentLibraryFolder()
     {
@@ -78,4 +86,6 @@ open class UserInteractionState constructor(val fsm: UserInteractionFSM) : Enter
             fsm.selectedComponents.remove(component.component.id)
         }
     }
+
+    private val pub = Publisher()
 }

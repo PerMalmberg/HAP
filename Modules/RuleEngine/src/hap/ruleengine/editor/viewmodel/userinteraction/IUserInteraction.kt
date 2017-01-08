@@ -2,9 +2,10 @@ package hap.ruleengine.editor.viewmodel.userinteraction
 
 import hap.ruleengine.editor.viewmodel.DrawingSurfaceVM
 import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
-import hap.ruleengine.editor.viewmodel.event.MouseDragDropReleased
 import hap.ruleengine.editor.viewmodel.event.ComponentDragged
+import hap.ruleengine.editor.viewmodel.event.MouseDragDropReleased
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
+import hap.ruleengine.parts.IConnectionPoint
 import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.stage.Window
 
@@ -16,4 +17,6 @@ interface IUserInteraction {
     fun componentDragged(dragged: ComponentDragged)
     fun mouseReleased()
     fun saveComposite(surface: DrawingSurfaceVM, window: Window)
+    fun beginConnectWire(connectionPoint: IConnectionPoint)
+    fun mouseEnteredConnectionPoint(connectionPoint: IConnectionPoint?)
 }

@@ -4,10 +4,10 @@
 package hap.ruleengine.parts.Wire;
 
 import hap.ruleengine.parts.IComponent;
-import hap.ruleengine.parts.input.Input;
-import hap.ruleengine.parts.output.Output;
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.data.WireDef;
+import hap.ruleengine.parts.input.Input;
+import hap.ruleengine.parts.output.Output;
 
 import java.util.UUID;
 
@@ -20,6 +20,17 @@ public abstract class Wire<T, In extends Input<T>, Out extends Output<T>> implem
 	Wire( WireDef def )
 	{
 		myDef = def;
+	}
+
+	public static <T, In extends Input<T>, Out extends Output<T>> WireDef createDef( Out output, In input, String simpleClassName )
+	{
+		WireDef def = new WireDef();
+		def.setType( simpleClassName );
+		def.setTargetInput( input.getName() );
+		def.setTargetComponent( input.getParent().getId().toString() );
+		def.setSourceOutput( output.getName() );
+		def.setSourceComponent( output.getParent().getId().toString() );
+		return def;
 	}
 
 	@Override

@@ -15,14 +15,17 @@ import tornadofx.*
 import java.util.*
 
 class DrawingSurface : Fragment(), IDrawingSurfaceView {
-    private val vm: DrawingSurfaceVM by inject()
+    private val vm = DrawingSurfaceVM()
 
     private var drawingBackground: Rectangle by singleAssign()
+
     private var wireBackground: Rectangle by singleAssign()
     private var componentLayer: Group by singleAssign()
     private var wireLayer: Group by singleAssign()
     val components: HashMap<UUID, ComponentView> = HashMap()
     val drawingSize = 5000.0
+
+    override fun getVM() = vm
 
     private fun getComponentView(id: UUID): ComponentView? {
         return components[id]
@@ -98,9 +101,12 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
             val targetInput = targetComponent?.getInputView(it.targetInput)
 
             if (sourceOutput != null && targetInput != null) {
-                val wire = sourceOutput.connect(targetInput)
-                wireLayer += wire
-                wire.updateEndPoints()
+                // Since an input only can have one input we use that as a check to see which wires are not yet visualized
+                if (!targetInput.hasWires()) {
+                    val wire = sourceOutput.connect(targetInput)
+                    wireLayer += wire
+                    wire.updateEndPoints()
+                }
             }
         }
 

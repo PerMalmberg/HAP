@@ -4,6 +4,8 @@ import hap.ruleengine.editor.viewmodel.event.*
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.editor.viewmodel.userinteraction.UserInteractionFSM
 import hap.ruleengine.parts.CompositeSerializer
+import hap.ruleengine.parts.IConnectionPoint
+import hap.ruleengine.parts.Wire.IWire
 import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.application.Platform
 import tornadofx.*
@@ -54,6 +56,14 @@ class DrawingSurfaceVM : ViewModel() {
         subscribe<SaveComposite> {
             interaction.saveComposite(this, it.window)
         }
+
+        subscribe<BeginConnectWire> {
+            interaction.beginConnectWire(it.connectionPoint)
+        }
+
+        subscribe<MouseEnteredConnectionPoint> {
+            interaction.mouseEnteredConnectionPoint(it.connectionPoint)
+        }
     }
 
     private fun visualize() {
@@ -84,5 +94,13 @@ class DrawingSurfaceVM : ViewModel() {
     {
         val serializer = CompositeSerializer()
         return serializer.serialize(currentCC, file)
+    }
+
+    fun addWire(startPoint: IConnectionPoint, lastEntered: IConnectionPoint) {
+        val wire : IWire? = currentCC.addWire( startPoint, lastEntered )
+        if( wire != null) {
+            surface.drawWires(currentCC)
+        }
+
     }
 }

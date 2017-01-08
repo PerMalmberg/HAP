@@ -45,14 +45,21 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 		return myValue;
 	}
 
-	public void connect( Input<T> remote )
+	public boolean connect( Input<T> remote )
 	{
-		myRemote.add( remote );
+		boolean res = !remote.isConnected();
+		if( res )
+		{
+			myRemote.add( remote );
+			remote.markConnected();
+		}
+		return res;
 	}
 
 	public void disconnect( Input<T> remote )
 	{
 		myRemote.remove( remote );
+		remote.markDisconnected();
 	}
 
 	@Override

@@ -12,10 +12,11 @@ public abstract class Input<T> extends ConnectionPoint implements IInput
 	private T myValue;
 
 	private IComponent myParent;
+	private boolean myIsConnected = false;
 
 	Input( String name, IComponent parent, T defaultValue, boolean isVisibleWhenParentIsVisualized )
 	{
-		super(name, parent, isVisibleWhenParentIsVisualized);
+		super( name, parent, isVisibleWhenParentIsVisualized );
 		myParent = parent;
 		myValue = defaultValue;
 	}
@@ -32,7 +33,25 @@ public abstract class Input<T> extends ConnectionPoint implements IInput
 	}
 
 	@Override
-	public IComponent getParent() { return myParent; }
+	public IComponent getParent()
+	{
+		return myParent;
+	}
 
 	public abstract void signal( Component component );
+
+	public void markConnected()
+	{
+		myIsConnected = true;
+	}
+
+	public void markDisconnected()
+	{
+		myIsConnected = false;
+	}
+
+	public boolean isConnected()
+	{
+		return myIsConnected;
+	}
 }

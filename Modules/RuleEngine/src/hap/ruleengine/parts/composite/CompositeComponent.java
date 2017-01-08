@@ -6,6 +6,7 @@ package hap.ruleengine.parts.composite;
 import hap.ruleengine.parts.Component;
 import hap.ruleengine.parts.IComponent;
 import hap.ruleengine.parts.IComponentFactory;
+import hap.ruleengine.parts.IConnectionPoint;
 import hap.ruleengine.parts.Wire.BooleanWire;
 import hap.ruleengine.parts.Wire.DoubleWire;
 import hap.ruleengine.parts.Wire.IWire;
@@ -126,6 +127,7 @@ public class CompositeComponent extends Component
 		if( ! res )
 		{
 			myWire.forEach( IWire::disconnect );
+			myWire.clear();
 		}
 
 		return res;
@@ -231,5 +233,15 @@ public class CompositeComponent extends Component
 	public List<IWire> getWires()
 	{
 		return myWire;
+	}
+
+	public IWire addWire( IConnectionPoint start, IConnectionPoint end )
+	{
+		IWire wire = start.connectTo( end );
+		if( wire != null )
+		{
+			myWire.add( wire );
+		}
+		return wire;
 	}
 }

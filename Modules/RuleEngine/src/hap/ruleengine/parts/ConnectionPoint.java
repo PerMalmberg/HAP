@@ -39,4 +39,10 @@ public abstract class ConnectionPoint implements IConnectionPoint
 
 		return res;
 	}
+
+	@Override
+	public IComponent getParent()
+	{
+		return myParent;
+	}
 }

@@ -2,20 +2,32 @@ package hap.ruleengine.editor.view.parts
 
 import hap.ruleengine.editor.view.css.ComponentStyle
 import hap.ruleengine.editor.viewmodel.parts.InputVM
-import javafx.beans.binding.Bindings
-import javafx.geometry.Point2D
-import tornadofx.*
+import tornadofx.addClass
+import tornadofx.rectangle
+import tornadofx.stackpane
 
 class InputView : ConnectionPointView() {
     private val vm: InputVM by param()
 
     override val root =
             stackpane {
-                rectangle {
-                    width = connectionPointSize
-                    height = connectionPointSize
+                rectangle(0.0, 0.0, connectionPointSize, connectionPointSize) {
                     fill = vm.color
                     addClass(ComponentStyle.input)
+
+                    setOnDragDetected {
+                        startConnectWire(vm.connectionPoint)
+                        startFullDrag()
+                    }
+
+                    setOnMouseDragExited {
+                        enteredConnectionPoint(null)
+                    }
+
+                    setOnMouseDragEntered {
+                        enteredConnectionPoint(vm.connectionPoint)
+                    }
+
                 }.apply {
                     myConnectionPoint = this
                 }
