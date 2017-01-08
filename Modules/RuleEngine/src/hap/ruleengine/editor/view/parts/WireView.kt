@@ -13,7 +13,7 @@ class WireView(val source: OutputView, val target: InputView) : Line() {
 
         style {
             strokeWidth = 2.px
-            stroke = Color.RED
+            stroke = source.color
         }
     }
 

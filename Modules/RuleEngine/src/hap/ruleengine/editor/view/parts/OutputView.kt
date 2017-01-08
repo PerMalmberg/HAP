@@ -43,4 +43,5 @@ class OutputView : ConnectionPointView() {
     }
 
     val name: String = vm.name.value
+    val color = vm.color
 }
