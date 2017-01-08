@@ -29,8 +29,8 @@ abstract class ConnectionPointView : Fragment() {
         myWire.forEach { it.updateEndPoints() }
     }
 
-    protected fun startConnectWire(connectionPoint: IConnectionPoint) {
-        fire(BeginConnectWire(connectionPoint))
+    protected fun startConnectWire(connectionPoint: IConnectionPoint, sceneRelativeCenter: Point2D) {
+        fire(BeginConnectWire(connectionPoint, sceneRelativeCenter))
     }
 
     protected fun enteredConnectionPoint(connectionPoint: IConnectionPoint?) {

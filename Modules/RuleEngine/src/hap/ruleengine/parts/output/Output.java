@@ -8,6 +8,7 @@ import hap.ruleengine.parts.IComponent;
 import hap.ruleengine.parts.data.CompositeDef;
 import hap.ruleengine.parts.data.WireDef;
 import hap.ruleengine.parts.input.Input;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;

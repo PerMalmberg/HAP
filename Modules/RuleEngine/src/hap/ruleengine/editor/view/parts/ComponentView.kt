@@ -34,6 +34,8 @@ class ComponentView : Fragment() {
                     updateWires()
                 }
 
+                vgap = connectionPointSize / 2
+
                 val inputs = Stack<InputVM>()
                 inputs.addAll(vm.inputs.filter { it.connectionPoint.isVisible }.reversed())
                 val outputs = Stack<OutputVM>()

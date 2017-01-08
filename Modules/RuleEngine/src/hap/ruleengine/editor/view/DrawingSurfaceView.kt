@@ -10,11 +10,13 @@ import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.geometry.Point2D
 import javafx.scene.Group
 import javafx.scene.input.TransferMode
+import javafx.scene.paint.Color
+import javafx.scene.shape.Line
 import javafx.scene.shape.Rectangle
 import tornadofx.*
 import java.util.*
 
-class DrawingSurface : Fragment(), IDrawingSurfaceView {
+class DrawingSurfaceView : Fragment(), IDrawingSurfaceView {
     private val vm = DrawingSurfaceVM()
 
     private var drawingBackground: Rectangle by singleAssign()
@@ -22,6 +24,7 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
     private var wireBackground: Rectangle by singleAssign()
     private var componentLayer: Group by singleAssign()
     private var wireLayer: Group by singleAssign()
+    private var dragLine: Line by singleAssign()
     val components: HashMap<UUID, ComponentView> = HashMap()
     val drawingSize = 5000.0
 
@@ -47,6 +50,7 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
         componentLayer += drawingBackground
         wireLayer.children.clear()
         wireLayer += wireBackground
+        wireLayer += dragLine
     }
 
     override val root = scrollpane {
@@ -61,6 +65,22 @@ class DrawingSurface : Fragment(), IDrawingSurfaceView {
                 }.apply {
                     wireBackground = this
                 }
+
+                line {
+                    stroke = Color.GRAY
+                    strokeWidth = 2.0
+                    strokeDashArray.addAll(10.0, 5.0)
+                    isVisible = false
+                }.apply {
+                    dragLine = this
+                    startXProperty().bind(vm.dragLineStartXProperty())
+                    startYProperty().bind(vm.dragLineStartYProperty())
+                    endXProperty().bind(vm.dragLineEndXProperty())
+                    endYProperty().bind(vm.dragLineEndYProperty())
+                    visibleProperty().bind(vm.dragLineVisibleProperty())
+                }
+
+
             }.apply {
                 wireLayer = this
             }

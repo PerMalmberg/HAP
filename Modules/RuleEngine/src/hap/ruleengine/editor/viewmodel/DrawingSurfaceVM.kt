@@ -8,6 +8,7 @@ import hap.ruleengine.parts.IConnectionPoint
 import hap.ruleengine.parts.Wire.IWire
 import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.application.Platform
+import javafx.geometry.Point2D
 import tornadofx.*
 import java.io.File
 import java.util.*
@@ -58,11 +59,15 @@ class DrawingSurfaceVM : ViewModel() {
         }
 
         subscribe<BeginConnectWire> {
-            interaction.beginConnectWire(it.connectionPoint)
+            interaction.beginConnectWire(it.connectionPoint, it.sceneRelativeCenter)
         }
 
         subscribe<MouseEnteredConnectionPoint> {
             interaction.mouseEnteredConnectionPoint(it.connectionPoint)
+        }
+
+        subscribe<UpdateDragWire> {
+            interaction.updateDragWire(it.sceneX, it.sceneY)
         }
     }
 
@@ -103,4 +108,29 @@ class DrawingSurfaceVM : ViewModel() {
         }
 
     }
+
+    fun setDragWire(startSceneRelativeCenter: Point2D, sceneX: Double, sceneY: Double) {
+        dragLineVisible = true
+        var xy = surface.sceneToLocal(startSceneRelativeCenter.x, startSceneRelativeCenter.y)
+        dragLineStartX = xy.x
+        dragLineStartY = xy.y
+        xy = surface.sceneToLocal(sceneX, sceneY)
+        dragLineEndX = xy.x
+        dragLineEndY = xy.y
+    }
+
+    fun hideDragWire() {
+        dragLineVisible = false
+    }
+
+    var dragLineStartX: Double by property(0.0)
+    fun dragLineStartXProperty() = getProperty(DrawingSurfaceVM::dragLineStartX)
+    var dragLineStartY: Double by property(0.0)
+    fun dragLineStartYProperty() = getProperty(DrawingSurfaceVM::dragLineStartY)
+    var dragLineEndX: Double by property(0.0)
+    fun dragLineEndXProperty() = getProperty(DrawingSurfaceVM::dragLineEndX)
+    var dragLineEndY: Double by property(0.0)
+    fun dragLineEndYProperty() = getProperty(DrawingSurfaceVM::dragLineEndY)
+    var dragLineVisible: Boolean by property(false)
+    fun dragLineVisibleProperty() = getProperty(DrawingSurfaceVM::dragLineVisible)
 }

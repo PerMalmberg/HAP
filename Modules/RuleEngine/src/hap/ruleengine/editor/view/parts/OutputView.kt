@@ -1,6 +1,7 @@
 package hap.ruleengine.editor.view.parts
 
 import hap.ruleengine.editor.view.css.ComponentStyle
+import hap.ruleengine.editor.viewmodel.event.UpdateDragWire
 import hap.ruleengine.editor.viewmodel.parts.OutputVM
 import tornadofx.addClass
 import tornadofx.rectangle
@@ -16,12 +17,12 @@ class OutputView : ConnectionPointView() {
                     addClass(ComponentStyle.output)
 
                     setOnDragDetected {
-                        startConnectWire(vm.connectionPoint)
+                        startConnectWire(vm.connectionPoint, getSceneRelativeCenter())
                         startFullDrag()
                     }
 
                     setOnMouseDragged {
-
+                        fire(UpdateDragWire( it.sceneX, it.sceneY))
                     }
 
                     setOnMouseDragExited {

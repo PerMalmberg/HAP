@@ -10,17 +10,22 @@ import hap.ruleengine.editor.viewmodel.userinteraction.state.NoAction
 import hap.ruleengine.editor.viewmodel.userinteraction.state.UserInteractionState
 import hap.ruleengine.parts.IConnectionPoint
 import hap.ruleengine.parts.composite.CompositeComponent
+import javafx.geometry.Point2D
 import javafx.stage.Window
 import java.io.File
 import java.util.*
 
 class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<UserInteractionState>(), IUserInteraction {
+    override fun updateDragWire(sceneX: Double, sceneY: Double) {
+        currentState.updateDragWire(sceneX, sceneY)
+    }
+
     override fun mouseEnteredConnectionPoint(connectionPoint: IConnectionPoint?) {
         currentState.mouseEnteredConnectionPoint(connectionPoint)
     }
 
-    override fun beginConnectWire(connectionPoint: IConnectionPoint) {
-        setState(ConnectingWire(this, connectionPoint, surface.getVM()))
+    override fun beginConnectWire(connectionPoint: IConnectionPoint, sceneRelativeCenter: Point2D) {
+        setState(ConnectingWire(this, connectionPoint, surface.getVM(), sceneRelativeCenter))
     }
 
     fun getSelectedComponents() = selectedComponents.values.toList()

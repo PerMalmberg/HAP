@@ -13,21 +13,24 @@ import hap.ruleengine.editor.viewmodel.userinteraction.UserInteractionFSM
 import hap.ruleengine.parts.ComponentFactory
 import hap.ruleengine.parts.IConnectionPoint
 import hap.ruleengine.parts.composite.CompositeComponent
+import javafx.geometry.Point2D
 import javafx.stage.Window
 import java.util.*
 
 open class UserInteractionState constructor(val fsm: UserInteractionFSM) : EnterLeaveState(), IUserInteraction {
+    override fun updateDragWire(sceneX: Double, sceneY: Double) {
+
+    }
 
     override fun mouseEnteredConnectionPoint(connectionPoint: IConnectionPoint?) {
 
     }
 
-    override fun beginConnectWire(connectionPoint: IConnectionPoint) {
+    override fun beginConnectWire(connectionPoint: IConnectionPoint, sceneRelativeCenter: Point2D) {
 
     }
 
-    protected fun createComponentLibraryFolder()
-    {
+    protected fun createComponentLibraryFolder() {
         ComponentFactory.STANDARD_LIBRARY.toFile().mkdirs()
     }
 
@@ -40,7 +43,7 @@ open class UserInteractionState constructor(val fsm: UserInteractionFSM) : Enter
         // Nothing to do here
     }
 
-    override fun selectComponent(component: ComponentVM, addToOrRemoveFromSelection: Boolean ) {
+    override fun selectComponent(component: ComponentVM, addToOrRemoveFromSelection: Boolean) {
         val deselected = ArrayList<ComponentVM>()
 
         if (addToOrRemoveFromSelection) {

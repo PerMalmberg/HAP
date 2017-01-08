@@ -25,7 +25,7 @@ class RuleEngineTab : Fragment() {
         center{
             splitpane {
                 add(ComponentPalletView::class)
-                add(DrawingSurface::class)
+                add(DrawingSurfaceView::class)
                 add(PropertyView::class)
             }
         }
