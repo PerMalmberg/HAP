@@ -1,5 +1,6 @@
 package hap.ruleengine.editor.viewmodel.userinteraction
 
+import hap.ruleengine.editor.view.parts.WireView
 import hap.ruleengine.editor.viewmodel.DrawingSurfaceVM
 import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
 import hap.ruleengine.editor.viewmodel.event.ComponentDragged
@@ -16,6 +17,10 @@ import java.io.File
 import java.util.*
 
 class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<UserInteractionState>(), IUserInteraction {
+    override fun deleteWire(wire: WireView) {
+        currentState.deleteWire(wire)
+    }
+
     override fun updateDragWire(sceneX: Double, sceneY: Double) {
         currentState.updateDragWire(sceneX, sceneY)
     }

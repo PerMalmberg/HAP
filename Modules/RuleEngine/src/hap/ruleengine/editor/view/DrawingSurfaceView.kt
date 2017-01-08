@@ -2,6 +2,7 @@ package hap.ruleengine.editor.view
 
 import hap.ruleengine.editor.view.css.ComponentStyle
 import hap.ruleengine.editor.view.parts.ComponentView
+import hap.ruleengine.editor.view.parts.WireView
 import hap.ruleengine.editor.viewmodel.DrawingSurfaceVM
 import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
 import hap.ruleengine.editor.viewmodel.event.MouseDragDropReleased
@@ -22,16 +23,22 @@ class DrawingSurfaceView : Fragment(), IDrawingSurfaceView {
     private var drawingBackground: Rectangle by singleAssign()
 
     private var wireBackground: Rectangle by singleAssign()
+
     private var componentLayer: Group by singleAssign()
     private var wireLayer: Group by singleAssign()
     private var dragLine: Line by singleAssign()
     val components: HashMap<UUID, ComponentView> = HashMap()
     val drawingSize = 5000.0
-
     override fun getVM() = vm
 
     private fun getComponentView(id: UUID): ComponentView? {
         return components[id]
+    }
+
+    override fun removeWire(wire: WireView) {
+        wireLayer.children.remove(wire)
+        wire.disconnectFromConnectionPoints()
+        vm.removeWire(wire.wire)
     }
 
     override fun sceneToLocal(sceneX: Double, sceneY: Double): Point2D {
@@ -80,6 +87,14 @@ class DrawingSurfaceView : Fragment(), IDrawingSurfaceView {
                     visibleProperty().bind(vm.dragLineVisibleProperty())
                 }
 
+                setOnMouseDragReleased {
+                    fire(MouseDragDropReleased(it.sceneX, it.sceneY))
+                }
+
+                setOnDragOver {
+                    it.acceptTransferModes(TransferMode.COPY)
+                }
+
 
             }.apply {
                 wireLayer = this
@@ -92,16 +107,9 @@ class DrawingSurfaceView : Fragment(), IDrawingSurfaceView {
                     width = drawingSize
                     height = drawingSize
                     addClass(ComponentStyle.drawingBackground)
+                    isMouseTransparent = true
                 }.apply {
                     drawingBackground = this
-                }
-
-                setOnMouseDragReleased {
-                    fire(MouseDragDropReleased(it.sceneX, it.sceneY))
-                }
-
-                setOnDragOver {
-                    it.acceptTransferModes(TransferMode.COPY)
                 }
             }.apply {
                 componentLayer = this
@@ -124,11 +132,11 @@ class DrawingSurfaceView : Fragment(), IDrawingSurfaceView {
                 // Since an input only can have one input we use that as a check to see which wires are not yet visualized
                 if (!targetInput.hasWires()) {
                     val wire = sourceOutput.connect(targetInput)
+                    wire.wire = it
                     wireLayer += wire
                     wire.updateEndPoints()
                 }
             }
         }
-
     }
 }

@@ -7,7 +7,7 @@ import tornadofx.*
 
 class PropertyView : Fragment() {
     override val root = ScrollPane()
-    var selectedComponentCount by property(0)
+    var selectedComponentCount: Int by property(0)
     fun selectedComponentCountProperty() = getProperty(PropertyView::selectedComponentCount)
 
     init {

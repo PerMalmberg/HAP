@@ -8,7 +8,6 @@ import hap.ruleengine.parts.IComponent;
 import hap.ruleengine.parts.data.CompositeDef;
 import hap.ruleengine.parts.data.WireDef;
 import hap.ruleengine.parts.input.Input;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,7 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 
 	Output( String name, IComponent parent, T defaultValue, boolean isVisibleWhenParentIsVisualized )
 	{
-		super(name, parent, isVisibleWhenParentIsVisualized);
+		super( name, parent, isVisibleWhenParentIsVisualized );
 		myValue = defaultValue;
 	}
 
@@ -48,7 +47,7 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 
 	public boolean connect( Input<T> remote )
 	{
-		boolean res = !remote.isConnected();
+		boolean res = ! remote.isConnected();
 		if( res )
 		{
 			myRemote.add( remote );
@@ -61,12 +60,6 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 	{
 		myRemote.remove( remote );
 		remote.markDisconnected();
-	}
-
-	@Override
-	public void disconnectAll()
-	{
-		myRemote.clear();
 	}
 
 	@Override

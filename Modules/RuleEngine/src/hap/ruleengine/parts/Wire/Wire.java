@@ -47,8 +47,7 @@ public abstract class Wire<T, In extends Input<T>, Out extends Output<T>> implem
 			input = getInput( target, myDef.getTargetInput() );
 			if( output != null && input != null )
 			{
-				output.connect( input );
-				res = true;
+				res = output.connect( input );
 			}
 		}
 

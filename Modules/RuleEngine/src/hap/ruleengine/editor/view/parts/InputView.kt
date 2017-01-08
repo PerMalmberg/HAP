@@ -1,8 +1,10 @@
 package hap.ruleengine.editor.view.parts
 
 import hap.ruleengine.editor.view.css.ComponentStyle
+import hap.ruleengine.editor.viewmodel.event.MouseDragDropReleased
 import hap.ruleengine.editor.viewmodel.event.UpdateDragWire
 import hap.ruleengine.editor.viewmodel.parts.InputVM
+import javafx.scene.input.TransferMode
 import tornadofx.addClass
 import tornadofx.rectangle
 import tornadofx.stackpane
@@ -33,10 +35,23 @@ class InputView : ConnectionPointView() {
                         enteredConnectionPoint(vm.connectionPoint)
                     }
 
+                    setOnMouseDragReleased {
+                        fire(MouseDragDropReleased(it.sceneX, it.sceneY))
+                    }
+
+                    setOnDragOver {
+                        it.acceptTransferModes(TransferMode.COPY)
+                    }
+
                 }.apply {
                     myConnectionPoint = this
                 }
             }
+
+    override fun disconnect( wire: WireView )
+    {
+        myWire.remove(wire)
+    }
 
     val name: String = vm.name.value
 }

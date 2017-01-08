@@ -218,7 +218,7 @@ public abstract class Component implements IComponent
 	@Override
 	public List<IWire> getWires()
 	{
-		return new ArrayList<IWire>();
+		return new ArrayList<>();
 	}
 
 	@Override

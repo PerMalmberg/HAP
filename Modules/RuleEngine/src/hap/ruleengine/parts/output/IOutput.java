@@ -8,7 +8,5 @@ import hap.ruleengine.parts.IConnectionPoint;
 
 public interface IOutput extends IConnectionPoint
 {
-	void disconnectAll();
-
 	void store( CompositeDef data );
 }

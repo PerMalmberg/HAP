@@ -9,6 +9,7 @@ import hap.ruleengine.parts.IConnectionPoint;
 import hap.ruleengine.parts.Wire.DoubleWire;
 import hap.ruleengine.parts.Wire.IWire;
 import hap.ruleengine.parts.Wire.Wire;
+import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.output.DoubleOutput;
 
 public class DoubleInput extends Input<Double>
@@ -30,15 +31,16 @@ public class DoubleInput extends Input<Double>
 	}
 
 	@Override
-	public IWire connectTo( IConnectionPoint other )
+	public IWire connectTo( IConnectionPoint other, CompositeComponent cc )
 	{
 		IWire wire = null;
 		if( other instanceof DoubleOutput )
 		{
 			DoubleOutput output = (DoubleOutput) other;
-			if( output.connect( this ) )
-			{
-				wire = new DoubleWire( Wire.createDef( output, this, DoubleWire.class.getSimpleName() ) );
+			wire = new DoubleWire( Wire.createDef( output, this, DoubleWire.class.getSimpleName() ) );
+			boolean res = wire.connect( cc );
+			if( !res ) {
+				wire = null;
 			}
 		}
 

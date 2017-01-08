@@ -1,12 +1,17 @@
 package hap.ruleengine.editor.view.parts
 
+import hap.ruleengine.editor.viewmodel.Publisher
+import hap.ruleengine.editor.viewmodel.event.DeleteWire
+import hap.ruleengine.parts.Wire.IWire
 import javafx.geometry.Point2D
-import javafx.scene.paint.Color
+import javafx.scene.input.MouseButton
 import javafx.scene.shape.Line
 import tornadofx.px
 import tornadofx.style
 
 class WireView(val source: OutputView, val target: InputView) : Line() {
+    val pub = Publisher()
+
     init {
         source.addWire(this)
         target.addWire(this)
@@ -15,6 +20,17 @@ class WireView(val source: OutputView, val target: InputView) : Line() {
             strokeWidth = 2.px
             stroke = source.color
         }
+
+        setOnMouseClicked {
+            if (it.button == MouseButton.SECONDARY) {
+                pub.fire(DeleteWire(this))
+            }
+        }
+    }
+
+    fun disconnectFromConnectionPoints() {
+        source.disconnect(this)
+        target.disconnect(this)
     }
 
     private fun setStart(sceneCoordinates: Point2D) {
@@ -35,4 +51,6 @@ class WireView(val source: OutputView, val target: InputView) : Line() {
         val targetCenter = target.getSceneRelativeCenter()
         setEnd(targetCenter)
     }
+
+    var wire: IWire? = null
 }

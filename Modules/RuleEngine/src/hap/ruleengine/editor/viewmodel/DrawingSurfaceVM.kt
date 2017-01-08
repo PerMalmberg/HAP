@@ -9,12 +9,15 @@ import hap.ruleengine.parts.Wire.IWire
 import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.application.Platform
 import javafx.geometry.Point2D
-import tornadofx.*
+import tornadofx.ViewModel
+import tornadofx.getProperty
+import tornadofx.property
+import tornadofx.singleAssign
 import java.io.File
 import java.util.*
 
 class DrawingSurfaceVM : ViewModel() {
-    private var interaction : UserInteractionFSM by singleAssign()
+    private var interaction: UserInteractionFSM by singleAssign()
     private var currentCC: CompositeComponent = CompositeComponent(UUID.randomUUID(), null)
 
     var surface: IDrawingSurfaceView by singleAssign()
@@ -23,8 +26,7 @@ class DrawingSurfaceVM : ViewModel() {
         subscribeToEvents()
     }
 
-    fun init( s: IDrawingSurfaceView )
-    {
+    fun init(s: IDrawingSurfaceView) {
         surface = s
         interaction = UserInteractionFSM(surface)
     }
@@ -69,6 +71,10 @@ class DrawingSurfaceVM : ViewModel() {
         subscribe<UpdateDragWire> {
             interaction.updateDragWire(it.sceneX, it.sceneY)
         }
+
+        subscribe<DeleteWire> {
+            interaction.deleteWire(it.wire)
+        }
     }
 
     private fun visualize() {
@@ -95,18 +101,20 @@ class DrawingSurfaceVM : ViewModel() {
         visualize()
     }
 
-    fun saveComposite( file: File) : Boolean
-    {
+    fun saveComposite(file: File): Boolean {
         val serializer = CompositeSerializer()
         return serializer.serialize(currentCC, file)
     }
 
     fun addWire(startPoint: IConnectionPoint, lastEntered: IConnectionPoint) {
-        val wire : IWire? = currentCC.addWire( startPoint, lastEntered )
-        if( wire != null) {
+        val wire: IWire? = currentCC.addWire(startPoint, lastEntered)
+        if (wire != null) {
             surface.drawWires(currentCC)
         }
+    }
 
+    fun removeWire(wire: IWire?) {
+        currentCC.removeWire(wire)
     }
 
     fun setDragWire(startSceneRelativeCenter: Point2D, sceneX: Double, sceneY: Double) {

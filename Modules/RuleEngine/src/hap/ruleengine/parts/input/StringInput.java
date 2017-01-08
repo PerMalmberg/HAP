@@ -9,6 +9,7 @@ import hap.ruleengine.parts.IConnectionPoint;
 import hap.ruleengine.parts.Wire.IWire;
 import hap.ruleengine.parts.Wire.StringWire;
 import hap.ruleengine.parts.Wire.Wire;
+import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.output.StringOutput;
 
 public class StringInput extends Input<String>
@@ -31,15 +32,16 @@ public class StringInput extends Input<String>
 	}
 
 	@Override
-	public IWire connectTo( IConnectionPoint other )
+	public IWire connectTo( IConnectionPoint other, CompositeComponent cc )
 	{
 		IWire wire = null;
 		if( other instanceof StringOutput )
 		{
 			StringOutput output = (StringOutput) other;
-			if( output.connect( this ) )
-			{
-				wire = new StringWire( Wire.createDef( output, this, StringWire.class.getSimpleName() ) );
+			wire = new StringWire( Wire.createDef( output, this, StringWire.class.getSimpleName() ) );
+			boolean res = wire.connect( cc );
+			if( !res ) {
+				wire = null;
 			}
 		}
 

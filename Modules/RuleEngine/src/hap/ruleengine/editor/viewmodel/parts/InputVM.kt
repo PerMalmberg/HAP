@@ -2,7 +2,6 @@ package hap.ruleengine.editor.viewmodel.parts
 
 import hap.ruleengine.parts.IConnectionPoint
 import javafx.scene.paint.Color
-import tornadofx.Controller
 import tornadofx.ViewModel
 import tornadofx.observable
 

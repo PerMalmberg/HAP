@@ -4,7 +4,6 @@
 package hap.ruleengine.parts.input;
 
 import hap.ruleengine.parts.IComponent;
-import hap.ruleengine.parts.IConnectionPoint;
 
 public interface IInput
 {

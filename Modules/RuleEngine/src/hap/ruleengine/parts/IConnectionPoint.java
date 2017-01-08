@@ -1,6 +1,7 @@
 package hap.ruleengine.parts;
 
 import hap.ruleengine.parts.Wire.IWire;
+import hap.ruleengine.parts.composite.CompositeComponent;
 
 public interface IConnectionPoint
 {
@@ -12,7 +13,7 @@ public interface IConnectionPoint
 	boolean isVisible();
 
 	// Connects two connection points, if their sub classes allows it
-	IWire connectTo( IConnectionPoint other );
+	IWire connectTo( IConnectionPoint other, CompositeComponent cc );
 
 	IComponent getParent();
 }

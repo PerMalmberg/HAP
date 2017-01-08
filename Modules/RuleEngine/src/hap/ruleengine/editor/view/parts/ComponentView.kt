@@ -7,7 +7,6 @@ import hap.ruleengine.editor.viewmodel.event.SelectComponent
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.editor.viewmodel.parts.InputVM
 import hap.ruleengine.editor.viewmodel.parts.OutputVM
-import javafx.beans.binding.Bindings
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.GridPane
 import javafx.scene.paint.Color
@@ -94,9 +93,9 @@ class ComponentView : Fragment() {
                     heightProperty().bind((this.parent as GridPane).heightProperty())
                     addClass(ComponentStyle.componentCenter)
 
-                    if( vm.isSelectable ) {
+                    if (vm.isSelectable) {
                         setOnMouseClicked {
-                            if( it.button == MouseButton.PRIMARY ) {
+                            if (it.button == MouseButton.PRIMARY) {
                                 fire(SelectComponent(vm, it.isControlDown))
                             }
                         }
@@ -106,9 +105,9 @@ class ComponentView : Fragment() {
                         }
 
                         setOnMouseDragged {
-                            if( it.button == MouseButton.PRIMARY ) {
+                            if (it.button == MouseButton.PRIMARY) {
                                 // Select component if not already selected
-                                if( !vm.isSelected) {
+                                if (!vm.isSelected) {
                                     fire(SelectComponent(vm, it.isControlDown))
                                 }
                                 fire(ComponentDragged(it, vm))
@@ -117,7 +116,7 @@ class ComponentView : Fragment() {
                     }
 
                     vm.isSelectedProperty().addListener { observableValue, oldValue, newValue ->
-                        if( newValue ) {
+                        if (newValue) {
                             addClass(ComponentStyle.componentSelected)
                         } else {
                             removeClass(ComponentStyle.componentSelected)

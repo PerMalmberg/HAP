@@ -36,6 +36,8 @@ abstract class ConnectionPointView : Fragment() {
     protected fun enteredConnectionPoint(connectionPoint: IConnectionPoint?) {
         fire(MouseEnteredConnectionPoint(connectionPoint))
     }
+
+    abstract fun disconnect(wire: WireView)
 }
 
 const val connectionPointSize: Double = 8.0

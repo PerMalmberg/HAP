@@ -237,11 +237,17 @@ public class CompositeComponent extends Component
 
 	public IWire addWire( IConnectionPoint start, IConnectionPoint end )
 	{
-		IWire wire = start.connectTo( end );
+		IWire wire = start.connectTo( end, this );
 		if( wire != null )
 		{
 			myWire.add( wire );
 		}
 		return wire;
+	}
+
+	public void removeWire( IWire wire )
+	{
+		wire.disconnect();
+		myWire.remove( wire );
 	}
 }

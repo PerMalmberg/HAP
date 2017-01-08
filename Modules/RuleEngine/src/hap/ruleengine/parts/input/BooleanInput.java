@@ -9,6 +9,7 @@ import hap.ruleengine.parts.IConnectionPoint;
 import hap.ruleengine.parts.Wire.BooleanWire;
 import hap.ruleengine.parts.Wire.IWire;
 import hap.ruleengine.parts.Wire.Wire;
+import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.output.BooleanOutput;
 
 public class BooleanInput extends Input<Boolean>
@@ -30,15 +31,16 @@ public class BooleanInput extends Input<Boolean>
 	}
 
 	@Override
-	public IWire connectTo( IConnectionPoint other )
+	public IWire connectTo( IConnectionPoint other, CompositeComponent cc )
 	{
 		IWire wire = null;
 		if( other instanceof BooleanOutput )
 		{
 			BooleanOutput output = (BooleanOutput) other;
-			if( output.connect( this ) )
-			{
-				wire = new BooleanWire( Wire.createDef( output, this, BooleanWire.class.getSimpleName() ) );
+			wire = new BooleanWire( Wire.createDef( output, this, BooleanWire.class.getSimpleName() ) );
+			boolean res = wire.connect( cc );
+			if( !res ) {
+				wire = null;
 			}
 		}
 
