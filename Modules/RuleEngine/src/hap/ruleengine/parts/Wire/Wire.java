@@ -41,7 +41,9 @@ public abstract class Wire<T, In extends Input<T>, Out extends Output<T>> implem
 		IComponent source = cc.getComponent( UUID.fromString( myDef.getSourceComponent() ) );
 		IComponent target = cc.getComponent( UUID.fromString( myDef.getTargetComponent() ) );
 
-		if( source != null && target != null )
+		if( source != null && target != null
+				// Make sure we're not connecting a wire between to connection points on the same component.
+				&& source != target )
 		{
 			output = getOutput( source, myDef.getSourceOutput() );
 			input = getInput( target, myDef.getTargetInput() );
