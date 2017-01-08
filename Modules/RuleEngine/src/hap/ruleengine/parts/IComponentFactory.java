@@ -19,4 +19,8 @@ public interface IComponentFactory
 	IComponent create( ComponentDef c, CompositeComponent cc );
 
 	IComponent createFromName( @NotNull String componentType, @NotNull CompositeComponent parent );
+
+	// All composite components are stored in the same folder structure (i.e. 'the component library'). As such it is possible to
+	// locate any imported file by its name.
+	File findImport( String fileName);
 }

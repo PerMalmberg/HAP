@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 
 public class ComponentTest
 {
-	private final ComponentFactory f = new ComponentFactory();
+	private final ComponentFactory f = new ComponentFactory(Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class )));
 
 	private CompositeComponent loadComponent( String data )
 	{

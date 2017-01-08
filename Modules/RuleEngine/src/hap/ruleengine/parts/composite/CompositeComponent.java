@@ -21,7 +21,7 @@ import java.util.*;
 public class CompositeComponent extends Component
 {
 	private final List<IWire> myWire = new ArrayList<>();
-	private final String mySourceFile;
+	private String mySourceFile;
 
 	public CompositeComponent()
 	{
@@ -39,7 +39,10 @@ public class CompositeComponent extends Component
 	private CompositeDef myData;
 	private final HashMap<UUID, IComponent> myComponent = new HashMap<>();
 
-	public Collection<IComponent> getComponents() { return myComponent.values(); }
+	public Collection<IComponent> getComponents()
+	{
+		return myComponent.values();
+	}
 
 	@Override
 	public int getSubComponentCount()
@@ -141,17 +144,25 @@ public class CompositeComponent extends Component
 		for( int i = 0; res && i < imports.size(); ++ i )
 		{
 			Import imp = imports.get( i );
-			CompositeComponent cc = factory.create( new File( imp.getSrc() ), UUID.fromString( imp.getInstanceId() ) );
-			if( cc == null )
+			File imported = factory.findImport( imp.getSrc() );
+			if( imported == null )
 			{
 				res = false;
 			}
 			else
 			{
-				cc.setName( imp.getName() );
-				cc.setX( imp.getX() );
-				cc.setY( imp.getY() );
-				myComponent.put( UUID.fromString( imp.getInstanceId() ), cc );
+				CompositeComponent cc = factory.create( imported, UUID.fromString( imp.getInstanceId() ) );
+				if( cc == null )
+				{
+					res = false;
+				}
+				else
+				{
+					cc.setName( imp.getName() );
+					cc.setX( imp.getX() );
+					cc.setY( imp.getY() );
+					myComponent.put( UUID.fromString( imp.getInstanceId() ), cc );
+				}
 			}
 		}
 

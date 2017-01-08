@@ -9,6 +9,7 @@ import hap.ruleengine.parts.input.StringInput
 import hap.ruleengine.parts.output.BooleanOutput
 import hap.ruleengine.parts.output.DoubleOutput
 import hap.ruleengine.parts.output.StringOutput
+import javafx.beans.property.DoubleProperty
 import javafx.scene.paint.Color
 import tornadofx.ViewModel
 import tornadofx.getProperty
@@ -27,8 +28,8 @@ class ComponentVM constructor(val component: IComponent, val isSelectable: Boole
     val outputs: ArrayList<OutputVM> = ArrayList()
     var dragStartX: Double = 0.0
     var dragStartY: Double = 0.0
-    var originalX : Double = 0.0
-    var originalY : Double = 0.0
+    var originalX: Double = 0.0
+    var originalY: Double = 0.0
 
     ///////////////////////////////////////////////////////////////////////////////
     //
@@ -78,13 +79,13 @@ class ComponentVM constructor(val component: IComponent, val isSelectable: Boole
             }
 
     val componentType: String = component.javaClass.name
-    val x = bind { component.observable(IComponent::getX, IComponent::setX) }
-    val y = bind { component.observable(IComponent::getY, IComponent::setY) }
+    val x = bind(autocommit = true) { component.observable(IComponent::getX, IComponent::setX) } as DoubleProperty
+    val y = bind(autocommit = true) { component.observable(IComponent::getY, IComponent::setY) } as DoubleProperty
     var isSelected: Boolean by property(false)
     fun isSelectedProperty() = getProperty(ComponentVM::isSelected)
 
     fun startDragComponent(sceneX: Double, sceneY: Double, surface: IDrawingSurfaceView) {
-        val xy = surface.sceneToLocal( sceneX, sceneY )
+        val xy = surface.sceneToLocal(sceneX, sceneY)
         dragStartX = xy.x
         dragStartY = xy.y
         originalX = x.value
@@ -92,12 +93,10 @@ class ComponentVM constructor(val component: IComponent, val isSelectable: Boole
     }
 
     fun moveFromOriginalPosition(sceneX: Double, sceneY: Double, surface: IDrawingSurfaceView) {
-        val xy =  surface.sceneToLocal( sceneX, sceneY )
+        val xy = surface.sceneToLocal(sceneX, sceneY)
         val xOffset = xy.x - dragStartX
         val yOffset = xy.y - dragStartY
         x.value = originalX + xOffset
         y.value = originalY + yOffset
-
-
     }
 }

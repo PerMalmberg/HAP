@@ -23,7 +23,10 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.UUID;
@@ -34,6 +37,18 @@ public class ComponentFactory implements IComponentFactory
 	private HashMap<String, String> myFiles = new HashMap<>();
 	private final Stack<String> myLoadedFiles = new Stack<>();
 	private final Logger myLogger = Logger.getLogger( ComponentFactory.class.getName() );
+	private final Path myComponentLibrary;
+	public static final Path STANDARD_LIBRARY = Paths.get(SysUtil.getFullOrRelativePath( CompositeComponent.class, "ComponentLibrary" ) );
+
+	public ComponentFactory()
+	{
+		this(null);
+	}
+
+	public ComponentFactory( Path componentLibrary )
+	{
+		myComponentLibrary = componentLibrary;
+	}
 
 	///////////////////////////////////////////////////////////////////////////
 	//
@@ -126,6 +141,40 @@ public class ComponentFactory implements IComponentFactory
 		def.setNativeType( componentType );
 		def.setInstanceId( UUID.randomUUID().toString() );
 		return create( def, parent );
+	}
+
+	@Override
+	public File findImport( String fileName )
+	{
+		// The component library is expected to be located in the folder "ComponentLibrary" relative to
+		// where the application is running from, unless specified in the constructor.
+		Path lib;
+		if( myComponentLibrary != null) {
+			lib = myComponentLibrary;
+		}
+		else {
+			lib = STANDARD_LIBRARY;
+		}
+
+		ArrayList<Path> foundFiles = new ArrayList<>();
+
+		try
+		{
+			Files.walk(lib)
+					.filter(Files::isRegularFile)
+					.forEach(
+							path -> {
+								if( fileName.equals( path.getFileName().toString() )) {
+									foundFiles.add( path );
+								}
+							} );
+		}
+		catch( IOException e )
+		{
+			e.printStackTrace();
+		}
+
+		return foundFiles.size() == 1 ? foundFiles.get( 0 ).toFile(): null;
 	}
 
 	///////////////////////////////////////////////////////////////////////////

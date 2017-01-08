@@ -10,12 +10,18 @@ import hap.ruleengine.editor.viewmodel.event.SelectedComponentsChanged
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.editor.viewmodel.userinteraction.IUserInteraction
 import hap.ruleengine.editor.viewmodel.userinteraction.UserInteractionFSM
+import hap.ruleengine.parts.ComponentFactory
 import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.stage.Window
 import java.util.*
 
 open class UserInteractionState constructor(val fsm: UserInteractionFSM) : EnterLeaveState(), IUserInteraction {
     private val pub = Publisher()
+
+    protected fun createComponentLibraryFolder()
+    {
+        ComponentFactory.STANDARD_LIBRARY.toFile().mkdirs()
+    }
 
     override fun mouseReleased() {
         // Reset any action when user release the mouse button
@@ -48,6 +54,10 @@ open class UserInteractionState constructor(val fsm: UserInteractionFSM) : Enter
 
     override fun openComposite(surface: DrawingSurfaceVM, window: Window) {
         fsm.setState(OpenComposite(fsm, surface, window))
+    }
+
+    override fun saveComposite(surface: DrawingSurfaceVM, window: Window) {
+        fsm.setState(SaveComposite(fsm, surface, window))
     }
 
     override fun mouseDragDropReleased(event: MouseDragDropReleased, view: IDrawingSurfaceView, currentCC: CompositeComponent) {

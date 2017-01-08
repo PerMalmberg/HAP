@@ -15,4 +15,5 @@ interface IUserInteraction {
     fun selectComponent(component: ComponentVM, addToOrRemoveFromSelection: Boolean)
     fun componentDragged(dragged: ComponentDragged)
     fun mouseReleased()
+    fun saveComposite(surface: DrawingSurfaceVM, window: Window)
 }

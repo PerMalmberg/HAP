@@ -23,8 +23,8 @@ class ComponentView : Fragment() {
 
     override val root =
             gridpane {
-                layoutXProperty().bind(vm.x)
-                layoutYProperty().bind(vm.y)
+                layoutXProperty().bindBidirectional(vm.x)
+                layoutYProperty().bindBidirectional(vm.y)
 
                 layoutXProperty().addListener { xValue, old, newValue ->
                     updateWires()

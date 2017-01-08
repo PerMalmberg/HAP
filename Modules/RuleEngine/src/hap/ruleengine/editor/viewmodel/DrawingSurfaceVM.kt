@@ -3,10 +3,11 @@ package hap.ruleengine.editor.viewmodel
 import hap.ruleengine.editor.viewmodel.event.*
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.editor.viewmodel.userinteraction.UserInteractionFSM
+import hap.ruleengine.parts.CompositeSerializer
 import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.application.Platform
-import tornadofx.ViewModel
-import tornadofx.singleAssign
+import tornadofx.*
+import java.io.File
 import java.util.*
 
 class DrawingSurfaceVM : ViewModel() {
@@ -49,6 +50,10 @@ class DrawingSurfaceVM : ViewModel() {
         subscribe<MouseReleased> {
             interaction.mouseReleased()
         }
+
+        subscribe<SaveComposite> {
+            interaction.saveComposite(this, it.window)
+        }
     }
 
     private fun visualize() {
@@ -75,4 +80,9 @@ class DrawingSurfaceVM : ViewModel() {
         visualize()
     }
 
+    fun saveComposite( file: File) : Boolean
+    {
+        val serializer = CompositeSerializer()
+        return serializer.serialize(currentCC, file)
+    }
 }

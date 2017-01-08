@@ -9,9 +9,11 @@ import hap.ruleengine.editor.viewmodel.userinteraction.state.NoAction
 import hap.ruleengine.editor.viewmodel.userinteraction.state.UserInteractionState
 import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.stage.Window
+import java.io.File
 import java.util.*
 
 class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<UserInteractionState>(), IUserInteraction {
+
     val selectedComponents = HashMap<UUID, ComponentVM>()
 
 
@@ -38,6 +40,9 @@ class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<User
         currentState.openComposite(surface, window)
     }
 
+    override fun saveComposite(surface: DrawingSurfaceVM, window: Window) {
+        currentState.saveComposite(surface, window)
+    }
 
     override fun mouseDragDropReleased(event: MouseDragDropReleased, view: IDrawingSurfaceView, currentCC: CompositeComponent) {
         currentState.mouseDragDropReleased(event, view, currentCC)
@@ -46,4 +51,6 @@ class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<User
     override fun dragComponentFromComponentPallet(componentType: String) {
         currentState.dragComponentFromComponentPallet(componentType)
     }
+
+    var currentFile: File? = null
 }
