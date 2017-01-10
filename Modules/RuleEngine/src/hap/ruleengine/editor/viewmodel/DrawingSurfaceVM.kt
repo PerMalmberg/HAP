@@ -1,5 +1,6 @@
 package hap.ruleengine.editor.viewmodel
 
+import hap.ruleengine.editor.view.parts.ComponentView
 import hap.ruleengine.editor.viewmodel.event.*
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.editor.viewmodel.userinteraction.UserInteractionFSM
@@ -75,6 +76,10 @@ class DrawingSurfaceVM : ViewModel() {
         subscribe<DeleteWire> {
             interaction.deleteWire(it.wire)
         }
+
+        subscribe<DeleteComponent> {
+            interaction.deleteComponent( it.component )
+        }
     }
 
     private fun visualize() {
@@ -113,8 +118,8 @@ class DrawingSurfaceVM : ViewModel() {
         }
     }
 
-    fun removeWire(wire: IWire?) {
-        currentCC.removeWire(wire)
+    fun delete(wire: IWire?) {
+        currentCC.deleteWire(wire)
     }
 
     fun setDragWire(startSceneRelativeCenter: Point2D, sceneX: Double, sceneY: Double) {
@@ -129,6 +134,11 @@ class DrawingSurfaceVM : ViewModel() {
 
     fun hideDragWire() {
         dragLineVisible = false
+    }
+
+    fun deleteComponent(component: ComponentView) {
+        currentCC.deleteComponent(component.vm.component)
+        component.delete()
     }
 
     var dragLineStartX: Double by property(0.0)

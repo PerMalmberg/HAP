@@ -99,4 +99,9 @@ class ComponentVM constructor(val component: IComponent, val isSelectable: Boole
         x.value = originalX + xOffset
         y.value = originalY + yOffset
     }
+
+    fun delete() {
+        inputs.map { it.disconnect() }
+        outputs.map { it.disconnect() }
+    }
 }

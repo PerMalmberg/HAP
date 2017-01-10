@@ -37,6 +37,11 @@ abstract class ConnectionPointView : Fragment() {
         fire(MouseEnteredConnectionPoint(connectionPoint))
     }
 
+    fun disconnectAllWires()
+    {
+        myWire.toList().map { it.delete() }
+    }
+
     abstract fun disconnect(wire: WireView)
 }
 

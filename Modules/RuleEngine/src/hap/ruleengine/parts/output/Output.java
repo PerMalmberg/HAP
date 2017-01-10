@@ -63,6 +63,15 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 	}
 
 	@Override
+	public void disconnectAll()
+	{
+		for( Input<T> input : myRemote ) {
+			input.markDisconnected();
+		}
+		myRemote.clear();
+	}
+
+	@Override
 	public void store( CompositeDef data )
 	{
 		for( Input<T> remote : myRemote )

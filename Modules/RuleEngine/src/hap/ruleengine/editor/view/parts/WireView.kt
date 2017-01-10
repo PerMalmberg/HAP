@@ -7,6 +7,7 @@ import javafx.geometry.Point2D
 import javafx.scene.input.MouseButton
 import javafx.scene.shape.Line
 import tornadofx.px
+import tornadofx.removeFromParent
 import tornadofx.style
 
 class WireView(val source: OutputView, val target: InputView) : Line() {
@@ -28,7 +29,8 @@ class WireView(val source: OutputView, val target: InputView) : Line() {
         }
     }
 
-    fun disconnectFromConnectionPoints() {
+    fun delete() {
+        removeFromParent()
         source.disconnect(this)
         target.disconnect(this)
     }

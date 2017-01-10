@@ -27,6 +27,12 @@ public abstract class Input<T> extends ConnectionPoint implements IInput
 		myParent.inputChanged( this );
 	}
 
+	@Override
+	public void disconnectAll()
+	{
+		// Nothing to disconnect in an input
+	}
+
 	public T getValue()
 	{
 		return myValue;

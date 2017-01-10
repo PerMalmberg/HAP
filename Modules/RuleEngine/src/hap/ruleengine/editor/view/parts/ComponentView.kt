@@ -2,6 +2,7 @@ package hap.ruleengine.editor.view.parts
 
 import hap.ruleengine.editor.view.css.ComponentStyle
 import hap.ruleengine.editor.viewmodel.event.ComponentDragged
+import hap.ruleengine.editor.viewmodel.event.DeleteComponent
 import hap.ruleengine.editor.viewmodel.event.MouseReleased
 import hap.ruleengine.editor.viewmodel.event.SelectComponent
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
@@ -97,6 +98,8 @@ class ComponentView : Fragment() {
                         setOnMouseClicked {
                             if (it.button == MouseButton.PRIMARY) {
                                 fire(SelectComponent(vm, it.isControlDown))
+                            } else if (it.button == MouseButton.SECONDARY) {
+                                fire(DeleteComponent(this@ComponentView))
                             }
                         }
 
@@ -136,5 +139,12 @@ class ComponentView : Fragment() {
 
     fun getOutputView(nameOfOutput: String): OutputView? {
         return myOutputs.singleOrNull { nameOfOutput == it.name }
+    }
+
+    fun delete() {
+        removeFromParent()
+        myInputs.map { it.disconnectAllWires() }
+        myOutputs.map { it.disconnectAllWires() }
+        vm.delete()
     }
 }

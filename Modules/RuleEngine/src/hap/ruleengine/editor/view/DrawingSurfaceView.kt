@@ -35,10 +35,14 @@ class DrawingSurfaceView : Fragment(), IDrawingSurfaceView {
         return components[id]
     }
 
-    override fun removeWire(wire: WireView) {
-        wireLayer.children.remove(wire)
-        wire.disconnectFromConnectionPoints()
-        vm.removeWire(wire.wire)
+    override fun delete(wire: WireView) {
+        wire.delete()
+        vm.delete(wire.wire)
+    }
+
+    override fun deleteComponent(component: ComponentView) {
+        components.remove(component.vm.component.id)
+        vm.deleteComponent(component)
     }
 
     override fun sceneToLocal(sceneX: Double, sceneY: Double): Point2D {

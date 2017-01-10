@@ -8,4 +8,5 @@ import tornadofx.observable
 
 class InputVM(val index: Int, val color: Color, val connectionPoint: IConnectionPoint) : ViewModel() {
     val name = bind(autocommit = true) { connectionPoint.observable(IConnectionPoint::getName, IConnectionPoint::setName) }
+    fun disconnect() = connectionPoint.disconnectAll()
 }

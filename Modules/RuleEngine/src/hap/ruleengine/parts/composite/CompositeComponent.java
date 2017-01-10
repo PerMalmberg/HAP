@@ -245,9 +245,14 @@ public class CompositeComponent extends Component
 		return wire;
 	}
 
-	public void removeWire( IWire wire )
+	public void deleteWire( IWire wire )
 	{
 		wire.disconnect();
 		myWire.remove( wire );
+	}
+
+	public void deleteComponent( IComponent component )
+	{
+		myComponent.remove( component.getId() );
 	}
 }

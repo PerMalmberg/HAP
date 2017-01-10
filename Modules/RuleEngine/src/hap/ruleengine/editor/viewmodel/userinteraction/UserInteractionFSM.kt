@@ -1,5 +1,6 @@
 package hap.ruleengine.editor.viewmodel.userinteraction
 
+import hap.ruleengine.editor.view.parts.ComponentView
 import hap.ruleengine.editor.view.parts.WireView
 import hap.ruleengine.editor.viewmodel.DrawingSurfaceVM
 import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
@@ -17,6 +18,10 @@ import java.io.File
 import java.util.*
 
 class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<UserInteractionState>(), IUserInteraction {
+    override fun deleteComponent(component: ComponentView) {
+        currentState.deleteComponent(component)
+    }
+
     override fun deleteWire(wire: WireView) {
         currentState.deleteWire(wire)
     }

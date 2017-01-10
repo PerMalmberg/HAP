@@ -1,6 +1,7 @@
 package hap.ruleengine.editor.viewmodel.userinteraction.state
 
 import chainedfsm.EnterLeaveState
+import hap.ruleengine.editor.view.parts.ComponentView
 import hap.ruleengine.editor.view.parts.WireView
 import hap.ruleengine.editor.viewmodel.DrawingSurfaceVM
 import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
@@ -18,7 +19,11 @@ import javafx.geometry.Point2D
 import javafx.stage.Window
 import java.util.*
 
-open class UserInteractionState constructor(val fsm: UserInteractionFSM) : EnterLeaveState(), IUserInteraction {
+abstract class UserInteractionState constructor(val fsm: UserInteractionFSM) : EnterLeaveState(), IUserInteraction {
+    override fun deleteComponent(component: ComponentView) {
+
+    }
+
     override fun deleteWire(wire: WireView) {
 
     }

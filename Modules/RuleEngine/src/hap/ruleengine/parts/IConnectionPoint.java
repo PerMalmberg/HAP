@@ -16,4 +16,6 @@ public interface IConnectionPoint
 	IWire connectTo( IConnectionPoint other, CompositeComponent cc );
 
 	IComponent getParent();
+
+	void disconnectAll();
 }

@@ -1,5 +1,6 @@
 package hap.ruleengine.editor.viewmodel.userinteraction
 
+import hap.ruleengine.editor.view.parts.ComponentView
 import hap.ruleengine.editor.view.parts.WireView
 import hap.ruleengine.editor.viewmodel.DrawingSurfaceVM
 import hap.ruleengine.editor.viewmodel.IDrawingSurfaceView
@@ -23,4 +24,5 @@ interface IUserInteraction {
     fun mouseEnteredConnectionPoint(connectionPoint: IConnectionPoint?)
     fun updateDragWire(sceneX: Double, sceneY: Double)
     fun deleteWire(wire: WireView)
+    fun deleteComponent(component: ComponentView)
 }
