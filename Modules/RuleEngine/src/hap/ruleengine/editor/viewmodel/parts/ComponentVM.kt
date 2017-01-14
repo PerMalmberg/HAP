@@ -31,6 +31,10 @@ class ComponentVM constructor(val component: IComponent, val isSelectable: Boole
     var originalX: Double = 0.0
     var originalY: Double = 0.0
 
+    val componentType: String = component.javaClass.name
+    val x = bind(autocommit = true) { component.observable(IComponent::getX, IComponent::setX) } as DoubleProperty
+    val y = bind(autocommit = true) { component.observable(IComponent::getY, IComponent::setY) } as DoubleProperty
+
     ///////////////////////////////////////////////////////////////////////////////
     //
     //
@@ -61,6 +65,8 @@ class ComponentVM constructor(val component: IComponent, val isSelectable: Boole
         component.stringOutputs.values.map {
             outputs.add(OutputVM(index++, getConnectionPointColor(it), it))
         }
+
+        ignoreDirtyStateProperties.addAll(listOf( x, y )) // TODO: Not needed from tornadofx 1.5.10
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -77,10 +83,6 @@ class ComponentVM constructor(val component: IComponent, val isSelectable: Boole
                 is StringOutput -> Color.DEEPPINK
                 else -> Color.RED
             }
-
-    val componentType: String = component.javaClass.name
-    val x = bind(autocommit = true) { component.observable(IComponent::getX, IComponent::setX) } as DoubleProperty
-    val y = bind(autocommit = true) { component.observable(IComponent::getY, IComponent::setY) } as DoubleProperty
 
     val name = bind { component.observable(IComponent::getName, IComponent::setName) } as StringProperty
 
