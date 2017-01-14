@@ -45,4 +45,4 @@ abstract class ConnectionPointView : Fragment() {
     abstract fun disconnect(wire: WireView)
 }
 
-const val connectionPointSize: Double = 8.0
+const val connectionPointSize: Double = 12.0

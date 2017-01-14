@@ -165,7 +165,7 @@ public abstract class Component implements IComponent
 	public String getName()
 	{
 		// A top-level composite has no name
-		return myName == null ? "" : myName;
+		return myName == null || myName.length() == 0 ? this.getClass().getSimpleName() : myName;
 	}
 
 	@Override

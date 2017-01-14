@@ -4,4 +4,4 @@ import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import tornadofx.FXEvent
 import java.util.*
 
-class SelectedComponentsChanged(val selectedComponents: HashMap<UUID, ComponentVM>, val deselected: ArrayList<ComponentVM>) : FXEvent()
+class SelectedComponentsChanged(val selectedComponents: HashMap<UUID, ComponentVM>) : FXEvent()

@@ -17,7 +17,6 @@ import hap.ruleengine.parts.IConnectionPoint
 import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.geometry.Point2D
 import javafx.stage.Window
-import java.util.*
 
 abstract class UserInteractionState constructor(val fsm: UserInteractionFSM) : EnterLeaveState(), IUserInteraction {
     override fun deleteComponent(component: ComponentView) {
@@ -54,15 +53,12 @@ abstract class UserInteractionState constructor(val fsm: UserInteractionFSM) : E
     }
 
     override fun selectComponent(component: ComponentVM, addToOrRemoveFromSelection: Boolean) {
-        val deselected = ArrayList<ComponentVM>()
-
         if (addToOrRemoveFromSelection) {
             setSelectionState(component, !component.isSelected)
         } else {
             // Only the clicked component should remain selected
             fsm.selectedComponents.values.forEach {
                 it.isSelected = false
-                deselected.add(it)
             }
             fsm.selectedComponents.clear()
 
@@ -70,7 +66,7 @@ abstract class UserInteractionState constructor(val fsm: UserInteractionFSM) : E
         }
 
         // Let those listening for changes in selected components know of the new selection state
-        pub.fire(SelectedComponentsChanged(fsm.selectedComponents, deselected))
+        pub.fire(SelectedComponentsChanged(fsm.selectedComponents))
     }
 
     override fun openComposite(surface: DrawingSurfaceVM, window: Window) {
@@ -93,7 +89,7 @@ abstract class UserInteractionState constructor(val fsm: UserInteractionFSM) : E
 
     }
 
-    private fun setSelectionState(component: ComponentVM, isSelected: Boolean) {
+    protected fun setSelectionState(component: ComponentVM, isSelected: Boolean) {
         // Select/deselect component
         component.isSelected = isSelected
 
@@ -102,6 +98,11 @@ abstract class UserInteractionState constructor(val fsm: UserInteractionFSM) : E
         } else {
             fsm.selectedComponents.remove(component.component.id)
         }
+    }
+
+    protected fun deselectComponent(vm: ComponentVM) {
+        setSelectionState(vm, false)
+        pub.fire(SelectedComponentsChanged(fsm.selectedComponents))
     }
 
     private val pub = Publisher()

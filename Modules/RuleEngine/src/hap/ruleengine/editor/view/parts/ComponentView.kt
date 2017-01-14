@@ -8,6 +8,7 @@ import hap.ruleengine.editor.viewmodel.event.SelectComponent
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.editor.viewmodel.parts.InputVM
 import hap.ruleengine.editor.viewmodel.parts.OutputVM
+import javafx.geometry.Pos
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.GridPane
 import javafx.scene.paint.Color
@@ -20,9 +21,14 @@ class ComponentView : Fragment() {
     val vm: ComponentVM by param()
     private val myOutputs: ArrayList<OutputView> = ArrayList()
     private val myInputs: ArrayList<InputView> = ArrayList()
+    private val inputColumn = 0
+    private val inputTextColumn = 1
+    private val centerColumn = 2
+    private val outputColumn = 3
+    private val outputTextColumn = 4
 
     override val root =
-            gridpane {
+            borderpane {
                 layoutXProperty().bindBidirectional(vm.x)
                 layoutYProperty().bindBidirectional(vm.y)
 
@@ -34,95 +40,114 @@ class ComponentView : Fragment() {
                     updateWires()
                 }
 
-                vgap = connectionPointSize / 2
-
-                val inputs = Stack<InputVM>()
-                inputs.addAll(vm.inputs.filter { it.connectionPoint.isVisible }.reversed())
-                val outputs = Stack<OutputVM>()
-                outputs.addAll(vm.outputs.filter { it.connectionPoint.isVisible }.reversed())
-
-                var row = 0
-                while (!inputs.isEmpty() || !outputs.isEmpty()) {
-                    if (!inputs.isEmpty()) {
-                        val inVM = inputs.pop()
-                        stackpane {
-                            this += find<InputTextView>("vm" to inVM)
-                            gridpaneConstraints {
-                                columnRowIndex(0, row)
-                            }
-                        }
-                        stackpane {
-                            val inputView = find<InputView>("vm" to inVM)
-                            myInputs.add(inputView)
-                            this += inputView
-                            gridpaneConstraints {
-                                columnRowIndex(1, row)
-                            }
-                        }
-                    }
-
-                    if (!outputs.isEmpty()) {
-                        val outVM = outputs.pop()
-                        stackpane {
-                            val outputView = find<OutputView>("vm" to outVM)
-                            myOutputs.add(outputView)
-                            this += outputView
-                            gridpaneConstraints {
-                                columnRowIndex(3, row)
-                            }
+                center {
+                    gridpane {
+                        style {
+                            alignment = Pos.BASELINE_CENTER
                         }
 
-                        stackpane {
-                            this += find<OutputTextView>("vm" to outVM)
-                            gridpaneConstraints {
-                                columnRowIndex(4, row)
-                            }
-                        }
-                    }
+                        vgap = connectionPointSize / 2
 
-                    ++row
-                }
+                        val inputs = Stack<InputVM>()
+                        inputs.addAll(vm.inputs.filter { it.connectionPoint.isVisible }.reversed())
+                        val outputs = Stack<OutputVM>()
+                        outputs.addAll(vm.outputs.filter { it.connectionPoint.isVisible }.reversed())
 
-                rectangle {
-                    fill = Color.GRAY
-                    gridpaneConstraints {
-                        columnRowIndex(2, 0)
-                        rowSpan = row
-                    }
-
-                    width = 10.0
-                    heightProperty().bind((this.parent as GridPane).heightProperty())
-                    addClass(ComponentStyle.componentCenter)
-
-                    if (vm.isSelectable) {
-                        setOnMouseClicked {
-                            if (it.button == MouseButton.PRIMARY) {
-                                fire(SelectComponent(vm, it.isControlDown))
-                            } else if (it.button == MouseButton.SECONDARY) {
-                                fire(DeleteComponent(this@ComponentView))
-                            }
-                        }
-
-                        setOnMouseReleased {
-                            fire(MouseReleased)
-                        }
-
-                        setOnMouseDragged {
-                            if (it.button == MouseButton.PRIMARY) {
-                                // Select component if not already selected
-                                if (!vm.isSelected) {
-                                    fire(SelectComponent(vm, it.isControlDown))
+                        var row = 0
+                        while (!inputs.isEmpty() || !outputs.isEmpty()) {
+                            if (!inputs.isEmpty()) {
+                                val inVM = inputs.pop()
+                                stackpane {
+                                    this += find<InputTextView>("vm" to inVM)
+                                    gridpaneConstraints {
+                                        columnRowIndex(inputColumn, row)
+                                    }
                                 }
-                                fire(ComponentDragged(it, vm))
+                                stackpane {
+                                    val inputView = find<InputView>("vm" to inVM)
+                                    myInputs.add(inputView)
+                                    this += inputView
+                                    gridpaneConstraints {
+                                        columnRowIndex(inputTextColumn, row)
+                                    }
+                                }
+                            }
+
+                            if (!outputs.isEmpty()) {
+                                val outVM = outputs.pop()
+                                stackpane {
+                                    val outputView = find<OutputView>("vm" to outVM)
+                                    myOutputs.add(outputView)
+                                    this += outputView
+                                    gridpaneConstraints {
+                                        columnRowIndex(outputColumn, row)
+                                    }
+                                }
+
+                                stackpane {
+                                    this += find<OutputTextView>("vm" to outVM)
+                                    gridpaneConstraints {
+                                        columnRowIndex(outputTextColumn, row)
+                                    }
+                                }
+                            }
+
+                            ++row
+                        }
+
+                        // Center area
+                        rectangle {
+                            fill = Color.GRAY
+                            gridpaneConstraints {
+                                columnRowIndex(centerColumn, 0)
+                                rowSpan = row
+                            }
+
+
+                            widthProperty().bind(heightProperty())
+                            heightProperty().bind((this.parent as GridPane).heightProperty())
+                            addClass(ComponentStyle.componentCenter)
+
+                            if (vm.isSelectable) {
+                                setOnMouseClicked {
+                                    if (it.button == MouseButton.PRIMARY) {
+                                        fire(SelectComponent(vm, it.isControlDown))
+                                    } else if (it.button == MouseButton.SECONDARY) {
+                                        fire(DeleteComponent(this@ComponentView))
+                                    }
+                                }
+
+                                setOnMouseReleased {
+                                    fire(MouseReleased)
+                                }
+
+                                setOnMouseDragged {
+                                    if (it.button == MouseButton.PRIMARY) {
+                                        // Select component if not already selected
+                                        if (!vm.isSelected) {
+                                            fire(SelectComponent(vm, it.isControlDown))
+                                        }
+                                        fire(ComponentDragged(it, vm))
+                                    }
+                                }
+                            }
+
+                            vm.isSelectedProperty().addListener { observableValue, oldValue, newValue ->
+                                if (newValue) {
+                                    addClass(ComponentStyle.componentSelected)
+                                } else {
+                                    removeClass(ComponentStyle.componentSelected)
+                                }
                             }
                         }
                     }
-
-                    vm.isSelectedProperty().addListener { observableValue, oldValue, newValue ->
-                        if (newValue) {
-                            addClass(ComponentStyle.componentSelected)
-                        } else {
-                            removeClass(ComponentStyle.componentSelected)
+                }
+                bottom {
+                    stackpane {
+                        label {
+                            bind(vm.name)
+                        }.apply {
+                            alignment = Pos.BASELINE_CENTER
                         }
                     }
                 }

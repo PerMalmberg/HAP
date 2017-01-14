@@ -10,6 +10,7 @@ import hap.ruleengine.parts.output.BooleanOutput
 import hap.ruleengine.parts.output.DoubleOutput
 import hap.ruleengine.parts.output.StringOutput
 import javafx.beans.property.DoubleProperty
+import javafx.beans.property.StringProperty
 import javafx.scene.paint.Color
 import tornadofx.ViewModel
 import tornadofx.getProperty
@@ -23,7 +24,6 @@ import java.util.*
 ///////////////////////////////////////////////////////////////////////////////
 class ComponentVM constructor(val component: IComponent, val isSelectable: Boolean = true) : ViewModel() {
 
-    val name: String = component.name
     val inputs: ArrayList<InputVM> = ArrayList()
     val outputs: ArrayList<OutputVM> = ArrayList()
     var dragStartX: Double = 0.0
@@ -81,6 +81,9 @@ class ComponentVM constructor(val component: IComponent, val isSelectable: Boole
     val componentType: String = component.javaClass.name
     val x = bind(autocommit = true) { component.observable(IComponent::getX, IComponent::setX) } as DoubleProperty
     val y = bind(autocommit = true) { component.observable(IComponent::getY, IComponent::setY) } as DoubleProperty
+
+    val name = bind { component.observable(IComponent::getName, IComponent::setName) } as StringProperty
+
     var isSelected: Boolean by property(false)
     fun isSelectedProperty() = getProperty(ComponentVM::isSelected)
 
