@@ -37,6 +37,10 @@ class DrawingSurfaceVM : ViewModel() {
             interaction.dragComponentFromComponentPallet(it.componentType)
         }
 
+        subscribe<EndDragComponentFromPallet> {
+            interaction.endDragComponentFromComponentPallet()
+        }
+
         subscribe<MouseDragDropReleased> {
             interaction.mouseDragDropReleased(it, surface, currentCC)
         }

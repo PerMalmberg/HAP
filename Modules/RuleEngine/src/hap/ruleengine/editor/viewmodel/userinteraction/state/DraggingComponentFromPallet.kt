@@ -23,4 +23,8 @@ class DraggingComponentFromPallet constructor(val componentType: String, fsm: Us
 
         fsm.setState(NoAction(fsm))
     }
+
+    override fun endDragComponentFromComponentPallet() {
+        fsm.setState(NoAction(fsm))
+    }
 }

@@ -89,6 +89,10 @@ abstract class UserInteractionState constructor(val fsm: UserInteractionFSM) : E
         fsm.setState(DraggingComponentFromPallet(componentType, fsm))
     }
 
+    override fun endDragComponentFromComponentPallet() {
+
+    }
+
     private fun setSelectionState(component: ComponentVM, isSelected: Boolean) {
         // Select/deselect component
         component.isSelected = isSelected

@@ -18,6 +18,10 @@ import java.io.File
 import java.util.*
 
 class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<UserInteractionState>(), IUserInteraction {
+    override fun endDragComponentFromComponentPallet() {
+        currentState.endDragComponentFromComponentPallet()
+    }
+
     override fun deleteComponent(component: ComponentView) {
         currentState.deleteComponent(component)
     }
@@ -72,6 +76,10 @@ class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<User
 
     init {
         setState(NoAction(this))
+    }
+
+    override fun postSetState() {
+        println( currentState.javaClass.name)
     }
 
     var currentFile: File? = null

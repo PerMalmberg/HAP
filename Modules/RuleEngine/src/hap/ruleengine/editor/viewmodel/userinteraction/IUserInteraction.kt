@@ -14,6 +14,7 @@ import javafx.stage.Window
 
 interface IUserInteraction {
     fun dragComponentFromComponentPallet(componentType: String)
+    fun endDragComponentFromComponentPallet()
     fun mouseDragDropReleased(event: MouseDragDropReleased, view: IDrawingSurfaceView, currentCC: CompositeComponent)
     fun openComposite(surface: DrawingSurfaceVM, window: Window)
     fun selectComponent(component: ComponentVM, addToOrRemoveFromSelection: Boolean)
