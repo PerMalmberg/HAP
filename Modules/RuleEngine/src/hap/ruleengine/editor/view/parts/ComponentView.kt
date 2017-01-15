@@ -54,45 +54,47 @@ class ComponentView : Fragment() {
                         outputs.addAll(vm.outputs.filter { it.connectionPoint.isVisible }.reversed())
 
                         var row = 0
-                        while (!inputs.isEmpty() || !outputs.isEmpty()) {
-                            if (!inputs.isEmpty()) {
-                                val inVM = inputs.pop()
-                                stackpane {
-                                    this += find<InputTextView>("vm" to inVM)
-                                    gridpaneConstraints {
-                                        columnRowIndex(inputColumn, row)
+                        if (inputs.size > 0 || outputs.size > 0) {
+                            while (!inputs.isEmpty() || !outputs.isEmpty()) {
+                                if (!inputs.isEmpty()) {
+                                    val inVM = inputs.pop()
+                                    stackpane {
+                                        this += find<InputTextView>("vm" to inVM)
+                                        gridpaneConstraints {
+                                            columnRowIndex(inputColumn, row)
+                                        }
+                                    }
+                                    stackpane {
+                                        val inputView = find<InputView>("vm" to inVM)
+                                        myInputs.add(inputView)
+                                        this += inputView
+                                        gridpaneConstraints {
+                                            columnRowIndex(inputTextColumn, row)
+                                        }
                                     }
                                 }
-                                stackpane {
-                                    val inputView = find<InputView>("vm" to inVM)
-                                    myInputs.add(inputView)
-                                    this += inputView
-                                    gridpaneConstraints {
-                                        columnRowIndex(inputTextColumn, row)
+
+                                if (!outputs.isEmpty()) {
+                                    val outVM = outputs.pop()
+                                    stackpane {
+                                        val outputView = find<OutputView>("vm" to outVM)
+                                        myOutputs.add(outputView)
+                                        this += outputView
+                                        gridpaneConstraints {
+                                            columnRowIndex(outputColumn, row)
+                                        }
+                                    }
+
+                                    stackpane {
+                                        this += find<OutputTextView>("vm" to outVM)
+                                        gridpaneConstraints {
+                                            columnRowIndex(outputTextColumn, row)
+                                        }
                                     }
                                 }
+
+                                ++row
                             }
-
-                            if (!outputs.isEmpty()) {
-                                val outVM = outputs.pop()
-                                stackpane {
-                                    val outputView = find<OutputView>("vm" to outVM)
-                                    myOutputs.add(outputView)
-                                    this += outputView
-                                    gridpaneConstraints {
-                                        columnRowIndex(outputColumn, row)
-                                    }
-                                }
-
-                                stackpane {
-                                    this += find<OutputTextView>("vm" to outVM)
-                                    gridpaneConstraints {
-                                        columnRowIndex(outputTextColumn, row)
-                                    }
-                                }
-                            }
-
-                            ++row
                         }
 
                         // Center area
@@ -100,12 +102,18 @@ class ComponentView : Fragment() {
                             fill = Color.GRAY
                             gridpaneConstraints {
                                 columnRowIndex(centerColumn, 0)
-                                rowSpan = row
+                                // When representing a composite, it may not have any inputs so make sure we use a valid rowSpan
+                                rowSpan = Math.max(row, 1)
                             }
 
 
                             widthProperty().bind(heightProperty())
-                            heightProperty().bind((this.parent as GridPane).heightProperty())
+                            if( row > 0 ) {
+                                heightProperty().bind((this.parent as GridPane).heightProperty())
+                            }
+                            else {
+                                height = 20.0
+                            }
                             addClass(ComponentStyle.componentCenter)
 
                             if (vm.isSelectable) {

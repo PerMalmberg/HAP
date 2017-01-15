@@ -16,9 +16,9 @@ public class And extends Component
 	private BooleanInput inB;
 	private BooleanOutput out;
 
-	public And( UUID id )
+	public And( UUID id, boolean executionState )
 	{
-		super( id );
+		super( id, executionState );
 	}
 
 	@Override

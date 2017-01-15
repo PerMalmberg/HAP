@@ -15,9 +15,9 @@ public class StringInputNode extends Component
 {
 	private StringOutput out;
 
-	public StringInputNode( UUID id )
+	public StringInputNode( UUID id, boolean executionState )
 	{
-		super( id );
+		super( id, executionState );
 	}
 
 	@Override

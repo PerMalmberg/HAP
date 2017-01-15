@@ -9,7 +9,7 @@ public class PlaceHolderComponent extends Component
 {
 	public PlaceHolderComponent()
 	{
-		super( UUID.randomUUID() );
+		super( UUID.randomUUID(), false );
 	}
 
 	@Override

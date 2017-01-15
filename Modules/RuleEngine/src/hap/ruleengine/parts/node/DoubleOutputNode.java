@@ -15,9 +15,9 @@ public class DoubleOutputNode extends Component
 {
 	private DoubleOutput out;
 
-	public DoubleOutputNode( UUID id )
+	public DoubleOutputNode( UUID id, boolean executionState )
 	{
-		super( id );
+		super( id, executionState );
 	}
 
 	@Override

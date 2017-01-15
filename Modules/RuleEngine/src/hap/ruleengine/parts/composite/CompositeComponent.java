@@ -24,16 +24,16 @@ public class CompositeComponent extends Component
 	private final List<IWire> myWire = new ArrayList<>();
 	private String mySourceFile;
 
-	public CompositeComponent()
+	public CompositeComponent( boolean executionState )
 	{
-		super( UUID.randomUUID() );
+		super( UUID.randomUUID(), executionState );
 		myData = new CompositeDef();
 		mySourceFile = null;
 	}
 
-	public CompositeComponent( UUID id, String sourceFile )
+	public CompositeComponent( UUID id, String sourceFile, boolean executionState )
 	{
-		super( id );
+		super( id, executionState );
 		mySourceFile = sourceFile;
 	}
 
@@ -254,5 +254,16 @@ public class CompositeComponent extends Component
 	public void deleteComponent( IComponent component )
 	{
 		myComponent.remove( component.getId() );
+		component.setExecutionState( false );
 	}
+
+	@Override
+	public void setExecutionState( boolean status )
+	{
+		for( IComponent comp : myComponent.values()	)
+		{
+			comp.setExecutionState( status );
+		}
+	}
+
 }

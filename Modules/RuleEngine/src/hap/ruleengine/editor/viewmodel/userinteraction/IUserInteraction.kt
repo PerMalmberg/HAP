@@ -26,4 +26,5 @@ interface IUserInteraction {
     fun updateDragWire(sceneX: Double, sceneY: Double)
     fun deleteWire(wire: WireView)
     fun deleteComponent(component: ComponentView)
+    fun dragCompositeFromComponentPallet(sourceFile: String)
 }

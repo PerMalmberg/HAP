@@ -42,7 +42,7 @@ public class ComponentTest
 	@Test
 	public void createComponentFromNameTest()
 	{
-		CompositeComponent cc = new CompositeComponent( UUID.randomUUID(), null );
+		CompositeComponent cc = new CompositeComponent( UUID.randomUUID(), null, false );
 		IComponent c = f.createFromName( "hap.ruleengine.component.bool.And", cc );
 		assertNotNull( c );
 		assertEquals( 1, cc.getSubComponentCount() );

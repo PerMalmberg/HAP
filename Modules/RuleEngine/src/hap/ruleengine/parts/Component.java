@@ -34,9 +34,27 @@ public abstract class Component implements IComponent
 	private double Y = 0.0;
 	private boolean myIsVisualized = false;
 
-	public Component( UUID id )
+	// Determines if the component may execute its (more advanced) internal logic
+	// i.e. connect to external systems etc. This is always false when a component
+	// is visualized in a component pallet.
+	private boolean myExecutionState = false;
+
+	public Component( UUID id, boolean executionAllowed )
 	{
 		myInstanceId = id;
+		myExecutionState = executionAllowed;
+	}
+
+	@Override
+	public void setExecutionState( boolean status )
+	{
+		myExecutionState = status;
+	}
+
+	@Override
+	public boolean getExecutionState()
+	{
+		return myExecutionState;
 	}
 
 	// Called during creation of parts. Use it to add in- and outputs.

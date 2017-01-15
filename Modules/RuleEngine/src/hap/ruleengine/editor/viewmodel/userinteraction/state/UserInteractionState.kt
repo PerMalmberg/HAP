@@ -85,6 +85,10 @@ abstract class UserInteractionState constructor(val fsm: UserInteractionFSM) : E
         fsm.setState(DraggingComponentFromPallet(componentType, fsm))
     }
 
+    override fun dragCompositeFromComponentPallet(sourceFile: String) {
+        fsm.setState(DraggingCompositeFromPallet(sourceFile, fsm))
+    }
+
     override fun endDragComponentFromComponentPallet() {
 
     }

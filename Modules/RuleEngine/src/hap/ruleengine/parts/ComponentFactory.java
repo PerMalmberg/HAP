@@ -4,12 +4,12 @@
 package hap.ruleengine.parts;
 
 import hap.SysUtil;
-import org.jetbrains.annotations.NotNull;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.data.ComponentDef;
 import hap.ruleengine.parts.data.CompositeDef;
+import org.jetbrains.annotations.NotNull;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -26,10 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Stack;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class ComponentFactory implements IComponentFactory
@@ -38,11 +35,11 @@ public class ComponentFactory implements IComponentFactory
 	private final Stack<String> myLoadedFiles = new Stack<>();
 	private final Logger myLogger = Logger.getLogger( ComponentFactory.class.getName() );
 	private final Path myComponentLibrary;
-	public static final Path STANDARD_LIBRARY = Paths.get(SysUtil.getFullOrRelativePath( CompositeComponent.class, "ComponentLibrary" ) );
+	public static final Path STANDARD_LIBRARY = Paths.get( SysUtil.getFullOrRelativePath( CompositeComponent.class, "ComponentLibrary" ) );
 
 	public ComponentFactory()
 	{
-		this(null);
+		this( null );
 	}
 
 	public ComponentFactory( Path componentLibrary )
@@ -101,6 +98,23 @@ public class ComponentFactory implements IComponentFactory
 	//
 	///////////////////////////////////////////////////////////////////////////
 	@Override
+	public CompositeComponent create( File compositeFile, UUID uid, CompositeComponent parent )
+	{
+		CompositeComponent cc = create( compositeFile, uid );
+		if( cc != null) {
+			parent.addComponent( cc );
+		}
+
+		return cc;
+	}
+
+
+	///////////////////////////////////////////////////////////////////////////
+	//
+	//
+	//
+	///////////////////////////////////////////////////////////////////////////
+	@Override
 	public IComponent create( ComponentDef def, CompositeComponent cc )
 	{
 		Component c = null;
@@ -111,8 +125,8 @@ public class ComponentFactory implements IComponentFactory
 			Class<?> componentClass = Class.forName( def.getNativeType() );
 			if( componentClass != null )
 			{
-				Constructor<?> ctor = componentClass.getConstructor( UUID.class );
-				c = (Component) ctor.newInstance( UUID.fromString( def.getInstanceId() ) );
+				Constructor<?> ctor = componentClass.getConstructor( UUID.class, boolean.class );
+				c = (Component) ctor.newInstance( UUID.fromString( def.getInstanceId() ), false );
 
 				// Let the parts load itself
 				if( ! c.loadComponentFromData( def ) )
@@ -134,6 +148,11 @@ public class ComponentFactory implements IComponentFactory
 		return c;
 	}
 
+	///////////////////////////////////////////////////////////////////////////
+	//
+	//
+	//
+	///////////////////////////////////////////////////////////////////////////
 	@Override
 	public IComponent createFromName( @NotNull String componentType, @NotNull CompositeComponent parent )
 	{
@@ -143,28 +162,29 @@ public class ComponentFactory implements IComponentFactory
 		return create( def, parent );
 	}
 
+	///////////////////////////////////////////////////////////////////////////
+	//
+	//
+	//
+	///////////////////////////////////////////////////////////////////////////
 	@Override
 	public File findImport( String fileName )
 	{
 		// The component library is expected to be located in the folder "ComponentLibrary" relative to
 		// where the application is running from, unless specified in the constructor.
-		Path lib;
-		if( myComponentLibrary != null) {
-			lib = myComponentLibrary;
-		}
-		else {
-			lib = STANDARD_LIBRARY;
-		}
+		Path lib = getLibPath();
 
 		ArrayList<Path> foundFiles = new ArrayList<>();
 
 		try
 		{
-			Files.walk(lib)
-					.filter(Files::isRegularFile)
+			Files.walk( lib )
+					.filter( Files::isRegularFile )
 					.forEach(
-							path -> {
-								if( fileName.equals( path.getFileName().toString() )) {
+							path ->
+							{
+								if( fileName.equals( path.getFileName().toString() ) )
+								{
 									foundFiles.add( path );
 								}
 							} );
@@ -174,7 +194,58 @@ public class ComponentFactory implements IComponentFactory
 			e.printStackTrace();
 		}
 
-		return foundFiles.size() == 1 ? foundFiles.get( 0 ).toFile(): null;
+		return foundFiles.size() == 1 ? foundFiles.get( 0 ).toFile() : null;
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	//
+	//
+	//
+	///////////////////////////////////////////////////////////////////////////
+	private Path getLibPath()
+	{
+		Path lib;
+		if( myComponentLibrary != null )
+		{
+			lib = myComponentLibrary;
+		}
+		else
+		{
+			lib = STANDARD_LIBRARY;
+		}
+		return lib;
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	//
+	//
+	//
+	///////////////////////////////////////////////////////////////////////////
+	@Override
+	public List<String> getAvailableImports()
+	{
+		ArrayList<String> imports = new ArrayList<>();
+
+		try
+		{
+			Path lib = getLibPath();
+			Files.walk( lib )
+					.filter( Files::isRegularFile )
+					.forEach(
+							path ->
+							{
+								if( path.getFileName().toString().endsWith( ".cc" ) )
+								{
+									imports.add( path.toString() );
+								}
+							} );
+		}
+		catch( IOException e )
+		{
+			e.printStackTrace();
+		}
+
+		return imports;
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -198,8 +269,12 @@ public class ComponentFactory implements IComponentFactory
 			u.setSchema( schema );
 
 			CompositeDef data = (CompositeDef) u.unmarshal( new InputSource( new StringReader( compositeData ) ) );
-			cc = new CompositeComponent( compositeUid, sourceFile.getName() );
-			if( ! cc.loadCompositeFromData( data, this ) )
+			cc = new CompositeComponent( compositeUid, sourceFile.getName(), false );
+			if( cc.loadCompositeFromData( data, this ) )
+			{
+				cc.setName( buildNameFromSourceFile(sourceFile) );
+			}
+			else
 			{
 				cc = null;
 			}
@@ -209,8 +284,16 @@ public class ComponentFactory implements IComponentFactory
 			e.printStackTrace();
 		}
 
-
 		return cc;
+	}
+
+	private String buildNameFromSourceFile( File sourceFile )
+	{
+		String name = sourceFile.getName();
+		if( name.endsWith( ".cc" )) {
+			name = name.substring( 0, name.lastIndexOf( ".cc" ) );
+		}
+		return name;
 	}
 
 

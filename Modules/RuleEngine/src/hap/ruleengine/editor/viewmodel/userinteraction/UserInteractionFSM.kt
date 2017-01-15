@@ -74,6 +74,10 @@ class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<User
         currentState.dragComponentFromComponentPallet(componentType)
     }
 
+    override fun dragCompositeFromComponentPallet(sourceFile: String) {
+        currentState.dragCompositeFromComponentPallet(sourceFile)
+    }
+
     init {
         setState(NoAction(this))
     }

@@ -19,7 +19,7 @@ import java.util.*
 
 class DrawingSurfaceVM : ViewModel() {
     private var interaction: UserInteractionFSM by singleAssign()
-    private var currentCC: CompositeComponent = CompositeComponent(UUID.randomUUID(), null)
+    private var currentCC: CompositeComponent = CompositeComponent(UUID.randomUUID(), null, false)
 
     var surface: IDrawingSurfaceView by singleAssign()
 
@@ -33,6 +33,10 @@ class DrawingSurfaceVM : ViewModel() {
     }
 
     private fun subscribeToEvents() {
+        subscribe<DragCompositeFromComponentPallet> {
+            interaction.dragCompositeFromComponentPallet(it.sourcefile)
+        }
+
         subscribe<DragComponentFromComponentPallet> {
             interaction.dragComponentFromComponentPallet(it.componentType)
         }

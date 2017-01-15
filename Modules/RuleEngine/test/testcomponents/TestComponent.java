@@ -13,7 +13,7 @@ public class TestComponent extends Component
 {
 	public TestComponent( UUID id )
 	{
-		super( id );
+		super( id, false );
 	}
 
 	@Override

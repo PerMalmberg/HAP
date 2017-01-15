@@ -17,9 +17,9 @@ public class Concatenate extends Component
 	private StringInput inB;
 	private StringOutput out;
 
-	public Concatenate( UUID id )
+	public Concatenate( UUID id, boolean executionState )
 	{
-		super( id );
+		super( id, executionState );
 	}
 
 	@Override

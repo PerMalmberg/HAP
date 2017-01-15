@@ -3,7 +3,11 @@ package hap.ruleengine.editor.view
 import hap.ruleengine.editor.view.parts.ComponentView
 import hap.ruleengine.editor.viewmodel.ComponentPallet
 import hap.ruleengine.editor.viewmodel.event.DragComponentFromComponentPallet
+import hap.ruleengine.editor.viewmodel.event.DragCompositeFromComponentPallet
 import hap.ruleengine.editor.viewmodel.event.EndDragComponentFromPallet
+import hap.ruleengine.editor.viewmodel.parts.ComponentVM
+import hap.ruleengine.editor.viewmodel.parts.CompositeVM
+import hap.ruleengine.parts.composite.CompositeComponent
 import javafx.event.EventHandler
 import javafx.scene.control.TitledPane
 import tornadofx.*
@@ -23,7 +27,11 @@ class ComponentPalletView : Fragment() {
                                 val vm = it
                                 setOnDragDetected {
                                     this.startFullDrag()
-                                    fire(DragComponentFromComponentPallet(vm.componentType))
+                                    when(vm) {
+                                        is CompositeVM -> fire(DragCompositeFromComponentPallet(vm.sourceFile))
+                                        is ComponentVM -> fire(DragComponentFromComponentPallet(vm.componentType))
+                                    }
+
                                     it.consume()
                                 }
 

@@ -15,9 +15,9 @@ public class DoubleInputNode extends Component
 {
 	private DoubleOutput out;
 
-	public DoubleInputNode( UUID id )
+	public DoubleInputNode( UUID id, boolean executionState )
 	{
-		super( id );
+		super( id, executionState );
 	}
 
 	@Override

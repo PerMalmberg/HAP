@@ -17,9 +17,9 @@ public class Add extends Component
 	private DoubleInput inB;
 	private DoubleOutput out;
 
-	public Add( UUID id )
+	public Add( UUID id, boolean executionState )
 	{
-		super( id );
+		super( id, executionState );
 	}
 
 	@Override

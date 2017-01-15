@@ -15,9 +15,9 @@ public class BooleanInputNode extends Component
 {
 	private BooleanOutput out;
 
-	public BooleanInputNode( UUID id )
+	public BooleanInputNode( UUID id, boolean executionState )
 	{
-		super( id );
+		super( id, executionState );
 	}
 
 	@Override

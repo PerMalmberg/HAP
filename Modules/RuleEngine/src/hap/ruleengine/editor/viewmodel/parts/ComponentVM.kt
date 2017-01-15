@@ -22,7 +22,7 @@ import java.util.*
 //
 //
 ///////////////////////////////////////////////////////////////////////////////
-class ComponentVM constructor(val component: IComponent, val isSelectable: Boolean = true) : ViewModel() {
+open class ComponentVM constructor(val component: IComponent, val isSelectable: Boolean = true) : ViewModel() {
 
     val inputs: ArrayList<InputVM> = ArrayList()
     val outputs: ArrayList<OutputVM> = ArrayList()

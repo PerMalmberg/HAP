@@ -51,4 +51,8 @@ public interface IComponent
 
 	boolean isVisualized();
 	void setVisualized();
+
+	void setExecutionState( boolean status );
+
+	boolean getExecutionState();
 }
