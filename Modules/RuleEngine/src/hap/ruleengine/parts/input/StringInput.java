@@ -12,17 +12,19 @@ import hap.ruleengine.parts.Wire.Wire;
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.output.StringOutput;
 
+import java.util.UUID;
+
 public class StringInput extends Input<String>
 {
-	public StringInput( String name, IComponent parent, boolean isVisibleInComponent
+	public StringInput( String name, UUID id, IComponent parent, boolean isVisibleInComponent
 	)
 	{
-		super( name, parent, null, isVisibleInComponent );
+		super( name, id, parent, null, isVisibleInComponent );
 	}
 
-	public StringInput( String name, IComponent parent )
+	public StringInput( String name, UUID id, IComponent parent )
 	{
-		super( name, parent, null, true );
+		super( name, id, parent, null, true );
 	}
 
 	@Override

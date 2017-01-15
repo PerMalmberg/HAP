@@ -7,6 +7,8 @@ import hap.ruleengine.parts.Component;
 import hap.ruleengine.parts.ConnectionPoint;
 import hap.ruleengine.parts.IComponent;
 
+import java.util.UUID;
+
 public abstract class Input<T> extends ConnectionPoint implements IInput
 {
 	private T myValue;
@@ -14,9 +16,9 @@ public abstract class Input<T> extends ConnectionPoint implements IInput
 	private IComponent myParent;
 	private boolean myIsConnected = false;
 
-	Input( String name, IComponent parent, T defaultValue, boolean isVisibleWhenParentIsVisualized )
+	Input( String name, UUID id, IComponent parent, T defaultValue, boolean isVisibleWhenParentIsVisualized )
 	{
-		super( name, parent, isVisibleWhenParentIsVisualized );
+		super( name, id, parent, isVisibleWhenParentIsVisualized );
 		myParent = parent;
 		myValue = defaultValue;
 	}

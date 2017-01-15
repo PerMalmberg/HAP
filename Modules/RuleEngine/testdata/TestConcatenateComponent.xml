@@ -1,14 +1,1 @@
-<CompositeDef>
-	<Components>
-		<ComponentDef nativeType="hap.ruleengine.component.string.Concatenate" instanceId="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95" X="45.0" Y="90.0"/>
-		<ComponentDef nativeType="hap.ruleengine.parts.node.StringInputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2ed95" name="A"/>
-		<ComponentDef nativeType="hap.ruleengine.parts.node.StringInputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2eeee" name="B"/>
-		<ComponentDef nativeType="hap.ruleengine.parts.node.StringOutputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2edaa" name="Out"/>
-	</Components>
-	<Imports/>
-	<Wires>
-		<WireDef sourceComponent="2bb63aaa-ddb5-4934-90f0-924c9bb2ed95" sourceOutput="A" targetComponent="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95" targetInput="A" type="StringWire"/>
-		<WireDef sourceComponent="2bb63aaa-ddb5-4934-90f0-924c9bb2eeee" sourceOutput="B" targetComponent="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95" targetInput="B" type="StringWire"/>
-		<WireDef sourceComponent="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95" sourceOutput="Out" targetComponent="2bb63aaa-ddb5-4934-90f0-924c9bb2edaa" targetInput="Out" type="StringWire"/>
-	</Wires>
-</CompositeDef>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><CompositeDef><Components><ComponentDef nativeType="hap.ruleengine.component.string.Concatenate" instanceId="43df7263-b87c-4170-b2f6-613763235823" name="Concatenate" X="298.0" Y="106.0"/><ComponentDef nativeType="hap.ruleengine.parts.node.StringInputNode" instanceId="98dd743c-4f36-43f6-a7ce-04e89fe169d4" name="StringInputNode" X="139.0" Y="191.0"/><ComponentDef nativeType="hap.ruleengine.parts.node.StringInputNode" instanceId="0f5e9b0d-0546-43d1-be1c-c3cd3fe20fa0" name="StringInputNode" X="128.0" Y="93.0"/><ComponentDef nativeType="hap.ruleengine.parts.node.StringOutputNode" instanceId="dc52864f-3365-4db7-8c13-5d6addd3626c" name="StringOutputNode" X="408.0" Y="130.0"/></Components><Imports/><Wires><WireDef sourceComponent="43df7263-b87c-4170-b2f6-613763235823" sourceOutput="90d5fe91-8938-46da-b155-711bc10511fb" targetComponent="dc52864f-3365-4db7-8c13-5d6addd3626c" targetInput="dc52864f-3365-4db7-8c13-5d6addd3626c" type="StringWire"/><WireDef sourceComponent="98dd743c-4f36-43f6-a7ce-04e89fe169d4" sourceOutput="98dd743c-4f36-43f6-a7ce-04e89fe169d4" targetComponent="43df7263-b87c-4170-b2f6-613763235823" targetInput="4bf0d092-7195-4fd2-9540-c1978164fe50" type="StringWire"/><WireDef sourceComponent="0f5e9b0d-0546-43d1-be1c-c3cd3fe20fa0" sourceOutput="0f5e9b0d-0546-43d1-be1c-c3cd3fe20fa0" targetComponent="43df7263-b87c-4170-b2f6-613763235823" targetInput="36abe6cb-97f1-462e-88e5-4538cea29041" type="StringWire"/></Wires></CompositeDef>

@@ -8,6 +8,7 @@ import javafx.scene.input.TransferMode
 import tornadofx.addClass
 import tornadofx.rectangle
 import tornadofx.stackpane
+import java.util.*
 
 class OutputView : ConnectionPointView() {
     private val vm: OutputVM by param()
@@ -57,6 +58,7 @@ class OutputView : ConnectionPointView() {
         myWire.remove(wire)
     }
 
+    val id : UUID = vm.id.value
     val name: String = vm.name.value
     val color = vm.color
 }

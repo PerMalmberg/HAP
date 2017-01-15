@@ -9,8 +9,8 @@
 		<Import src="TestAndComponent.xml" instanceId="33333333-ddb5-4934-90f0-774c9aa2ed95" name="A minimal composite"  X="30.0" Y="30.0"/>
 	</Imports>
 	<Wires>
-		<WireDef sourceComponent="11111111-ddb5-4934-90f0-924c9bb2ed95" sourceOutput="A" targetComponent="33333333-ddb5-4934-90f0-774c9aa2ed95" targetInput="AAA" type="BooleanWire"/>
-		<WireDef sourceComponent="22222222-ddb5-4934-90f0-924c9bb2eeee" sourceOutput="B" targetComponent="33333333-ddb5-4934-90f0-774c9aa2ed95" targetInput="B" type="BooleanWire"/>
-		<WireDef sourceComponent="33333333-ddb5-4934-90f0-774c9aa2ed95" sourceOutput="Out" targetComponent="44444444-ddb5-4934-90f0-924c9bb2edaa" targetInput="Out" type="BooleanWire"/>
+		<WireDef sourceComponent="11111111-ddb5-4934-90f0-924c9bb2ed95" sourceOutput="11111111-ddb5-4934-90f0-924c9bb2ed95" targetComponent="33333333-ddb5-4934-90f0-774c9aa2ed95" targetInput="4e11d2cc-57a2-4ba4-9d35-aed40e73844e" type="BooleanWire"/>
+		<WireDef sourceComponent="22222222-ddb5-4934-90f0-924c9bb2eeee" sourceOutput="22222222-ddb5-4934-90f0-924c9bb2eeee" targetComponent="33333333-ddb5-4934-90f0-774c9aa2ed95" targetInput="bf7db3d9-5002-4774-a4a2-db8bfc6728d0" type="BooleanWire"/>
+		<WireDef sourceComponent="33333333-ddb5-4934-90f0-774c9aa2ed95" sourceOutput="cf9cb9cb-fc5d-4122-a5de-550c0566b728" targetComponent="44444444-ddb5-4934-90f0-924c9bb2edaa" targetInput="44444444-ddb5-4934-90f0-924c9bb2edaa" type="BooleanWire"/>
 	</Wires>
 </CompositeDef>

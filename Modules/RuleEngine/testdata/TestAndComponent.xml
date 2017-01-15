@@ -1,14 +1,1 @@
-<CompositeDef>
-	<Components>
-		<ComponentDef nativeType="hap.ruleengine.component.bool.And" instanceId="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95"/>
-		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanInputNode" instanceId="2bb63aaa-ddb5-4934-90f0-bbbbbbbbbbbb" name="AAA"/>
-		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanInputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2eeee" name="B"/>
-		<ComponentDef nativeType="hap.ruleengine.parts.node.BooleanOutputNode" instanceId="2bb63aaa-ddb5-4934-90f0-924c9bb2edaa" name="Out"/>
-	</Components>
-	<Imports/>
-	<Wires>
-		<WireDef sourceComponent="2bb63aaa-ddb5-4934-90f0-bbbbbbbbbbbb" sourceOutput="AAA" targetComponent="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95" targetInput="A" type="BooleanWire"/>
-		<WireDef sourceComponent="2bb63aaa-ddb5-4934-90f0-924c9bb2eeee" sourceOutput="B" targetComponent="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95" targetInput="B" type="BooleanWire"/>
-		<WireDef sourceComponent="2bb63aaa-ddb5-4934-90f0-924c9aa2ed95" sourceOutput="Out" targetComponent="2bb63aaa-ddb5-4934-90f0-924c9bb2edaa" targetInput="Out" type="BooleanWire"/>
-	</Wires>
-</CompositeDef>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><CompositeDef><Components><ComponentDef nativeType="hap.ruleengine.component.bool.And" instanceId="402a3f4d-b3b3-42e7-8457-84e2b61d1f58" name="And" X="304.0" Y="120.0"/><ComponentDef nativeType="hap.ruleengine.parts.node.BooleanOutputNode" instanceId="cf9cb9cb-fc5d-4122-a5de-550c0566b728" name="BooleanOutputNode" X="434.0" Y="139.0"/><ComponentDef nativeType="hap.ruleengine.parts.node.BooleanInputNode" instanceId="4e11d2cc-57a2-4ba4-9d35-aed40e73844e" name="BooleanInputNode" X="169.0" Y="128.0"/><ComponentDef nativeType="hap.ruleengine.parts.node.BooleanInputNode" instanceId="bf7db3d9-5002-4774-a4a2-db8bfc6728d0" name="BooleanInputNode" X="169.0" Y="189.0"/></Components><Imports/><Wires><WireDef sourceComponent="402a3f4d-b3b3-42e7-8457-84e2b61d1f58" sourceOutput="6f48e6ab-a186-40c1-880e-2fbf2d5375c6" targetComponent="cf9cb9cb-fc5d-4122-a5de-550c0566b728" targetInput="cf9cb9cb-fc5d-4122-a5de-550c0566b728" type="BooleanWire"/><WireDef sourceComponent="4e11d2cc-57a2-4ba4-9d35-aed40e73844e" sourceOutput="4e11d2cc-57a2-4ba4-9d35-aed40e73844e" targetComponent="402a3f4d-b3b3-42e7-8457-84e2b61d1f58" targetInput="87cd2526-c95a-44a6-a7cd-8d94e97bd924" type="BooleanWire"/><WireDef sourceComponent="bf7db3d9-5002-4774-a4a2-db8bfc6728d0" sourceOutput="bf7db3d9-5002-4774-a4a2-db8bfc6728d0" targetComponent="402a3f4d-b3b3-42e7-8457-84e2b61d1f58" targetInput="d549c1a6-6624-4ada-a33f-b09918b43e57" type="BooleanWire"/></Wires></CompositeDef>

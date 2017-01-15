@@ -12,7 +12,7 @@ public interface IWire
 	boolean connect( CompositeComponent cc );
 	void disconnect();
 	UUID getSourceComponent();
-	String getSourceOutput();
+	UUID getSourceOutput();
 	UUID getTargetComponent();
-	String getTargetInput();
+	UUID getTargetInput();
 }

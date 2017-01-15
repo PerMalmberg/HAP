@@ -19,17 +19,17 @@ import java.util.UUID;
 
 public interface IComponent
 {
-	HashMap<String, BooleanOutput> getBooleanOutputs();
+	HashMap<UUID, BooleanOutput> getBooleanOutputs();
 
-	HashMap<String, BooleanInput> getBooleanInputs();
+	HashMap<UUID, BooleanInput> getBooleanInputs();
 
-	HashMap<String, StringInput> getStringInputs();
+	HashMap<UUID, StringInput> getStringInputs();
 
-	HashMap<String, StringOutput> getStringOutputs();
+	HashMap<UUID, StringOutput> getStringOutputs();
 
-	HashMap<String, DoubleInput> getDoubleInputs();
+	HashMap<UUID, DoubleInput> getDoubleInputs();
 
-	HashMap<String, DoubleOutput> getDoubleOutputs();
+	HashMap<UUID, DoubleOutput> getDoubleOutputs();
 
 	UUID getId();
 

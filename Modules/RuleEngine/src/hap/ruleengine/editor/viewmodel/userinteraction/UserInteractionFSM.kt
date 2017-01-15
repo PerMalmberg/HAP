@@ -79,9 +79,10 @@ class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<User
     }
 
     override fun postSetState() {
-        println( currentState.javaClass.name)
+        println(currentState.javaClass.name) //QQQ
     }
 
     var currentFile: File? = null
     val selectedComponents = HashMap<UUID, ComponentVM>()
+    var beginDragPoistion = Point2D(0.0, 0.0)
 }

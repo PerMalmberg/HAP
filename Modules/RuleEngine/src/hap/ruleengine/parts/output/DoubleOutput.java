@@ -11,16 +11,18 @@ import hap.ruleengine.parts.Wire.Wire;
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.input.DoubleInput;
 
+import java.util.UUID;
+
 public class DoubleOutput extends Output<Double>
 {
-	public DoubleOutput( String name, IComponent parent, boolean isVisibleWhenParentIsVisualized )
+	public DoubleOutput( String name, UUID id, IComponent parent, boolean isVisibleWhenParentIsVisualized )
 	{
-		super( name, parent, Double.NaN, isVisibleWhenParentIsVisualized );
+		super( name, id, parent, Double.NaN, isVisibleWhenParentIsVisualized );
 	}
 
-	public DoubleOutput( String name, IComponent parent )
+	public DoubleOutput( String name, UUID id, IComponent parent )
 	{
-		super( name, parent, Double.NaN, true );
+		super( name, id, parent, Double.NaN, true );
 	}
 
 	@Override

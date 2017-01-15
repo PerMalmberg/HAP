@@ -11,16 +11,18 @@ import hap.ruleengine.parts.Wire.Wire;
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.input.BooleanInput;
 
+import java.util.UUID;
+
 public class BooleanOutput extends Output<Boolean>
 {
-	public BooleanOutput( String name, IComponent parent, boolean isVisibleOnCompoent )
+	public BooleanOutput( String name, UUID id, IComponent parent, boolean isVisibleOnCompoent )
 	{
-		super( name, parent, false, isVisibleOnCompoent );
+		super( name, id, parent, false, isVisibleOnCompoent );
 	}
 
-	public BooleanOutput( String name, IComponent parent )
+	public BooleanOutput( String name, UUID id, IComponent parent )
 	{
-		super( name, parent, false, true );
+		super( name, id, parent, false, true );
 	}
 
 	@Override

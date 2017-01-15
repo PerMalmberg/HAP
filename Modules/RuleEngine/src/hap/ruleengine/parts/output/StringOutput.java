@@ -11,16 +11,18 @@ import hap.ruleengine.parts.Wire.Wire;
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.input.StringInput;
 
+import java.util.UUID;
+
 public class StringOutput extends Output<String>
 {
-	public StringOutput( String name, IComponent parent, boolean isVisibleWhenParentIsVisualized )
+	public StringOutput( String name, UUID id, IComponent parent, boolean isVisibleWhenParentIsVisualized )
 	{
-		super( name, parent, null, isVisibleWhenParentIsVisualized );
+		super( name, id, parent, null, isVisibleWhenParentIsVisualized );
 	}
 
-	public StringOutput( String name, IComponent parent )
+	public StringOutput( String name, UUID id, IComponent parent )
 	{
-		super( name, parent, null, true );
+		super( name, id, parent, null, true );
 	}
 
 	@Override

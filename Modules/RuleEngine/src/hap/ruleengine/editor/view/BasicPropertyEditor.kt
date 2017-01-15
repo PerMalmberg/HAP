@@ -8,9 +8,8 @@ import java.util.*
 
 class BasicPropertyEditor : View("") {
     var selectedComponents: HashMap<UUID, ComponentVM> by property(HashMap<UUID, ComponentVM>())
-    val dummy = HashMap<UUID, ComponentVM>()
-
     fun selectedComponentsProperty() = getProperty(BasicPropertyEditor::selectedComponents)
+    val dummy = HashMap<UUID, ComponentVM>()
 
     override val root = borderpane {
         center {

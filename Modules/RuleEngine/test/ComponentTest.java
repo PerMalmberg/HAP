@@ -56,9 +56,9 @@ public class ComponentTest
 		assertTrue( c.getId() != null );
 		assertTrue( c.getSubComponentCount() == 4 );
 
-		BooleanInput a = c.getBooleanInputs().get( "A" );
-		BooleanInput b = c.getBooleanInputs().get( "B" );
-		BooleanOutput out = c.getBooleanOutputs().get( "Out" );
+		BooleanInput a = c.getBooleanInputs().get( UUID.fromString( "11111111-ddb5-4934-90f0-924c9bb2ed95" ) );
+		BooleanInput b = c.getBooleanInputs().get( UUID.fromString( "22222222-ddb5-4934-90f0-924c9bb2eeee" ) );
+		BooleanOutput out = c.getBooleanOutputs().get( UUID.fromString( "44444444-ddb5-4934-90f0-924c9bb2edaa" ) );
 
 		assertFalse( out.getValue() );
 		a.set( true );
@@ -80,26 +80,13 @@ public class ComponentTest
 	}
 
 	@Test
-	public void testPassthroughComponent()
-	{
-		CompositeComponent c = loadComponent( "PassthroughTestComp.xml" );
-
-		c.getBooleanInputs().get( "MyInput" ).set( false );
-		assertFalse( c.getBooleanOutputs().get( "MyOutput" ).getValue() );
-		c.getBooleanInputs().get( "MyInput" ).set( true );
-		assertTrue( c.getBooleanOutputs().get( "MyOutput" ).getValue() );
-		c.getBooleanInputs().get( "MyInput" ).set( false );
-		assertFalse( c.getBooleanOutputs().get( "MyOutput" ).getValue() );
-	}
-
-	@Test
 	public void testAndComponent()
 	{
 		CompositeComponent c = loadComponent( "TestAndComponent.xml" );
 
-		BooleanInput a = c.getBooleanInputs().get( "AAA" );
-		BooleanInput b = c.getBooleanInputs().get( "B" );
-		BooleanOutput out = c.getBooleanOutputs().get( "Out" );
+		BooleanInput a = c.getBooleanInputs().get( UUID.fromString( "4e11d2cc-57a2-4ba4-9d35-aed40e73844e" ) );
+		BooleanInput b = c.getBooleanInputs().get( UUID.fromString( "bf7db3d9-5002-4774-a4a2-db8bfc6728d0" ) );
+		BooleanOutput out = c.getBooleanOutputs().get( UUID.fromString( "cf9cb9cb-fc5d-4122-a5de-550c0566b728" ) );
 
 		assertFalse( out.getValue() );
 		a.set( true );
@@ -117,9 +104,9 @@ public class ComponentTest
 	{
 		CompositeComponent c = loadComponent( "TestAddComponent.xml" );
 
-		DoubleInput a = c.getDoubleInputs().get( "A" );
-		DoubleInput b = c.getDoubleInputs().get( "B" );
-		DoubleOutput out = c.getDoubleOutputs().get( "Out" );
+		DoubleInput a = c.getDoubleInputs().get( UUID.fromString( "0f766bed-0362-4226-8e1a-8367ad1febdb" ) );
+		DoubleInput b = c.getDoubleInputs().get( UUID.fromString( "260f070a-bcfb-4731-a4ec-956b028a5781" ) );
+		DoubleOutput out = c.getDoubleOutputs().get( UUID.fromString( "4a62c1dd-cd7a-4676-b355-e1089dbabe45" ) );
 
 		assertTrue( Double.isNaN( out.getValue() ) );
 		a.set( 0d );
@@ -142,9 +129,9 @@ public class ComponentTest
 
 	private void testConcatenate( CompositeComponent c )
 	{
-		StringInput a = c.getStringInputs().get( "A" );
-		StringInput b = c.getStringInputs().get( "B" );
-		StringOutput out = c.getStringOutputs().get( "Out" );
+		StringInput a = c.getStringInputs().get( UUID.fromString( "98dd743c-4f36-43f6-a7ce-04e89fe169d4" ) );
+		StringInput b = c.getStringInputs().get( UUID.fromString( "0f5e9b0d-0546-43d1-be1c-c3cd3fe20fa0" ) );
+		StringOutput out = c.getStringOutputs().get( UUID.fromString( "dc52864f-3365-4db7-8c13-5d6addd3626c" ) );
 
 		assertEquals( null, out.getValue() );
 		a.set( "" );
@@ -232,9 +219,9 @@ public class ComponentTest
 		}
 
 		// Perform tests on CC
-		DoubleInput a = c.getDoubleInputs().get( "A" );
-		DoubleInput b = c.getDoubleInputs().get( "B" );
-		DoubleOutput out = c.getDoubleOutputs().get( "Out" );
+		DoubleInput a = c.getDoubleInputs().get( UUID.fromString( "260f070a-bcfb-4731-a4ec-956b028a5781" ) );
+		DoubleInput b = c.getDoubleInputs().get( UUID.fromString( "0f766bed-0362-4226-8e1a-8367ad1febdb" ) );
+		DoubleOutput out = c.getDoubleOutputs().get( UUID.fromString( "4a62c1dd-cd7a-4676-b355-e1089dbabe45" ) );
 
 		assertTrue( Double.isNaN( out.getValue() ) );
 		a.set( 0d );

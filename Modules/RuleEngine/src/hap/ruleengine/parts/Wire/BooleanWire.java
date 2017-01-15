@@ -5,6 +5,8 @@ import hap.ruleengine.parts.output.BooleanOutput;
 import hap.ruleengine.parts.IComponent;
 import hap.ruleengine.parts.data.WireDef;
 
+import java.util.UUID;
+
 public class BooleanWire extends Wire<Boolean, BooleanInput, BooleanOutput>
 {
 	public BooleanWire( WireDef def )
@@ -13,15 +15,15 @@ public class BooleanWire extends Wire<Boolean, BooleanInput, BooleanOutput>
 	}
 
 	@Override
-	protected BooleanOutput getOutput( IComponent source, String name )
+	protected BooleanOutput getOutput( IComponent source, UUID id )
 	{
-		return source.getBooleanOutputs().get( name );
+		return source.getBooleanOutputs().get( id );
 	}
 
 	@Override
-	protected BooleanInput getInput( IComponent target, String name )
+	protected BooleanInput getInput( IComponent target, UUID id )
 	{
-		return target.getBooleanInputs().get( name );
+		return target.getBooleanInputs().get( id );
 	}
 
 

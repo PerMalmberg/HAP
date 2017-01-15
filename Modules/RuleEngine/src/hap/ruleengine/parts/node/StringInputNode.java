@@ -23,8 +23,8 @@ public class StringInputNode extends Component
 	@Override
 	public void setup( CompositeComponent cc )
 	{
-		StringInput in = new StringInput( getName(), this, false );
-		out = new StringOutput( getName(), this );
+		StringInput in = new StringInput( getName(), getId(), this, false );
+		out = new StringOutput( "", getId(), this );
 
 		addInput( in );
 		addOutput( out );

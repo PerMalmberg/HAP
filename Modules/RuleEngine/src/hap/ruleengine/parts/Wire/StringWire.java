@@ -5,6 +5,8 @@ import hap.ruleengine.parts.data.WireDef;
 import hap.ruleengine.parts.input.StringInput;
 import hap.ruleengine.parts.output.StringOutput;
 
+import java.util.UUID;
+
 public class StringWire extends Wire<String, StringInput, StringOutput>
 {
 	public StringWire( WireDef def )
@@ -13,14 +15,14 @@ public class StringWire extends Wire<String, StringInput, StringOutput>
 	}
 
 	@Override
-	protected StringOutput getOutput( IComponent source, String name )
+	protected StringOutput getOutput( IComponent source, UUID id )
 	{
-		return source.getStringOutputs().get( name );
+		return source.getStringOutputs().get( id );
 	}
 
 	@Override
-	protected StringInput getInput( IComponent target, String name )
+	protected StringInput getInput( IComponent target, UUID id )
 	{
-		return target.getStringInputs().get( name );
+		return target.getStringInputs().get( id );
 	}
 }

@@ -19,6 +19,6 @@ public class TestComponent extends Component
 	@Override
 	public void setup( CompositeComponent cc )
 	{
-		addInput( new BooleanInput( "A", this ) );
+		addInput( new BooleanInput( "A", UUID.fromString( "218b3710-6d47-4730-bb7d-2d822daf6552" ), this ) );
 	}
 }

@@ -3,10 +3,10 @@
 
 package hap.ruleengine.parts.node;
 
-import hap.ruleengine.parts.input.BooleanInput;
-import hap.ruleengine.parts.output.BooleanOutput;
 import hap.ruleengine.parts.Component;
 import hap.ruleengine.parts.composite.CompositeComponent;
+import hap.ruleengine.parts.input.BooleanInput;
+import hap.ruleengine.parts.output.BooleanOutput;
 
 import java.util.UUID;
 
@@ -23,8 +23,8 @@ public class BooleanOutputNode extends Component
 	@Override
 	public void setup( CompositeComponent cc )
 	{
-		BooleanInput in = new BooleanInput( getName(), this );
-		out = new BooleanOutput( getName(), this, false );
+		BooleanInput in = new BooleanInput( "", getId(), this );
+		out = new BooleanOutput( getName(), getId(), this, false );
 
 		addInput( in );
 		addOutput( out );

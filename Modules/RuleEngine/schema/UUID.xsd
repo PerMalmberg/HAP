@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 		<xs:simpleType name="UUID">
 			<xs:restriction base="xs:string">
-				<xs:pattern value="[a-f0-9\-]{36}"/>
+				<xs:pattern value="[a-fA-F0-9\-]{36}"/>
 			</xs:restriction>
 		</xs:simpleType>
 </xs:schema>

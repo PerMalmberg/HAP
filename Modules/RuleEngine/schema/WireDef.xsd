@@ -3,9 +3,9 @@
 	<xs:include schemaLocation="UUID.xsd"/>
 	<xs:complexType name="WireDef">
 		<xs:attribute name="sourceComponent" type="UUID"/>
-		<xs:attribute name="sourceOutput" type="xs:string"/>
+		<xs:attribute name="sourceOutput" type="UUID"/>
 		<xs:attribute name="targetComponent" type="UUID"/>
-		<xs:attribute name="targetInput" type="xs:string"/>
+		<xs:attribute name="targetInput" type="UUID"/>
 		<xs:attribute name="type">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">

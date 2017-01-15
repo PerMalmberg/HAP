@@ -11,6 +11,7 @@ import hap.ruleengine.parts.input.Input;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class Output<T> extends ConnectionPoint implements IOutput
 {
@@ -18,9 +19,9 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 	private List<Input<T>> myRemote = new ArrayList<>();
 	private int myCallCount = 0;
 
-	Output( String name, IComponent parent, T defaultValue, boolean isVisibleWhenParentIsVisualized )
+	Output( String name, UUID id, IComponent parent, T defaultValue, boolean isVisibleWhenParentIsVisualized )
 	{
-		super( name, parent, isVisibleWhenParentIsVisualized );
+		super( name, id, parent, isVisibleWhenParentIsVisualized );
 		myValue = defaultValue;
 	}
 
@@ -78,9 +79,9 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 		{
 			WireDef wire = new WireDef();
 			wire.setSourceComponent( myParent.getId().toString() );
-			wire.setSourceOutput( getName() );
+			wire.setSourceOutput( getId().toString() );
 			wire.setTargetComponent( remote.getParent().getId().toString() );
-			wire.setTargetInput( remote.getName() );
+			wire.setTargetInput( remote.getId().toString() );
 			wire.setType( this.getClass().getSimpleName().replace( "Output", "Wire" ) );
 			data.getWires().getWireDef().add( wire );
 		}

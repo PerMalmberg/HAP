@@ -25,9 +25,9 @@ public class Concatenate extends Component
 	@Override
 	public void setup( CompositeComponent cc )
 	{
-		inA = new StringInput( "A", this );
-		inB = new StringInput( "B", this );
-		out = new StringOutput( "Out", this );
+		inA = new StringInput( "A", UUID.fromString( "4bf0d092-7195-4fd2-9540-c1978164fe50"),  this );
+		inB = new StringInput( "B", UUID.fromString( "36abe6cb-97f1-462e-88e5-4538cea29041" ), this );
+		out = new StringOutput( "Out", UUID.fromString( "90d5fe91-8938-46da-b155-711bc10511fb" ), this );
 		addInput( inA );
 		addInput( inB );
 		addOutput( out );

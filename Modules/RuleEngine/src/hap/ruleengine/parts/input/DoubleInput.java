@@ -12,16 +12,18 @@ import hap.ruleengine.parts.Wire.Wire;
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.output.DoubleOutput;
 
+import java.util.UUID;
+
 public class DoubleInput extends Input<Double>
 {
-	public DoubleInput( String name, IComponent parent, boolean isVisibleInComponent )
+	public DoubleInput( String name, UUID id, IComponent parent, boolean isVisibleInComponent )
 	{
-		super( name, parent, Double.NaN, isVisibleInComponent );
+		super( name, id, parent, Double.NaN, isVisibleInComponent );
 	}
 
-	public DoubleInput( String name, IComponent parent )
+	public DoubleInput( String name, UUID id, IComponent parent )
 	{
-		super( name, parent, Double.NaN, true );
+		super( name, id, parent, Double.NaN, true );
 	}
 
 	@Override
@@ -39,7 +41,8 @@ public class DoubleInput extends Input<Double>
 			DoubleOutput output = (DoubleOutput) other;
 			wire = new DoubleWire( Wire.createDef( output, this, DoubleWire.class.getSimpleName() ) );
 			boolean res = wire.connect( cc );
-			if( !res ) {
+			if( ! res )
+			{
 				wire = null;
 			}
 		}

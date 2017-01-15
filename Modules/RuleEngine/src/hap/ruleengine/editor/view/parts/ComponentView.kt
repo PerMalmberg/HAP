@@ -158,12 +158,12 @@ class ComponentView : Fragment() {
         myInputs.forEach { it.updateWires() }
     }
 
-    fun getInputView(nameOfInput: String): InputView? {
-        return myInputs.singleOrNull { nameOfInput == it.name }
+    fun getInputView(idOfInput: UUID): InputView? {
+        return myInputs.singleOrNull { idOfInput == it.id }
     }
 
-    fun getOutputView(nameOfOutput: String): OutputView? {
-        return myOutputs.singleOrNull { nameOfOutput == it.name }
+    fun getOutputView(idOfOutput: UUID): OutputView? {
+        return myOutputs.singleOrNull { idOfOutput == it.id }
     }
 
     fun delete() {

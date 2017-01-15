@@ -23,12 +23,12 @@ import java.util.UUID;
 public abstract class Component implements IComponent
 {
 	private final UUID myInstanceId;
-	private final HashMap<String, BooleanInput> myBooleanInput = new HashMap<>();
-	private final HashMap<String, BooleanOutput> myBooleanOutput = new HashMap<>();
-	private final HashMap<String, DoubleInput> myDoubleInput = new HashMap<>();
-	private final HashMap<String, DoubleOutput> myDoubleOutput = new HashMap<>();
-	private final HashMap<String, StringInput> myStringInput = new HashMap<>();
-	private final HashMap<String, StringOutput> myStringOutput = new HashMap<>();
+	private final HashMap<UUID, BooleanInput> myBooleanInput = new HashMap<>();
+	private final HashMap<UUID, BooleanOutput> myBooleanOutput = new HashMap<>();
+	private final HashMap<UUID, DoubleInput> myDoubleInput = new HashMap<>();
+	private final HashMap<UUID, DoubleOutput> myDoubleOutput = new HashMap<>();
+	private final HashMap<UUID, StringInput> myStringInput = new HashMap<>();
+	private final HashMap<UUID, StringOutput> myStringOutput = new HashMap<>();
 	private String myName;
 	private double X = 0.0;
 	private double Y = 0.0;
@@ -44,32 +44,32 @@ public abstract class Component implements IComponent
 
 	public void addInput( BooleanInput input )
 	{
-		myBooleanInput.put( input.getName(), input );
+		myBooleanInput.put( input.getId(), input );
 	}
 
 	public void addInput( DoubleInput input )
 	{
-		myDoubleInput.put( input.getName(), input );
+		myDoubleInput.put( input.getId(), input );
 	}
 
 	public void addInput( StringInput input )
 	{
-		myStringInput.put( input.getName(), input );
+		myStringInput.put( input.getId(), input );
 	}
 
 	public void addOutput( BooleanOutput output )
 	{
-		myBooleanOutput.put( output.getName(), output );
+		myBooleanOutput.put( output.getId(), output );
 	}
 
 	public void addOutput( DoubleOutput output )
 	{
-		myDoubleOutput.put( output.getName(), output );
+		myDoubleOutput.put( output.getId(), output );
 	}
 
 	public void addOutput( StringOutput output )
 	{
-		myStringOutput.put( output.getName(), output );
+		myStringOutput.put( output.getId(), output );
 	}
 
 	public void inputChanged( Input<?> input )
@@ -120,37 +120,37 @@ public abstract class Component implements IComponent
 	}
 
 	@Override
-	public HashMap<String, BooleanOutput> getBooleanOutputs()
+	public HashMap<UUID, BooleanOutput> getBooleanOutputs()
 	{
 		return myBooleanOutput;
 	}
 
 	@Override
-	public HashMap<String, BooleanInput> getBooleanInputs()
+	public HashMap<UUID, BooleanInput> getBooleanInputs()
 	{
 		return myBooleanInput;
 	}
 
 	@Override
-	public HashMap<String, DoubleInput> getDoubleInputs()
+	public HashMap<UUID, DoubleInput> getDoubleInputs()
 	{
 		return myDoubleInput;
 	}
 
 	@Override
-	public HashMap<String, DoubleOutput> getDoubleOutputs()
+	public HashMap<UUID, DoubleOutput> getDoubleOutputs()
 	{
 		return myDoubleOutput;
 	}
 
 	@Override
-	public HashMap<String, StringInput> getStringInputs()
+	public HashMap<UUID, StringInput> getStringInputs()
 	{
 		return myStringInput;
 	}
 
 	@Override
-	public HashMap<String, StringOutput> getStringOutputs()
+	public HashMap<UUID, StringOutput> getStringOutputs()
 	{
 		return myStringOutput;
 	}

@@ -24,9 +24,9 @@ public class And extends Component
 	@Override
 	public void setup( CompositeComponent cc )
 	{
-		inA = new BooleanInput( "A", this );
-		inB = new BooleanInput( "B", this );
-		out = new BooleanOutput( "Out", this );
+		inA = new BooleanInput( "A", UUID.fromString( "87cd2526-c95a-44a6-a7cd-8d94e97bd924" ), this );
+		inB = new BooleanInput( "B", UUID.fromString( "d549c1a6-6624-4ada-a33f-b09918b43e57" ), this );
+		out = new BooleanOutput( "Out", UUID.fromString( "6f48e6ab-a186-40c1-880e-2fbf2d5375c6" ), this );
 		addInput( inA );
 		addInput( inB );
 		addOutput( out );

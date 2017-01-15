@@ -26,9 +26,9 @@ public abstract class Wire<T, In extends Input<T>, Out extends Output<T>> implem
 	{
 		WireDef def = new WireDef();
 		def.setType( simpleClassName );
-		def.setTargetInput( input.getName() );
+		def.setTargetInput( input.getId().toString() );
 		def.setTargetComponent( input.getParent().getId().toString() );
-		def.setSourceOutput( output.getName() );
+		def.setSourceOutput( output.getId().toString() );
 		def.setSourceComponent( output.getParent().getId().toString() );
 		return def;
 	}
@@ -45,8 +45,8 @@ public abstract class Wire<T, In extends Input<T>, Out extends Output<T>> implem
 				// Make sure we're not connecting a wire between to connection points on the same component.
 				&& source != target )
 		{
-			output = getOutput( source, myDef.getSourceOutput() );
-			input = getInput( target, myDef.getTargetInput() );
+			output = getOutput( source, UUID.fromString( myDef.getSourceOutput() ) );
+			input = getInput( target,  UUID.fromString( myDef.getTargetInput() ) );
 			if( output != null && input != null )
 			{
 				res = output.connect( input );
@@ -56,9 +56,9 @@ public abstract class Wire<T, In extends Input<T>, Out extends Output<T>> implem
 		return res;
 	}
 
-	protected abstract Out getOutput( IComponent source, String name );
+	protected abstract Out getOutput( IComponent source, UUID id );
 
-	protected abstract In getInput( IComponent target, String name );
+	protected abstract In getInput( IComponent target, UUID id );
 
 	@Override
 	public void disconnect()
@@ -76,9 +76,9 @@ public abstract class Wire<T, In extends Input<T>, Out extends Output<T>> implem
 	}
 
 	@Override
-	public String getSourceOutput()
+	public UUID getSourceOutput()
 	{
-		return myDef.getSourceOutput();
+		return UUID.fromString( myDef.getSourceOutput() );
 	}
 
 	@Override
@@ -88,8 +88,8 @@ public abstract class Wire<T, In extends Input<T>, Out extends Output<T>> implem
 	}
 
 	@Override
-	public String getTargetInput()
+	public UUID getTargetInput()
 	{
-		return myDef.getTargetInput();
+		return UUID.fromString( myDef.getTargetInput() );
 	}
 }
