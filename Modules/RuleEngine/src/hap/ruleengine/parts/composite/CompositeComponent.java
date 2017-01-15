@@ -21,7 +21,7 @@ import java.util.*;
 
 public class CompositeComponent extends Component
 {
-	private final List<IWire> myWire = new ArrayList<>();
+	private final ArrayList<IWire> myWire = new ArrayList<>();
 	private String mySourceFile;
 
 	public CompositeComponent( boolean executionState )
@@ -255,12 +255,25 @@ public class CompositeComponent extends Component
 	{
 		myComponent.remove( component.getId() );
 		component.setExecutionState( false );
+		removeWiresConnectedTo( component );
+	}
+
+	private void removeWiresConnectedTo( IComponent component )
+	{
+		IWire[] wire = myWire.toArray( new IWire[myWire.size()] );
+		for( IWire w : wire )
+		{
+			if( w.getSourceComponent().equals( component.getId() ) || w.getTargetComponent().equals( component.getId() ) )
+			{
+				deleteWire( w );
+			}
+		}
 	}
 
 	@Override
 	public void setExecutionState( boolean status )
 	{
-		for( IComponent comp : myComponent.values()	)
+		for( IComponent comp : myComponent.values() )
 		{
 			comp.setExecutionState( status );
 		}
