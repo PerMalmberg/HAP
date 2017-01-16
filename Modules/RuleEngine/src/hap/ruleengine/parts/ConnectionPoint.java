@@ -1,5 +1,7 @@
 package hap.ruleengine.parts;
 
+import hap.ruleengine.parts.composite.CompositeComponent;
+
 import java.util.UUID;
 
 public abstract class ConnectionPoint implements IConnectionPoint
@@ -7,12 +9,17 @@ public abstract class ConnectionPoint implements IConnectionPoint
 	private String myName;
 	private UUID myId;
 	private final boolean myIsVisibleWhenParentIsVisualized;
-	protected IComponent myParent;
+	private IComponent myParent;
+
+	// Used to report the owning component. This is the same as the owner of the component the connection point
+	// is a part of, except when we act as an input/output to a composite.
+	private UUID myOwningComponent;
 
 	public ConnectionPoint( String name, UUID id, IComponent parent, boolean isVisibleWhenParentIsVisualized )
 	{
 		myName = name;
 		myId = id;
+		myOwningComponent = parent.getId();
 		myParent = parent;
 		myIsVisibleWhenParentIsVisualized = isVisibleWhenParentIsVisualized;
 	}
@@ -36,7 +43,7 @@ public abstract class ConnectionPoint implements IConnectionPoint
 	}
 
 	@Override
-	public void setId(UUID id)
+	public void setId( UUID id )
 	{
 		myId = id;
 	}
@@ -46,19 +53,25 @@ public abstract class ConnectionPoint implements IConnectionPoint
 	{
 		boolean res;
 
-		if( myParent.isVisualized()) {
+		if( myParent.isVisualized() )
+		{
 			res = myIsVisibleWhenParentIsVisualized;
 		}
-		else {
+		else
+		{
 			res = true;
 		}
 
 		return res;
 	}
 
-	@Override
-	public IComponent getParent()
+	public void setOwningComposite( CompositeComponent cc )
 	{
-		return myParent;
+		myOwningComponent = cc.getId();
+	}
+
+	public UUID getOwningComponentId()
+	{
+		return myOwningComponent;
 	}
 }

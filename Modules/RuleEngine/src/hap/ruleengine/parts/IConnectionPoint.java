@@ -21,7 +21,5 @@ public interface IConnectionPoint
 	// Connects two connection points, if their sub classes allows it
 	IWire connectTo( IConnectionPoint other, CompositeComponent cc );
 
-	IComponent getParent();
-
 	void disconnectAll();
 }

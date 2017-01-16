@@ -215,7 +215,7 @@ public abstract class Component implements IComponent
 		storeWires( data );
 	}
 
-	private void storeWires( CompositeDef data )
+	protected void storeWires( CompositeDef data )
 	{
 		for( BooleanOutput output : myBooleanOutput.values() )
 		{

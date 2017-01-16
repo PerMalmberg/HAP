@@ -78,9 +78,9 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 		for( Input<T> remote : myRemote )
 		{
 			WireDef wire = new WireDef();
-			wire.setSourceComponent( myParent.getId().toString() );
+			wire.setSourceComponent( getOwningComponentId().toString() );
 			wire.setSourceOutput( getId().toString() );
-			wire.setTargetComponent( remote.getParent().getId().toString() );
+			wire.setTargetComponent( remote.getOwningComponentId().toString() );
 			wire.setTargetInput( remote.getId().toString() );
 			wire.setType( this.getClass().getSimpleName().replace( "Output", "Wire" ) );
 			data.getWires().getWireDef().add( wire );

@@ -27,9 +27,9 @@ public abstract class Wire<T, In extends Input<T>, Out extends Output<T>> implem
 		WireDef def = new WireDef();
 		def.setType( simpleClassName );
 		def.setTargetInput( input.getId().toString() );
-		def.setTargetComponent( input.getParent().getId().toString() );
+		def.setTargetComponent( input.getOwningComponentId().toString() );
 		def.setSourceOutput( output.getId().toString() );
-		def.setSourceComponent( output.getParent().getId().toString() );
+		def.setSourceComponent( output.getOwningComponentId().toString() );
 		return def;
 	}
 

@@ -15,6 +15,12 @@ import hap.ruleengine.parts.data.ComponentDef;
 import hap.ruleengine.parts.data.CompositeDef;
 import hap.ruleengine.parts.data.CompositeDef.Imports.Import;
 import hap.ruleengine.parts.data.WireDef;
+import hap.ruleengine.parts.input.BooleanInput;
+import hap.ruleengine.parts.input.DoubleInput;
+import hap.ruleengine.parts.input.StringInput;
+import hap.ruleengine.parts.output.BooleanOutput;
+import hap.ruleengine.parts.output.DoubleOutput;
+import hap.ruleengine.parts.output.StringOutput;
 
 import java.io.File;
 import java.util.*;
@@ -62,6 +68,7 @@ public class CompositeComponent extends Component
 		imp.setX( getX() );
 		imp.setY( getY() );
 		data.getImports().getImport().add( imp );
+		storeWires( data );
 	}
 
 	@Override
@@ -277,6 +284,48 @@ public class CompositeComponent extends Component
 		{
 			comp.setExecutionState( status );
 		}
+	}
+
+	@Override
+	public void addInput( BooleanInput input )
+	{
+		input.setOwningComposite( this );
+		super.addInput( input );
+	}
+
+	@Override
+	public void addInput( DoubleInput input )
+	{
+		input.setOwningComposite( this );
+		super.addInput( input );
+	}
+
+	@Override
+	public void addInput( StringInput input )
+	{
+		input.setOwningComposite( this );
+		super.addInput( input );
+	}
+
+	@Override
+	public void addOutput( BooleanOutput output )
+	{
+		output.setOwningComposite( this );
+		super.addOutput( output );
+	}
+
+	@Override
+	public void addOutput( DoubleOutput output )
+	{
+		output.setOwningComposite( this );
+		super.addOutput( output );
+	}
+
+	@Override
+	public void addOutput( StringOutput output )
+	{
+		output.setOwningComposite( this );
+		super.addOutput( output );
 	}
 
 }
