@@ -8,7 +8,8 @@ import tornadofx.vbox
 class PropertyView : Fragment() {
     override val root = stackpane {
         vbox {
-            this += BasicPropertyEditor::class
+            this += ComponentPropertyEditor::class
+            this += PropertyEditorView::class
             this += DebugView::class
         }
     }

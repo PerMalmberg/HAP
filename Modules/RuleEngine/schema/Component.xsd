@@ -3,6 +3,30 @@
 	<xs:include schemaLocation="UUID.xsd"/>
 	<xs:include schemaLocation="ComponentName.xsd"/>
 	<xs:complexType name="ComponentDef">
+		<xs:sequence>
+			<xs:element name="Properties" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Prop" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Key" minOccurs="1" maxOccurs="1">
+										<xs:simpleType>
+											<xs:restriction base="xs:string"/>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="Value" default="" minOccurs="1" maxOccurs="1">
+										<xs:simpleType>
+											<xs:restriction base="xs:string"/>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
 		<xs:attribute name="nativeType">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">

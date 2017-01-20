@@ -3,6 +3,7 @@
 
 package hap.ruleengine.parts;
 
+import hap.ruleengine.component.IPropertyDisplay;
 import hap.ruleengine.parts.Wire.IWire;
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.data.ComponentDef;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class Component implements IComponent
+public abstract class Component implements IComponent, IComponentPropertyAccess
 {
 	private final UUID myInstanceId;
 	private final HashMap<UUID, BooleanInput> myBooleanInput = new HashMap<>();
@@ -33,6 +34,7 @@ public abstract class Component implements IComponent
 	private double X = 0.0;
 	private double Y = 0.0;
 	private boolean myIsVisualized = false;
+	private final HashMap<String, String> myProperties = new HashMap<>();
 
 	// Determines if the component may execute its (more advanced) internal logic
 	// i.e. connect to external systems etc. This is always false when a component
@@ -43,6 +45,99 @@ public abstract class Component implements IComponent
 	{
 		myInstanceId = id;
 		myExecutionState = executionAllowed;
+	}
+
+	@Override
+	public void setProperty( String key, String value )
+	{
+		myProperties.put( key, value );
+	}
+
+	@Override
+	public void setProperty( String key, int value )
+	{
+		myProperties.put( key, String.valueOf( toString() ) );
+	}
+
+	@Override
+	public void setProperty( String key, boolean value )
+	{
+		myProperties.put( key, String.valueOf( toString() ) );
+	}
+
+	@Override
+	public void setProperty( String key, double value )
+	{
+		myProperties.put( key, String.valueOf( toString() ) );
+	}
+
+	@Override
+	public String getProperty( String key, String defaultValue )
+	{
+		if( myProperties.containsKey( key ) )
+		{
+			return myProperties.get( key );
+		}
+		else
+		{
+			return defaultValue;
+		}
+	}
+
+	@Override
+	public int getProperty( String key, int defaultValue )
+	{
+		try
+		{
+			String v = getProperty( key, null );
+			if( v == null )
+			{
+				return defaultValue;
+			}
+			else
+			{
+				return Integer.parseInt( v );
+			}
+		}
+		catch( NumberFormatException ex )
+		{
+			return defaultValue;
+		}
+	}
+
+	@Override
+	public boolean getProperty( String key, boolean defaultValue )
+	{
+		String v = getProperty( key, null );
+		if( v == null )
+		{
+			return defaultValue;
+		}
+		else
+		{
+			return Boolean.parseBoolean( v );
+		}
+	}
+
+	@Override
+	public double getProperty( String key, double defaultValue )
+	{
+		try
+		{
+			String v = getProperty( key, null );
+			if( v == null )
+			{
+				return defaultValue;
+			}
+			else
+			{
+				return Double.parseDouble( v );
+			}
+		}
+		catch( NumberFormatException ex )
+		{
+			return defaultValue;
+		}
 	}
 
 	@Override
@@ -197,7 +292,37 @@ public abstract class Component implements IComponent
 		myName = def.getName();
 		X = def.getX();
 		Y = def.getY();
+		loadProperties( def.getProperties() );
 		return true;
+	}
+
+	private void loadProperties( ComponentDef.Properties properties )
+	{
+		if( properties != null )
+		{
+			for( ComponentDef.Properties.Prop p : properties.getProp() )
+			{
+				myProperties.put( p.getKey(), p.getValue() );
+			}
+		}
+	}
+
+	private void storeProperties( ComponentDef def )
+	{
+		if( def.getProperties() == null )
+		{
+			def.setProperties( new ComponentDef.Properties() );
+		}
+
+		ComponentDef.Properties props = def.getProperties();
+
+		for( String key : myProperties.keySet() )
+		{
+			ComponentDef.Properties.Prop p = new ComponentDef.Properties.Prop();
+			p.setKey( key );
+			p.setValue( myProperties.get( key ) );
+			props.getProp().add( p );
+		}
 	}
 
 	@Override
@@ -210,6 +335,7 @@ public abstract class Component implements IComponent
 		def.setNativeType( this.getClass().getName() );
 		def.setX( X );
 		def.setY( Y );
+		storeProperties( def );
 
 		data.getComponents().getComponentDef().add( def );
 		storeWires( data );
@@ -246,7 +372,13 @@ public abstract class Component implements IComponent
 	}
 
 	@Override
-	public void setVisualized() {
+	public void setVisualized()
+	{
 		myIsVisualized = true;
+	}
+
+	@Override
+	public void showProperties( IPropertyDisplay display )
+	{
 	}
 }

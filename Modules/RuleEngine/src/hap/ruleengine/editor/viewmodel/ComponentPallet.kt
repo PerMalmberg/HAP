@@ -52,14 +52,14 @@ class ComponentPallet : Controller() {
         }
 
         loadComponents()
-        loadComposites();
+        loadComposites()
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     //
     //
     ///////////////////////////////////////////////////////////////////////////////
-    fun loadComponents(): Boolean {
+    private fun loadComponents(): Boolean {
         var res = true
 
         categories.clear()

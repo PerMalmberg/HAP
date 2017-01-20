@@ -6,12 +6,13 @@ import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.editor.viewmodel.parts.InputVM
 import hap.ruleengine.editor.viewmodel.parts.OutputVM
 import javafx.scene.paint.Color
+import javafx.scene.text.FontWeight
 import tornadofx.*
 import java.util.*
 
 class DebugView : View("") {
     var selectedComponents: HashMap<UUID, ComponentVM> by property(HashMap<UUID, ComponentVM>())
-    fun selectedComponentsProperty() = getProperty(BasicPropertyEditor::selectedComponents)
+    fun selectedComponentsProperty() = getProperty(ComponentPropertyEditor::selectedComponents)
     val dummy = HashMap<UUID, ComponentVM>()
 
     override val root = borderpane {}
@@ -28,7 +29,12 @@ class DebugView : View("") {
 
         with(root) {
             top {
-                text("Debug Data")
+                text("Debug Data") {
+                    style {
+                        fontSize = 14.px
+                        fontWeight = FontWeight.BOLD
+                    }
+                }
             }
             center {
                 vbox {
@@ -39,7 +45,12 @@ class DebugView : View("") {
                             if (selectedComponents.size == 1) {
                                 val single = selectedComponents.values.first()
 
-                                text(single.name)
+                                hbox {
+                                    text("ID")
+                                    textfield(single.component.id.toString()) {
+                                        isEditable = false
+                                    }
+                                }
 
                                 tableview<OutputVM> {
                                     items = single.outputs.observable()
@@ -86,7 +97,6 @@ class DebugView : View("") {
                                         }
                                     }
                                 }
-
                             } else {
                                 text("Select single component to see debug properties")
                             }

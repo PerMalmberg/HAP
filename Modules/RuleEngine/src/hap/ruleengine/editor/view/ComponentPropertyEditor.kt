@@ -6,9 +6,9 @@ import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import tornadofx.*
 import java.util.*
 
-class BasicPropertyEditor : View("") {
+class ComponentPropertyEditor : View("") {
     var selectedComponents: HashMap<UUID, ComponentVM> by property(HashMap<UUID, ComponentVM>())
-    fun selectedComponentsProperty() = getProperty(BasicPropertyEditor::selectedComponents)
+    fun selectedComponentsProperty() = getProperty(ComponentPropertyEditor::selectedComponents)
     val dummy = HashMap<UUID, ComponentVM>()
 
     override val root = borderpane {
