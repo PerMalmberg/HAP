@@ -56,19 +56,19 @@ public abstract class Component implements IComponent, IComponentPropertyAccess
 	@Override
 	public void setProperty( String key, int value )
 	{
-		myProperties.put( key, String.valueOf( toString() ) );
+		myProperties.put( key, String.valueOf( value ) );
 	}
 
 	@Override
 	public void setProperty( String key, boolean value )
 	{
-		myProperties.put( key, String.valueOf( toString() ) );
+		myProperties.put( key, String.valueOf( value ) );
 	}
 
 	@Override
 	public void setProperty( String key, double value )
 	{
-		myProperties.put( key, String.valueOf( toString() ) );
+		myProperties.put( key, String.valueOf( value ) );
 	}
 
 	@Override

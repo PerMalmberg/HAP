@@ -30,6 +30,7 @@ class OpenComposite constructor(fsm: UserInteractionFSM, val surface: DrawingSur
         if (file != null) {
             val opened = factory.create(file, UUID.randomUUID())
             if (opened != null) {
+                deselectAllComponents()
                 surface.setComposite(opened)
             }
         }

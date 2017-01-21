@@ -39,7 +39,7 @@ class ComponentPalletView : Fragment() {
                                     fire(EndDragComponentFromPallet)
                                 }
 
-                                this += find<ComponentView>("vm" to it)
+                                this += find<ComponentView>(mapOf( ComponentView::vm to it ) )
                             }
                         }
                     }

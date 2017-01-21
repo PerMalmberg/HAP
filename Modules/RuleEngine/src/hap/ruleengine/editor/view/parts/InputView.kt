@@ -11,7 +11,7 @@ import tornadofx.stackpane
 import java.util.*
 
 class InputView : ConnectionPointView() {
-    private val vm: InputVM by param()
+    val vm: InputVM by param()
 
     override val root =
             stackpane {

@@ -93,6 +93,11 @@ abstract class UserInteractionState constructor(val fsm: UserInteractionFSM) : E
 
     }
 
+    protected fun deselectAllComponents()
+    {
+        fsm.selectedComponents.toList().forEach { deselectComponent( it.second ) }
+}
+
     protected fun setSelectionState(component: ComponentVM, isSelected: Boolean) {
         // Select/deselect component
         component.isSelected = isSelected

@@ -50,7 +50,7 @@ class DrawingSurfaceView : Fragment(), IDrawingSurfaceView {
     }
 
     override fun add(vm: ComponentVM) {
-        val cv = find<ComponentView>("vm" to vm)
+        val cv = find<ComponentView>( mapOf( ComponentView::vm to vm) )
         componentLayer += cv
         components.put(cv.vm.component.id, cv)
     }

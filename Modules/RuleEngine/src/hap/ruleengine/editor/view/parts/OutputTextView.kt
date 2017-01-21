@@ -5,7 +5,7 @@ import hap.ruleengine.editor.viewmodel.parts.OutputVM
 import tornadofx.*
 
 class OutputTextView : Fragment() {
-    private val vm: OutputVM by param()
+    val vm: OutputVM by param()
 
     override val root = stackpane {
         text {

@@ -88,5 +88,4 @@ class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<User
 
     var currentFile: File? = null
     val selectedComponents = HashMap<UUID, ComponentVM>()
-    var beginDragPoistion = Point2D(0.0, 0.0)
 }

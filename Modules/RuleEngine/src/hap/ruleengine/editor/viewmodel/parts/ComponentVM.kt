@@ -84,7 +84,7 @@ open class ComponentVM constructor(val component: IComponent, val isSelectable: 
                 else -> Color.RED
             }
 
-    val name = bind { component.observable(IComponent::getName, IComponent::setName) } as StringProperty
+    val name = bind(autocommit = true) { component.observable(IComponent::getName, IComponent::setName) } as StringProperty
 
     var isSelected: Boolean by property(false)
     fun isSelectedProperty() = getProperty(ComponentVM::isSelected)

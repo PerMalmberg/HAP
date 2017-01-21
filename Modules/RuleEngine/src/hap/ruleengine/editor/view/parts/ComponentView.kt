@@ -59,13 +59,13 @@ class ComponentView : Fragment() {
                                 if (!inputs.isEmpty()) {
                                     val inVM = inputs.pop()
                                     stackpane {
-                                        this += find<InputTextView>("vm" to inVM)
+                                        this += find<InputTextView>(mapOf(InputTextView::vm to inVM))
                                         gridpaneConstraints {
                                             columnRowIndex(inputColumn, row)
                                         }
                                     }
                                     stackpane {
-                                        val inputView = find<InputView>("vm" to inVM)
+                                        val inputView = find<InputView>(mapOf(InputView::vm to inVM))
                                         myInputs.add(inputView)
                                         this += inputView
                                         gridpaneConstraints {
@@ -77,7 +77,7 @@ class ComponentView : Fragment() {
                                 if (!outputs.isEmpty()) {
                                     val outVM = outputs.pop()
                                     stackpane {
-                                        val outputView = find<OutputView>("vm" to outVM)
+                                        val outputView = find<OutputView>(mapOf(OutputView::vm to outVM))
                                         myOutputs.add(outputView)
                                         this += outputView
                                         gridpaneConstraints {
@@ -86,7 +86,7 @@ class ComponentView : Fragment() {
                                     }
 
                                     stackpane {
-                                        this += find<OutputTextView>("vm" to outVM)
+                                        this += find<OutputTextView>(mapOf(OutputTextView::vm to outVM))
                                         gridpaneConstraints {
                                             columnRowIndex(outputTextColumn, row)
                                         }
@@ -108,10 +108,9 @@ class ComponentView : Fragment() {
 
 
                             widthProperty().bind(heightProperty())
-                            if( row > 0 ) {
+                            if (row > 0) {
                                 heightProperty().bind((this.parent as GridPane).heightProperty())
-                            }
-                            else {
+                            } else {
                                 height = 20.0
                             }
                             addClass(ComponentStyle.componentCenter)

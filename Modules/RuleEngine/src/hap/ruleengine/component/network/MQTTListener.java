@@ -4,6 +4,7 @@ package hap.ruleengine.component.network;
 import hap.ruleengine.component.IPropertyDisplay;
 import hap.ruleengine.parts.Component;
 import hap.ruleengine.parts.composite.CompositeComponent;
+import hap.ruleengine.parts.property.DoubleProperty;
 import hap.ruleengine.parts.property.IntProperty;
 import hap.ruleengine.parts.property.StringProperty;
 
@@ -19,7 +20,7 @@ public class MQTTListener extends Component
 	@Override
 	public void setup( CompositeComponent cc )
 	{
-		setProperty( "MyKey", "MyValue" );
+
 	}
 
 	@Override
@@ -27,5 +28,6 @@ public class MQTTListener extends Component
 	{
 		display.show( new StringProperty( "Broker", "Broker", "localhost", this ) );
 		display.show( new IntProperty( "Port", "Port", 1883, this ) );
+		display.show( new DoubleProperty( "D", "DK", 55.0, this ) );
 	}
 }

@@ -11,22 +11,9 @@ import tornadofx.*
 import java.util.*
 
 class DebugView : View("") {
-    var selectedComponents: HashMap<UUID, ComponentVM> by property(HashMap<UUID, ComponentVM>())
-    fun selectedComponentsProperty() = getProperty(ComponentPropertyEditor::selectedComponents)
-    val dummy = HashMap<UUID, ComponentVM>()
-
     override val root = borderpane {}
 
     init {
-        // The selectedComponentsProperty() change listener doesn't fire if the new hash map is empty or if the
-        // same map is assigned so we need an intermediate map.
-        dummy.put(UUID.randomUUID(), ComponentVM(PlaceHolderComponent()))
-
-        subscribe<SelectedComponentsChanged> {
-            selectedComponents = dummy
-            selectedComponents = it.selectedComponents
-        }
-
         with(root) {
             top {
                 text("Debug Data") {
@@ -38,12 +25,10 @@ class DebugView : View("") {
             }
             center {
                 vbox {
-
-                }.apply {
-                    selectedComponentsProperty().addListener { observableValue, oldValue, newValue ->
+                    subscribe<SelectedComponentsChanged> {
                         this.replaceChildren {
-                            if (selectedComponents.size == 1) {
-                                val single = selectedComponents.values.first()
+                            if (it.selectedComponents.size == 1) {
+                                val single = it.selectedComponents.values.first()
 
                                 hbox {
                                     text("ID")
