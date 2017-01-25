@@ -31,11 +31,11 @@ import static org.junit.Assert.*;
 
 public class ComponentTest
 {
-	private final ComponentFactory f = new ComponentFactory(Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class )));
+	private final ComponentFactory f = new ComponentFactory(Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class ), "RuleEngine/ComponentLibrary"));
 
 	private CompositeComponent loadComponent( String data )
 	{
-		File src = Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class ), "RuleEngine/" + data ).toFile();
+		File src = Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class ), "RuleEngine/ComponentLibrary/" + data ).toFile();
 		return f.create( src, UUID.randomUUID() );
 	}
 
@@ -169,7 +169,7 @@ public class ComponentTest
 		// Read the XML data
 		JAXBContext jc = JAXBContext.newInstance( CompositeDef.class );
 		Unmarshaller u = jc.createUnmarshaller();
-		File src = Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class ), "RuleEngine/TestAddComponent.xml" ).toFile();
+		File src = Paths.get( SysUtil.getDirectoryOfJar( ComponentTest.class ), "RuleEngine/ComponentLibrary/TestAddComponent.xml" ).toFile();
 
 		String contents = null;
 		try( FileInputStream fis = new FileInputStream( src ) )

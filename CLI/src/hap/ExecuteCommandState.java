@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class ExecuteCommandState extends CommState implements ITimedEventListener
 {
 
-public ExecuteCommandState( Communicator com, ArrayList<Message> commands, ModuleRunner runner )
+ExecuteCommandState( Communicator com, ArrayList<Message> commands, ModuleRunner runner )
 {
 	super( com );
 	myCommands = commands;

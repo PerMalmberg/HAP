@@ -1,9 +1,9 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package examplemodule.state;
+package hap.examplemodule.state;
 
-import examplemodule.ExampleModule;
+import hap.examplemodule.ExampleModule;
 import hap.communication.Communicator;
 import hap.communication.state.CommState;
 import hap.communication.state.ConnectState;

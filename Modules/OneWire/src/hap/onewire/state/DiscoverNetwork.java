@@ -1,11 +1,11 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package onewire.state;
+package hap.onewire.state;
 
 import chainedfsm.EnterChain;
 import hap.communication.Communicator;
-import onewire.OneWire;
+import hap.onewire.OneWire;
 
 
 public class DiscoverNetwork extends OwBaseState

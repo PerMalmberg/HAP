@@ -31,7 +31,7 @@ public static void main( String... args )
 	System.exit( result );
 }
 
-public Cli()
+private Cli()
 {
 	super( Cli.class.getName() );
 }

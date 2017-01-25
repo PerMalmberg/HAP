@@ -46,14 +46,7 @@ public boolean start()
 	myConfigDir = Paths.get( SysUtil.getDirectoryOfJar( MonitorModuleState.class ), "config" );
 	myLog.finest( "Configuration directory: " + myConfigDir );
 
-	Runtime.getRuntime().addShutdownHook( new Thread()
-	{
-		@Override
-		public void run()
-		{
-			myActiveModules.killAll();
-		}
-	} );
+	Runtime.getRuntime().addShutdownHook(new Thread(myActiveModules::killAll));
 
 	return myCom.start( this );
 }

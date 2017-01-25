@@ -1,17 +1,17 @@
 // Copyright (c) 2016 Per Malmberg
 // Licensed under MIT, see LICENSE file.
 
-package onewire.state;
+package hap.onewire.state;
 
 import chainedfsm.EnterChain;
 import chainedfsm.LeaveChain;
 import hap.communication.Communicator;
 import hap.message.Message;
 import hap.message.general.UnclassifiedMessage;
+import hap.onewire.OneWire;
 import jowshell.Network;
 import jowshell.items.OwData;
 import jowshell.items.OwDevice;
-import onewire.OneWire;
 
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;

@@ -22,38 +22,46 @@ class ComponentPallet : Controller() {
     val categories: ArrayList<NativeCategory> = ArrayList()
 
     init {
-        // Prepare native component names
-        val jar = SysUtil.getFullOrRelativePath(RuleEngine::class.java, "HAPed.jar")
 
-        val f = File(jar)
-        if (f.exists()) {
+        // https://regex101.com/r/yJu9l6/1
+        val findCompExpr = "(((hap\\/ruleengine\\/component\\/)|(hap\\/ruleengine\\/parts\\/node\\/)).*)\\.class$"
+        val pattern = Regex(findCompExpr)
+
+        // Prepare native component names
+
+        if (SysUtil.isRunningFromJAR(javaClass)) {
             // Running from a jar
-            ZipFile(jar).use {
-                it.entries().toList().filter {
-                    o ->
-                    !o.isDirectory
-                            && (!o.name.contains("placeholder") && o.name.contains("hap/ruleengine/component/") || o.name.contains("hap/ruleengine/parts/node/"))
-                }.map {
-                    nativeComponents.add(it.name.replace('/', '.').removeSuffix(".class"))
+            ZipFile(SysUtil.getNameOfJarForClass(javaClass)).use {
+                it.entries().toList().filter { o -> !o.isDirectory && !o.name.contains("placeholder") }.forEach {
+                    ReadComponentFromFile(it.toString(), pattern)
                 }
             }
         } else {
             // Running in IntelliJ
-            val start = SysUtil.getFullOrRelativePath(RuleEngine::class.java, "RuleEngine")
+            val start = SysUtil.getFullOrRelativePath(RuleEngine::class.java, "")
             val dir = File(start)
-            dir.walkTopDown().toList().filter {
-                val asUnix = it.absolutePath.replace('\\', '/')
-                !it.isDirectory &&
-                        (!asUnix.contains("placeholder") && asUnix.contains("hap/ruleengine/component/") || asUnix.contains("hap/ruleengine/parts/node/"))
-            }.map {
-                val asUnix = it.absolutePath.removePrefix(start).replace('\\', '/').removePrefix("/").removeSuffix(".class")
-                nativeComponents.add(asUnix.replace('/', '.'))
+            dir.walkTopDown().toList().filter { !it.isDirectory && !it.name.contains("placeholder") }.forEach {
+                ReadComponentFromFile(it.absolutePath, pattern)
             }
         }
 
         loadComponents()
         loadComposites()
     }
+
+
+    private fun ReadComponentFromFile(fullPath: String, pattern: Regex) {
+        val asUnix = fullPath.replace('\\', '/')
+        val singleMatch = pattern.find(asUnix)
+        if (singleMatch != null) {
+            // We always want group 1
+            val compName = singleMatch.groups[1]?.value
+            if (compName != null) {
+                nativeComponents.add(compName.replace('/', '.'))
+            }
+        }
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////////
     //
@@ -93,11 +101,11 @@ class ComponentPallet : Controller() {
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    //
-    //
-    ///////////////////////////////////////////////////////////////////////////////
+//
+//
+///////////////////////////////////////////////////////////////////////////////
     private fun CreateVMForComposite(sourceFile: String, category: String, component: CompositeComponent) {
-        val vm = CompositeVM( sourceFile, component, false)
+        val vm = CompositeVM(sourceFile, component, false)
         val cat = getCategory(category)
         cat.components.add(vm)
     }

@@ -7,7 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="module" module-name="RuleEngine" exported="" />
     <orderEntry type="library" exported="" name="no.tornado:tornadofx:1.6.0" level="project" />
   </component>

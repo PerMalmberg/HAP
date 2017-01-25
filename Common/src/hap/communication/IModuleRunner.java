@@ -8,7 +8,7 @@ import hap.communication.state.CommState;
 
 public interface IModuleRunner
 {
-CommState createEntryState( Communicator com );
+	CommState createEntryState( Communicator com );
 
-void terminate();
+	void terminate();
 }

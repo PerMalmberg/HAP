@@ -28,7 +28,13 @@ public class CompositeSerializer
 		{
 			JAXBContext jc = JAXBContext.newInstance( CompositeDef.class );
 			Marshaller m = jc.createMarshaller();
-			m.marshal( def, target );
+
+			if( !target.getParentFile().exists()) {
+				res = target.getParentFile().mkdirs();
+			}
+			if( res ) {
+				m.marshal(def, target);
+			}
 		}
 		catch( JAXBException e )
 		{

@@ -76,27 +76,31 @@ public class MonitorModuleState extends CommState implements ITimedEventListener
 	private boolean startModule( String specificModule )
 	{
 		File wDir = myModuleDir.toFile();
-		File[] jarFiles = wDir.listFiles( ( dir, name ) -> {
-			return name.endsWith( ".jar" );
-		} );
+		File[] jarFiles = wDir.listFiles( ( dir, name ) -> name.endsWith( ".jar" ));
 
-		boolean res = jarFiles.length > 0;
-		boolean done = false;
-
-		for( int i = 0; ! done && i < jarFiles.length; ++ i )
+		boolean res = true;
+		if( jarFiles != null && jarFiles.length > 0 )
 		{
-			File jar = jarFiles[i];
-			String name = getNameFromManifest( jar );
-			if( name != null ) {
-				// We're done when we've found the module we want to start.
-				done = name.equals( specificModule );
-				if( specificModule == null || done)
+			boolean done = false;
+
+			for( int i = 0; !done && i < jarFiles.length; ++i )
+			{
+				File jar = jarFiles[i];
+				String name = getNameFromManifest(jar);
+				if( name != null )
 				{
-					res &= startJar( jar, name );
+					// We're done when we've found the module we want to start.
+					done = name.equals(specificModule);
+					if( specificModule == null || done )
+					{
+						res &= startJar(jar, name);
+					}
 				}
 			}
 		}
-
+		else {
+			res = false;
+		}
 		return res;
 	}
 

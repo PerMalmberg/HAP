@@ -17,29 +17,31 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class ComponentFactory implements IComponentFactory
 {
 	private HashMap<String, String> myFiles = new HashMap<>();
 	private final Stack<String> myLoadedFiles = new Stack<>();
-	private final Logger myLogger = Logger.getLogger( ComponentFactory.class.getName() );
+	private final Logger myLogger = Logger.getLogger(ComponentFactory.class.getName());
 	private final Path myComponentLibrary;
-	public static final Path STANDARD_LIBRARY = Paths.get( SysUtil.getFullOrRelativePath( CompositeComponent.class, "ComponentLibrary" ) );
+	public static final Path STANDARD_LIBRARY = Paths.get(SysUtil.getFullOrRelativePath(CompositeComponent.class, "ComponentLibrary"));
+	private Path myTempXSDFolder = null;
 
 	public ComponentFactory()
 	{
-		this( null );
+		this(null);
 	}
 
 	public ComponentFactory( Path componentLibrary )
@@ -57,13 +59,13 @@ public class ComponentFactory implements IComponentFactory
 	{
 		CompositeComponent cc = null;
 
-		if( ! compositeFile.isAbsolute() )
+		if( !compositeFile.isAbsolute() )
 		{
 			// Try to find the file in the directory the last loaded file is located.
 			if( myLoadedFiles.size() > 0 )
 			{
-				File last = new File( myLoadedFiles.lastElement() );
-				compositeFile = Paths.get( last.getParent(), compositeFile.toString() ).toFile();
+				File last = new File(myLoadedFiles.lastElement());
+				compositeFile = Paths.get(last.getParent(), compositeFile.toString()).toFile();
 			}
 			else
 			{
@@ -74,17 +76,17 @@ public class ComponentFactory implements IComponentFactory
 		if( compositeFile != null )
 		{
 			// If a file ever loads a file that it itself was loaded by we must abort
-			boolean crossLoadFound = myLoadedFiles.contains( compositeFile.getAbsolutePath() );
+			boolean crossLoadFound = myLoadedFiles.contains(compositeFile.getAbsolutePath());
 
-			if( ! crossLoadFound )
+			if( !crossLoadFound )
 			{
-				myLoadedFiles.add( compositeFile.getAbsolutePath() );
-				String data = loadFile( compositeFile );
+				myLoadedFiles.add(compositeFile.getAbsolutePath());
+				String data = loadFile(compositeFile);
 				if( data != null )
 				{
-					cc = create( data, uid, compositeFile );
+					cc = create(data, uid, compositeFile);
 				}
-				myLoadedFiles.remove( myLoadedFiles.lastElement() );
+				myLoadedFiles.remove(myLoadedFiles.lastElement());
 			}
 
 		}
@@ -100,9 +102,10 @@ public class ComponentFactory implements IComponentFactory
 	@Override
 	public CompositeComponent create( File compositeFile, UUID uid, CompositeComponent parent )
 	{
-		CompositeComponent cc = create( compositeFile, uid );
-		if( cc != null) {
-			parent.addComponent( cc );
+		CompositeComponent cc = create(compositeFile, uid);
+		if( cc != null )
+		{
+			parent.addComponent(cc);
 		}
 
 		return cc;
@@ -122,27 +125,27 @@ public class ComponentFactory implements IComponentFactory
 		try
 		{
 			// Create an instance of the parts with the id and data as arguments.
-			Class<?> componentClass = Class.forName( def.getNativeType() );
+			Class<?> componentClass = Class.forName(def.getNativeType());
 			if( componentClass != null )
 			{
-				Constructor<?> ctor = componentClass.getConstructor( UUID.class, boolean.class );
-				c = (Component) ctor.newInstance( UUID.fromString( def.getInstanceId() ), false );
+				Constructor<?> ctor = componentClass.getConstructor(UUID.class, boolean.class);
+				c = (Component) ctor.newInstance(UUID.fromString(def.getInstanceId()), false);
 
 				// Let the parts load itself
-				if( ! c.loadComponentFromData( def ) )
+				if( !c.loadComponentFromData(def) )
 				{
 					c = null;
 				}
 				else
 				{
-					cc.addComponent( c );
-					c.setup( cc );
+					cc.addComponent(c);
+					c.setup(cc);
 				}
 			}
 		}
 		catch( ClassNotFoundException | NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e )
 		{
-			myLogger.severe( e.getMessage() );
+			myLogger.severe(e.getMessage());
 		}
 
 		return c;
@@ -157,9 +160,9 @@ public class ComponentFactory implements IComponentFactory
 	public IComponent createFromName( @NotNull String componentType, @NotNull CompositeComponent parent )
 	{
 		ComponentDef def = new ComponentDef();
-		def.setNativeType( componentType );
-		def.setInstanceId( UUID.randomUUID().toString() );
-		return create( def, parent );
+		def.setNativeType(componentType);
+		def.setInstanceId(UUID.randomUUID().toString());
+		return create(def, parent);
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -178,23 +181,34 @@ public class ComponentFactory implements IComponentFactory
 
 		try
 		{
-			Files.walk( lib )
-					.filter( Files::isRegularFile )
+			Files.walk(lib)
+					.filter(Files::isRegularFile)
 					.forEach(
 							path ->
 							{
-								if( fileName.equals( path.getFileName().toString() ) )
+								if( fileName.equals(path.getFileName().toString()) )
 								{
-									foundFiles.add( path );
+									foundFiles.add(path);
 								}
-							} );
+							});
 		}
 		catch( IOException e )
 		{
 			e.printStackTrace();
 		}
 
-		return foundFiles.size() == 1 ? foundFiles.get( 0 ).toFile() : null;
+
+		File f = null;
+
+		if( foundFiles.size() != 1 )
+		{
+			// TODO: Log problem
+		}
+		else
+		{
+			f = foundFiles.get(0).toFile();
+		}
+		return f;
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -229,16 +243,16 @@ public class ComponentFactory implements IComponentFactory
 		try
 		{
 			Path lib = getLibPath();
-			Files.walk( lib )
-					.filter( Files::isRegularFile )
+			Files.walk(lib)
+					.filter(Files::isRegularFile)
 					.forEach(
 							path ->
 							{
-								if( path.getFileName().toString().endsWith( ".cc" ) )
+								if( path.getFileName().toString().endsWith(".cc") )
 								{
-									imports.add( path.toString() );
+									imports.add(path.toString());
 								}
-							} );
+							});
 		}
 		catch( IOException e )
 		{
@@ -260,38 +274,116 @@ public class ComponentFactory implements IComponentFactory
 
 		try
 		{
-			JAXBContext jc = JAXBContext.newInstance( CompositeDef.class );
+			JAXBContext jc = JAXBContext.newInstance(CompositeDef.class);
 			Unmarshaller u = jc.createUnmarshaller();
 
-			SchemaFactory schemaFactory = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
-			String schemaPath = SysUtil.getFullOrRelativePath( CompositeComponent.class, "RuleEngine\\CompositeDefinition.xsd" );
-			Schema schema = schemaFactory.newSchema( new File( schemaPath ) );
-			u.setSchema( schema );
+			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-			CompositeDef data = (CompositeDef) u.unmarshal( new InputSource( new StringReader( compositeData ) ) );
-			cc = new CompositeComponent( compositeUid, sourceFile.getName(), false );
-			if( cc.loadCompositeFromData( data, this ) )
+			URL xsd = null;
+
+			if( SysUtil.isRunningFromJAR(getClass()) )
 			{
-				cc.setName( buildNameFromSourceFile(sourceFile) );
+				// Extract XSDs from JAR to temporary directory
+				Path tmp = extractXSD();
+				xsd = Paths.get(tmp.toString(), "/schema/CompositeDefinition.xsd").toUri().toURL();
 			}
 			else
 			{
-				cc = null;
+				xsd = getClass().getResource("/schema/CompositeDefinition.xsd");
+			}
+
+			try
+			{
+				File f = new File(xsd.toURI());
+				Schema schema = schemaFactory.newSchema(f);
+				u.setSchema(schema);
+
+				CompositeDef data = (CompositeDef) u.unmarshal(new InputSource(new StringReader(compositeData)));
+				cc = new CompositeComponent(compositeUid, sourceFile.getName(), false);
+				if( cc.loadCompositeFromData(data, this) )
+				{
+					cc.setName(buildNameFromSourceFile(sourceFile));
+				}
+				else
+				{
+					cc = null;
+				}
+			}
+			catch( URISyntaxException e )
+			{
+				// TODO: Log error
+				e.printStackTrace();
 			}
 		}
-		catch( JAXBException | SAXException e )
+		catch( JAXBException | SAXException | IOException e )
 		{
+			// TODO: Log error
 			e.printStackTrace();
 		}
 
 		return cc;
 	}
 
+	private Path extractXSD() throws IOException
+	{
+		if( myTempXSDFolder == null )
+		{
+			myTempXSDFolder = Files.createTempDirectory("HAPed-tmp");
+
+			Runtime.getRuntime().addShutdownHook(new Thread(() ->
+			{
+				// Delete all files in the temp folder
+				delete(myTempXSDFolder.toFile());
+			}));
+
+			try( ZipInputStream zip = new ZipInputStream(new FileInputStream((SysUtil.getNameOfJarForClass(getClass())))) )
+			{
+				ZipEntry ze = zip.getNextEntry();
+				while( ze != null )
+				{
+					if( ze.getName().startsWith("schema") && ze.getName().endsWith("xsd") )
+					{
+						Path outName = Paths.get(myTempXSDFolder.toString(), ze.getName());
+						File outFile = outName.toFile();
+
+
+						boolean res = true;
+
+						// Create dir if it doesn't exist
+						if( !outFile.getParentFile().exists() )
+						{
+							res = outFile.getParentFile().mkdirs();
+						}
+
+						if( res && outFile.createNewFile() )
+						{
+							try( FileOutputStream fos = new FileOutputStream(outFile) )
+							{
+								byte[] data = new byte[(int) ze.getSize()];
+								zip.read(data, 0, (int) ze.getSize());
+								fos.write(data);
+							}
+						}
+						else
+						{
+							// TODO: Log error
+						}
+					}
+					ze = zip.getNextEntry();
+				}
+			}
+
+		}
+
+		return myTempXSDFolder;
+	}
+
 	private String buildNameFromSourceFile( File sourceFile )
 	{
 		String name = sourceFile.getName();
-		if( name.endsWith( ".cc" )) {
-			name = name.substring( 0, name.lastIndexOf( ".cc" ) );
+		if( name.endsWith(".cc") )
+		{
+			name = name.substring(0, name.lastIndexOf(".cc"));
 		}
 		return name;
 	}
@@ -305,28 +397,51 @@ public class ComponentFactory implements IComponentFactory
 	private String loadFile( File f )
 	{
 		// Check the cache first
-		String contents = myFiles.get( f.getAbsolutePath() );
+		String contents = myFiles.get(f.getAbsolutePath());
 
 		if( contents == null )
 		{
 			// No cache hit, try to load the contents from disk
-			try( FileInputStream fis = new FileInputStream( f ) )
+			try( FileInputStream fis = new FileInputStream(f) )
 			{
 				byte[] data = new byte[(int) f.length()];
-				int readData = fis.read( data );
+				int readData = fis.read(data);
 				if( readData > 0 )
 				{
-					contents = new String( data, "UTF-8" );
+					contents = new String(data, "UTF-8");
 					// Store for later use
-					myFiles.put( f.getAbsolutePath(), contents );
+					myFiles.put(f.getAbsolutePath(), contents);
 				}
 			}
 			catch( IOException e )
 			{
-				myLogger.severe( e.toString() );
+				myLogger.severe(e.toString());
 			}
 		}
 
 		return contents;
+	}
+
+	private void delete( File f )
+	{
+		if( f != null )
+		{
+			if( f.isDirectory() )
+			{
+				File[] files = f.listFiles();
+				if( files != null )
+				{
+					for( File c : files )
+					{
+						delete(c);
+					}
+					f.delete();
+				}
+			}
+			else
+			{
+				f.delete();
+			}
+		}
 	}
 }
