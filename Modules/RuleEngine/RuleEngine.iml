@@ -49,6 +49,15 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="FSM" exported="" />
-    <orderEntry type="library" exported="" name="no.tornado:tornadofx:1.6.0" level="project" />
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../lib/tornadofx-1.6.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
   </component>
 </module>
