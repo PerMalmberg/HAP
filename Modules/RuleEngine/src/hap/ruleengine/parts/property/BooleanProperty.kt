@@ -1,14 +1,23 @@
 package hap.ruleengine.parts.property
 
 
-import hap.ruleengine.parts.Component
+import hap.ruleengine.parts.IComponentPropertyAccess
+import tornadofx.ValidationMessage
+import tornadofx.ValidationSeverity
+import tornadofx.observable
 
-class BooleanProperty(header: String, key: String, defaultValue: Boolean, c: Component) : BaseProperty<Boolean>(header, key, defaultValue, c) {
+class BooleanProperty(header: String, key: String, defaultValue: Boolean, informationMessage: String, propReader: IComponentPropertyAccess) : BaseProperty<Boolean>(header, key, defaultValue, informationMessage, propReader) {
+    val value = bind { observable(BooleanProperty::readValue, BooleanProperty::updateValue) } as javafx.beans.property.BooleanProperty
+
+    override fun validate(value: String?): ValidationMessage {
+        return ValidationMessage(null, ValidationSeverity.Success)
+    }
+
     override fun readValue(): Boolean {
-        return comp.getProperty(key, defaultValue)
+        return propReader.getProperty(key, defaultValue)
     }
 
     override fun updateValue(v: Boolean) {
-        comp.setProperty(key, v)
+        propReader.setProperty(key, v)
     }
 }

@@ -8,6 +8,9 @@
       <sourceFolder url="file://$MODULE_DIR$/testdata" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
     </content>
+    <content url="file://$MODULE_DIR$/../../resources">
+      <sourceFolder url="file://$MODULE_DIR$/../../resources/famfamfam" type="java-resource" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Common" exported="" />
@@ -49,15 +52,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="FSM" exported="" />
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/tornadofx-1.6.1.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
+    <orderEntry type="library" name="no.tornado:tornadofx:1.6.1" level="project" />
   </component>
 </module>

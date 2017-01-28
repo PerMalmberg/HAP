@@ -1,14 +1,29 @@
 package hap.ruleengine.parts.property
 
-import hap.ruleengine.parts.Component
+import hap.ruleengine.parts.IComponentPropertyAccess
+import tornadofx.ValidationMessage
+import tornadofx.ValidationSeverity
+import tornadofx.observable
 
 
-class StringProperty(header: String, key: String, defaultValue: String, c: Component) : BaseProperty<String>(header, key, defaultValue, c) {
-	override fun readValue(): String {
-		return comp.getProperty(key, defaultValue)
-	}
+class StringProperty(header: String, key: String, defaultValue: String, informationMessage: String, propReader: IComponentPropertyAccess) : BaseProperty<String>(header, key, defaultValue, informationMessage, propReader) {
+    override fun validate(value: String?): ValidationMessage {
+        var validationMessage = ValidationMessage(null, ValidationSeverity.Success)
 
-	override fun updateValue(v: String) {
-		comp.setProperty(key, v)
-	}
+        if (value == null) {
+            validationMessage = ValidationMessage("Must have a value", ValidationSeverity.Error)
+        }
+
+        return validationMessage
+    }
+
+    val value = bind { observable(StringProperty::readValue, StringProperty::updateValue) } as javafx.beans.property.StringProperty
+
+    override fun readValue(): String {
+        return propReader.getProperty(key, defaultValue)
+    }
+
+    override fun updateValue(v: String) {
+        propReader.setProperty(key, v)
+    }
 }
