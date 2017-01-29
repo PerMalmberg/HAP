@@ -6,6 +6,7 @@ import hap.ruleengine.parts.Component;
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.output.BooleanOutput;
 import hap.ruleengine.parts.output.StringOutput;
+import hap.ruleengine.parts.property.BooleanProperty;
 import hap.ruleengine.parts.property.IntProperty;
 import hap.ruleengine.parts.property.StringProperty;
 
@@ -35,6 +36,7 @@ public class MQTTListener extends Component
 		display.show( new StringProperty( "Broker", "Broker", "localhost", 1, "The broker to which a connection is made", this ) );
 		display.show( new IntProperty( "Port", "Port", 1883, 1, 65535, "The port of the broker to which a connection is made", this ) );
 		display.show( new StringProperty( "Topic", "topic", "", 2, "The topic to subscribe to", this ) );
+		display.show( new BooleanProperty( "Secure connection", "secure", false, "Use secure communication", this ) );
 	}
 
 	private StringOutput dataOut;
