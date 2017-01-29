@@ -6,12 +6,12 @@ import tornadofx.ValidationSeverity
 import tornadofx.observable
 
 
-class StringProperty(header: String, key: String, defaultValue: String, informationMessage: String, propReader: IComponentPropertyAccess) : BaseProperty<String>(header, key, defaultValue, informationMessage, propReader) {
+class StringProperty(header: String, key: String, defaultValue: String, val minLength : Int, informationMessage: String, propReader: IComponentPropertyAccess) : BaseProperty<String>(header, key, defaultValue, informationMessage, propReader) {
     override fun validate(value: String?): ValidationMessage {
         var validationMessage = ValidationMessage(null, ValidationSeverity.Success)
 
-        if (value == null) {
-            validationMessage = ValidationMessage("Must have a value", ValidationSeverity.Error)
+        if (value == null || value.length < minLength ) {
+            validationMessage = ValidationMessage("Must have a length of at least $minLength characters", ValidationSeverity.Error)
         }
 
         return validationMessage
