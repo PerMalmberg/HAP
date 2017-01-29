@@ -61,9 +61,9 @@ public class OneWire extends ModuleRunner implements ILogger, ICommandExecution
 		parser.accept("--ow-host").asString(1).setMandatory().describedAs("The host on which ow-Server is running");
 		parser.accept("--ow-topic").asString(1).setMandatory().describedAs("The root MQTT-topic to which data will be published");
 		parser.accept("--ow-timeout").asInteger(1, new NumericLimit<>(1, 10)).describedAs("Timeout for 1-Wire commands, in seconds").withAlias("-t");
-		configurationReader.setMatcher("--ow-host", new XMLConfigurationReader.NodeMatcher(OneWire.class.getName() + "/OWServer/Host"));
-		configurationReader.setMatcher("--ow-timeout", new XMLConfigurationReader.NodeMatcher(OneWire.class.getName() + "/OWServer/Timeout"));
-		configurationReader.setMatcher("--ow-topic", new XMLConfigurationReader.NodeMatcher(OneWire.class.getName() + "/MQTT/PublishTopic"));
+		configurationReader.setMatcher("--ow-host", new XMLConfigurationReader.NodeMatcher("HAP/OWServer/Host"));
+		configurationReader.setMatcher("--ow-timeout", new XMLConfigurationReader.NodeMatcher("HAP/OWServer/Timeout"));
+		configurationReader.setMatcher("--ow-topic", new XMLConfigurationReader.NodeMatcher("HAP/MQTT/PublishTopic"));
 	}
 
 	@Override
@@ -85,19 +85,19 @@ public class OneWire extends ModuleRunner implements ILogger, ICommandExecution
 	@Override
 	public void debug( String msg )
 	{
-		myLog.finest(msg);
+		getMyLog().finest(msg);
 	}
 
 	@Override
 	public void error( String msg )
 	{
-		myLog.severe(msg);
+		getMyLog().severe(msg);
 	}
 
 	@Override
 	public void error( Exception ex )
 	{
-		myLog.severe(ex.getMessage());
+		getMyLog().severe(ex.getMessage());
 	}
 
 	@Override
