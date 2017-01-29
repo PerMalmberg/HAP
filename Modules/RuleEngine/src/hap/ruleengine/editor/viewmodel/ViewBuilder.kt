@@ -137,7 +137,7 @@ class ViewBuilder(root: StackPane) : IPropertyDisplay
 						addClass(PropertyEditorStyle.applyButton)
 						tooltip("Apply all")
 						setOnAction {
-							myProps.first { !it.commit() }
+							myProps.any { !it.commit() }
 						}
 					}
 					button {
