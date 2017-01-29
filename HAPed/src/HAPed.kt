@@ -1,4 +1,5 @@
 import hap.ruleengine.editor.view.css.ComponentStyle
+import hap.ruleengine.editor.view.css.PalletStyle
 import hap.ruleengine.editor.view.css.PropertyEditorStyle
 import tornadofx.App
 import tornadofx.importStylesheet
@@ -10,5 +11,6 @@ class HAPed : App(MainView::class)
 	{
 		importStylesheet(ComponentStyle::class)
 		importStylesheet(PropertyEditorStyle::class)
+		importStylesheet(PalletStyle::class)
 	}
 }

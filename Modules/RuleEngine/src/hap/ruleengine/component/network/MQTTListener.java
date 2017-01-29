@@ -28,8 +28,8 @@ public class MQTTListener extends Component
 	public void showProperties( IPropertyDisplay display )
 	{
 		display.show( new StringProperty( "Broker", "Broker", "localhost", "The broker to which a connection is made", this ) );
-		display.show( new IntProperty( "Port", "Port", 1883, "The port of the broker to which a connection is made", this ) );
-		display.show( new DoubleProperty( "D", "DK", 55.0, "Test", this ) );
+		display.show( new IntProperty( "Port", "Port", 1883, 1, 65535,"The port of the broker to which a connection is made", this ) );
+		display.show( new DoubleProperty( "D", "DK", 55.0, 0, 100,"Test", this ) );
 		display.show( new BooleanProperty( "Box", "bb", true, "A boolean value", this ) );
 	}
 }

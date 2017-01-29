@@ -7,7 +7,7 @@ import tornadofx.ValidationSeverity
 import tornadofx.observable
 
 
-class IntProperty(header: String, key: String, defaultValue: Int, informationMessage: String, propReader: IComponentPropertyAccess) : BaseProperty<Int>(header, key, defaultValue, informationMessage, propReader)
+class IntProperty(header: String, key: String, defaultValue: Int, val minValue: Int, val maxValue: Int, informationMessage: String, propReader: IComponentPropertyAccess) : BaseProperty<Int>(header, key, defaultValue, informationMessage, propReader)
 {
 	override fun validate(value: String?): ValidationMessage
 	{
@@ -19,8 +19,9 @@ class IntProperty(header: String, key: String, defaultValue: Int, informationMes
 		{
 			try
 			{
-				java.lang.Integer.parseInt(value, 10)
+				val v = java.lang.Integer.parseInt(value, 10)
 				res = value.all { it.isDigit() || it == '-' }
+				res = res && v >= minValue && v <= maxValue
 			}
 			catch (e: NumberFormatException)
 			{

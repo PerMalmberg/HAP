@@ -1,5 +1,6 @@
 package hap.ruleengine.editor.view
 
+import hap.ruleengine.editor.view.css.PalletStyle
 import hap.ruleengine.editor.view.parts.ComponentView
 import hap.ruleengine.editor.viewmodel.ComponentPallet
 import hap.ruleengine.editor.viewmodel.event.DragComponentFromComponentPallet
@@ -17,33 +18,42 @@ class ComponentPalletView : Fragment() {
 
     val pallet: ComponentPallet by inject()
 
-    override val root = listview(pallet.categories.observable()) {
-        prefWidth = 300.0
-        cellCache {
-            TitledPane(it.category,
-                    listview(it.components) {
-                        cellCache {
-                            stackpane {
-                                val vm = it
-                                setOnDragDetected {
-                                    this.startFullDrag()
-                                    when(vm) {
-                                        is CompositeVM -> fire(DragCompositeFromComponentPallet(vm.sourceFile))
-                                        is ComponentVM -> fire(DragComponentFromComponentPallet(vm.componentType))
-                                    }
+    override val root = squeezebox {
+	    addClass(PalletStyle.componentRowStyle)
+	    pallet.categories.forEach {
+		    fold(it.category) {
+			    vbox(spacing = 5) {
+				    it.components.forEach {
+					    stackpane {
 
-                                    it.consume()
-                                }
+						    val vm = it
+						    this += find<ComponentView>(mapOf(ComponentView::vm to it))
 
-                                setOnMouseReleased {
-                                    fire(EndDragComponentFromPallet)
-                                }
+						    setOnDragDetected {
+							    this.startFullDrag()
+							    when(vm) {
+								    is CompositeVM -> fire(DragCompositeFromComponentPallet(vm.sourceFile))
+								    is ComponentVM -> fire(DragComponentFromComponentPallet(vm.componentType))
+							    }
 
-                                this += find<ComponentView>(mapOf( ComponentView::vm to it ) )
-                            }
-                        }
-                    }
-            )
-        }
+							    it.consume()
+						    }
+
+						    setOnMouseReleased {
+							    fire(EndDragComponentFromPallet)
+						    }
+
+						    setOnMouseEntered {
+							    addClass(PalletStyle.mouseOver)
+						    }
+
+						    setOnMouseExited {
+							    removeClass(PalletStyle.mouseOver)
+						    }
+					    }
+				    }
+			    }
+		    }
+	    }
     }
 }
