@@ -40,10 +40,8 @@ abstract class ModuleRunner(private val mqttClientId: String) : IModuleRunner
 		myParser.accept("--log-to-console").asBoolean(1).describedAs("If specified, logging to console will be enabled").withAlias("-l")
 		myParser.accept("--log-to-file").asBoolean(1).describedAs("If specified, logging to file will be enabled").withAlias("-f")
 		myParser.accept("--log-level").asString(1).describedAs("Specifies the log level").withAlias("-ll")
-		myParser.accept("--help").asSingleBoolean().describedAs("Print help text").withAlias("-?").setHelpCommand();
+		myParser.accept("--help").asSingleBoolean().describedAs("Print help text").withAlias("-?").setHelpCommand()
 
-		myCfg.setMatcher("--broker", XMLConfigurationReader.NodeMatcher("HAP/Module/MQTT/Broker"))
-		myCfg.setMatcher("--topic", XMLConfigurationReader.NodeMatcher("HAP/Module/MQTT/Topic"))
 		myCfg.setMatcher("--log-to-console", XMLConfigurationReader.NodeMatcher("HAP/Module/Logging", "console"))
 		myCfg.setMatcher("--log-to-file", XMLConfigurationReader.NodeMatcher("HAP/Module/Logging", "file"))
 		myCfg.setMatcher("--log-level", XMLConfigurationReader.NodeMatcher("HAP/Module/Logging/Level"))

@@ -8,6 +8,9 @@
       <sourceFolder url="file://$MODULE_DIR$/testdata" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
     </content>
+    <content url="file://$MODULE_DIR$/../../config">
+      <sourceFolder url="file://$MODULE_DIR$/../../config" type="java-test-resource" />
+    </content>
     <content url="file://$MODULE_DIR$/../../resources">
       <sourceFolder url="file://$MODULE_DIR$/../../resources/famfamfam" type="java-resource" />
     </content>

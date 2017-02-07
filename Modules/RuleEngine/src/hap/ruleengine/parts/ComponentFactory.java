@@ -27,8 +27,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 public class ComponentFactory implements IComponentFactory
 {
@@ -279,7 +277,7 @@ public class ComponentFactory implements IComponentFactory
 
 			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-			URL xsd = null;
+			URL xsd;
 
 			if( SysUtil.isRunningFromJAR(getClass()) )
 			{
@@ -330,49 +328,10 @@ public class ComponentFactory implements IComponentFactory
 		{
 			myTempXSDFolder = Files.createTempDirectory("HAPed-tmp");
 
-			Runtime.getRuntime().addShutdownHook(new Thread(() ->
-			{
-				// Delete all files in the temp folder
-				delete(myTempXSDFolder.toFile());
-			}));
+			SysUtil.deleteFolderOnExit( myTempXSDFolder );
 
-			try( ZipInputStream zip = new ZipInputStream(new FileInputStream((SysUtil.getNameOfJarForClass(getClass())))) )
-			{
-				ZipEntry ze = zip.getNextEntry();
-				while( ze != null )
-				{
-					if( ze.getName().startsWith("schema") && ze.getName().endsWith("xsd") )
-					{
-						Path outName = Paths.get(myTempXSDFolder.toString(), ze.getName());
-						File outFile = outName.toFile();
-
-
-						boolean res = true;
-
-						// Create dir if it doesn't exist
-						if( !outFile.getParentFile().exists() )
-						{
-							res = outFile.getParentFile().mkdirs();
-						}
-
-						if( res && outFile.createNewFile() )
-						{
-							try( FileOutputStream fos = new FileOutputStream(outFile) )
-							{
-								byte[] data = new byte[(int) ze.getSize()];
-								zip.read(data, 0, (int) ze.getSize());
-								fos.write(data);
-							}
-						}
-						else
-						{
-							// TODO: Log error
-						}
-					}
-					ze = zip.getNextEntry();
-				}
-			}
-
+			// Extract schema XSDs to the temp folder.
+			SysUtil.extractFilesFromJar( getClass(), myTempXSDFolder, ze -> ze.getName().startsWith("schema") && ze.getName().endsWith("xsd") );
 		}
 
 		return myTempXSDFolder;
@@ -422,26 +381,5 @@ public class ComponentFactory implements IComponentFactory
 		return contents;
 	}
 
-	private void delete( File f )
-	{
-		if( f != null )
-		{
-			if( f.isDirectory() )
-			{
-				File[] files = f.listFiles();
-				if( files != null )
-				{
-					for( File c : files )
-					{
-						delete(c);
-					}
-					f.delete();
-				}
-			}
-			else
-			{
-				f.delete();
-			}
-		}
-	}
+
 }

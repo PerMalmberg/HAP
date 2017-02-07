@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:complexType name="ModuleConfig">
+		<xs:annotation>
+			<xs:documentation>
+				The Module-element contains the common configuration options for all modules.
+				It should always be placed as the first element within the HAP root-element.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Logging">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Level">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="Info"/>
+									<xs:enumeration value="Warning"/>
+									<xs:enumeration value="Error"/>
+									<xs:enumeration value="Debug"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="console" default="true">
+						<xs:simpleType>
+							<xs:restriction base="xs:boolean"/>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="file" default="false">
+						<xs:simpleType>
+							<xs:restriction base="xs:boolean"/>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

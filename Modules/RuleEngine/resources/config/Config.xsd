@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:include schemaLocation="ModuleConfig.xsd"/>
+	<xs:element name="HAP">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Module" type="ModuleConfig" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="Composites">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Composite" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="src">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:minLength value="4"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
