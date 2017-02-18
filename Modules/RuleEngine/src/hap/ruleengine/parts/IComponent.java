@@ -64,4 +64,8 @@ public interface IComponent
 	boolean getExecutionState();
 
 	void showProperties( IPropertyDisplay display );
+
+	void tick();
+
+	void tearDown();
 }

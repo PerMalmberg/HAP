@@ -262,6 +262,7 @@ public class CompositeComponent extends Component
 	{
 		myComponent.remove( component.getId() );
 		component.setExecutionState( false );
+		component.tearDown();
 		removeWiresConnectedTo( component );
 	}
 
@@ -326,6 +327,15 @@ public class CompositeComponent extends Component
 	{
 		output.setOwningComposite( this );
 		super.addOutput( output );
+	}
+
+	@Override
+	public void tick()
+	{
+		for( IComponent c : myComponent.values() )
+		{
+			c.tick();
+		}
 	}
 
 }

@@ -381,4 +381,14 @@ public abstract class Component implements IComponent, IComponentPropertyAccess
 	public void showProperties( IPropertyDisplay display )
 	{
 	}
+
+	@Override
+	public void tick()
+	{
+	}
+
+	@Override
+	public void tearDown()
+	{
+	}
 }

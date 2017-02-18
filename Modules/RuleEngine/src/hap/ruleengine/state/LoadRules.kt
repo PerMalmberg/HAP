@@ -22,7 +22,7 @@ import javax.xml.XMLConstants
 import javax.xml.bind.JAXBContext
 import javax.xml.validation.SchemaFactory
 
-class LoadRules(val loadedSchema: HashMap<UUID, CompositeComponent>, val parser: CmdParser4J, com: Communicator) : BaseState(com), IEnter, ILeave
+class LoadRules(val loadedSchema: HashMap<UUID, CompositeComponent>, val parser: CmdParser4J, val com: Communicator) : BaseState(com), IEnter, ILeave
 {
 	private var xsdPath = Files.createTempDirectory("RuleEngine-tmp")
 	private val factory = ComponentFactory(ComponentFactory.STANDARD_LIBRARY)
@@ -70,6 +70,9 @@ class LoadRules(val loadedSchema: HashMap<UUID, CompositeComponent>, val parser:
 				loadedSchema.put(uuid, composite)
 			}
 		}
+
+
+		com.setState( Execute( loadedSchema, com ) )
 	}
 
 	override fun leave()
