@@ -46,7 +46,7 @@ class MQTTProxy(val server: String) : MqttCallback, IMqttActionListener
 			}
 
 			client = MqttAsyncClient(url, UUID.randomUUID().toString(), MemoryPersistence())
-			client!!.setCallback(this)
+			client?.setCallback(this)
 			connectToken = client!!.connect(opt, this)
 		}
 	}
@@ -68,7 +68,7 @@ class MQTTProxy(val server: String) : MqttCallback, IMqttActionListener
 			{
 				synchronized(subscriptions) {
 					subscriptions.map {
-						client!!.subscribe(it.key, QOS)
+						client?.subscribe(it.key, QOS)
 					}
 				}
 			}
@@ -85,7 +85,7 @@ class MQTTProxy(val server: String) : MqttCallback, IMqttActionListener
 	override fun connectionLost(ex: Throwable)
 	{
 		resubscribe = true
-		connectToken = client!!.connect(opt, this)
+		connectToken = client?.connect(opt, this)
 	}
 
 	override fun deliveryComplete(token: IMqttDeliveryToken?)
@@ -107,9 +107,9 @@ class MQTTProxy(val server: String) : MqttCallback, IMqttActionListener
 			receivers.add(receiver)
 		}
 
-		if (client!!.isConnected)
+		if (true == client?.isConnected)
 		{
-			client!!.subscribe(topic, QOS)
+			client?.subscribe(topic, QOS)
 		}
 	}
 
@@ -125,13 +125,27 @@ class MQTTProxy(val server: String) : MqttCallback, IMqttActionListener
 				}
 			}
 
-			// Remove element if no receivers left
+			// Remove element if no receivers are left
 			subscriptions.map {
-				if( it.value.isEmpty() ) {
+				if (it.value.isEmpty())
+				{
+					client?.unsubscribe(it.key)
 					subscriptions.remove(it.key)
 				}
 			}
+
+			if (subscriptions.isEmpty())
+			{
+				client?.disconnect()
+				client = null
+			}
+
 		}
+	}
+
+	fun publish(topic: String, msg: String)
+	{
+		client?.publish(topic, MqttMessage(msg.toByteArray()))
 	}
 
 }

@@ -8,4 +8,5 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 public interface IMqttMessageReceiver
 {
 	void messageArrived( String topic, MqttMessage msg);
+	void connectionStatus( boolean isConnected );
 }

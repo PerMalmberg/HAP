@@ -5,24 +5,24 @@ import hap.ruleengine.component.IPropertyDisplay;
 import hap.ruleengine.parts.Component;
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.output.BooleanOutput;
-import hap.ruleengine.parts.output.StringOutput;
 import hap.ruleengine.parts.property.BooleanProperty;
 import hap.ruleengine.parts.property.IntProperty;
 import hap.ruleengine.parts.property.StringProperty;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class MQTTListener extends Component implements IMqttMessageReceiver
+public abstract class MqttCommon extends Component implements IMqttMessageReceiver
 {
-	public MQTTListener( UUID id, boolean executionAllowed )
+	public MqttCommon( UUID id, boolean executionAllowed )
 	{
 		super( id, executionAllowed );
 	}
 
-	private MQTTProxy proxy;
+	protected MQTTProxy proxy;
+	private boolean connectionStatus = false;
+	private BooleanOutput isConnected;
 
 	class Pair
 	{
@@ -36,16 +36,13 @@ public class MQTTListener extends Component implements IMqttMessageReceiver
 		final MqttMessage msg;
 	}
 
-	private final ConcurrentLinkedQueue<Pair> incoming = new ConcurrentLinkedQueue<>();
 
 	public void setup( CompositeComponent cc )
 	{
-		dataOut = new StringOutput( "Data", UUID.fromString( "3268b8b9-c544-4b0a-ac7c-fdeb64031d48" ), this );
 		isConnected = new BooleanOutput( "Connected", UUID.fromString( "46ac2e40-ccc0-4499-826b-1009bed9211b" ), this );
-
-		addOutput( dataOut );
 		addOutput( isConnected );
 	}
+
 
 	@Override
 	public void tearDown()
@@ -79,18 +76,17 @@ public class MQTTListener extends Component implements IMqttMessageReceiver
 					}
 				}
 			}
-
-			if( ! incoming.isEmpty() )
-			{
-				Pair msg = incoming.poll();
-				dataOut.set( new String( msg.msg.getPayload() ) );
-			}
 		}
 
 
 		if( ! getExecutionState() && proxy != null )
 		{
 			proxy.stop();
+		}
+
+		if( isConnected.getValue() != connectionStatus )
+		{
+			isConnected.set( connectionStatus );
 		}
 
 	}
@@ -106,12 +102,9 @@ public class MQTTListener extends Component implements IMqttMessageReceiver
 		display.show( new BooleanProperty( "Secure connection", "Secure", false, "Use secure communication", this ) );
 	}
 
-	private StringOutput dataOut;
-	private BooleanOutput isConnected;
-
 	@Override
-	public void messageArrived( String topic, MqttMessage msg )
+	public void connectionStatus( boolean isConnected )
 	{
-		incoming.add( new Pair( topic, msg ) );
+		connectionStatus = isConnected;
 	}
 }
