@@ -8,52 +8,57 @@ import hap.ruleengine.editor.viewmodel.event.DragCompositeFromComponentPallet
 import hap.ruleengine.editor.viewmodel.event.EndDragComponentFromPallet
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.editor.viewmodel.parts.CompositeVM
-import hap.ruleengine.parts.composite.CompositeComponent
-import javafx.event.EventHandler
-import javafx.scene.control.TitledPane
 import tornadofx.*
 
 
-class ComponentPalletView : Fragment() {
+class ComponentPalletView : Fragment()
+{
 
-    val pallet: ComponentPallet by inject()
+	val pallet: ComponentPallet by inject()
 
-    override val root = squeezebox {
-	    addClass(PalletStyle.componentRowStyle)
-	    pallet.categories.forEach {
-		    fold(it.category) {
-			    vbox(spacing = 5) {
-				    it.components.forEach {
-					    stackpane {
+	override val root =
+				scrollpane {
+					isFitToHeight = true
+					isFitToWidth = true
+					squeezebox {
+						addClass(PalletStyle.componentRowStyle)
+						pallet.categories.forEach {
+							fold(it.category) {
+								vbox(spacing = 5) {
+									it.components.forEach {
+										stackpane {
 
-						    val vm = it
-						    this += find<ComponentView>(mapOf(ComponentView::vm to it))
+											val vm = it
+											this += find<ComponentView>(mapOf(ComponentView::vm to it))
 
-						    setOnDragDetected {
-							    this.startFullDrag()
-							    when(vm) {
-								    is CompositeVM -> fire(DragCompositeFromComponentPallet(vm.sourceFile))
-								    is ComponentVM -> fire(DragComponentFromComponentPallet(vm.componentType))
-							    }
+											setOnDragDetected {
+												this.startFullDrag()
+												when (vm)
+												{
+													is CompositeVM -> fire(DragCompositeFromComponentPallet(vm.sourceFile))
+													is ComponentVM -> fire(DragComponentFromComponentPallet(vm.componentType))
+												}
 
-							    it.consume()
-						    }
+												it.consume()
+											}
 
-						    setOnMouseReleased {
-							    fire(EndDragComponentFromPallet)
-						    }
+											setOnMouseReleased {
+												fire(EndDragComponentFromPallet)
+											}
 
-						    setOnMouseEntered {
-							    addClass(PalletStyle.mouseOver)
-						    }
+											setOnMouseEntered {
+												addClass(PalletStyle.mouseOver)
+											}
 
-						    setOnMouseExited {
-							    removeClass(PalletStyle.mouseOver)
-						    }
-					    }
-				    }
-			    }
-		    }
-	    }
-    }
+											setOnMouseExited {
+												removeClass(PalletStyle.mouseOver)
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
 }
