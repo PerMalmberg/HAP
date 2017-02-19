@@ -27,6 +27,14 @@ class WireView(val source: OutputView, val target: InputView) : Line() {
                 pub.fire(DeleteWire(this))
             }
         }
+
+        setOnMouseEntered {
+            strokeWidth *= 2
+        }
+
+        setOnMouseExited {
+            strokeWidth /= 2
+        }
     }
 
     fun delete() {
