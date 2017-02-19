@@ -338,4 +338,13 @@ public class CompositeComponent extends Component
 		}
 	}
 
+	@Override
+	public void tearDown()
+	{
+		for( IComponent comp : myComponent.values() )
+		{
+			comp.tearDown();
+		}
+	}
+
 }

@@ -125,6 +125,7 @@ class DrawingSurfaceVM : ViewModel()
 	fun setComposite(cc: CompositeComponent)
 	{
 		surface.clearComponents()
+		currentCC.tearDown()
 		currentCC = cc
 		visualize()
 		currentCC.executionState = liveComponents
@@ -195,6 +196,7 @@ class DrawingSurfaceVM : ViewModel()
 		tickTimer.cancel()
 		// Give the component a last tick so that they can shutdown any timers and threads.
 		currentCC.tick()
+		currentCC.tearDown()
 	}
 
 }

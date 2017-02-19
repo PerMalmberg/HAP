@@ -25,14 +25,8 @@ class RuleEngineTab : Fragment()
 				{
 					checkmenuitem("_Live components")
 					{
-						isSelected = config.boolean("LiveComponents")
-						// Update listeners with current value
-						fire(SetLiveComponentsEvent(isSelected))
-
 						setOnAction {
 							with(config) {
-								set("LiveComponents" to isSelected)
-								save()
 								fire(SetLiveComponentsEvent(isSelected))
 							}
 						}
