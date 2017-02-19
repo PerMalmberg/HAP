@@ -9,6 +9,7 @@ import hap.ruleengine.editor.viewmodel.event.MouseDragDropReleased
 import hap.ruleengine.editor.viewmodel.event.SetLiveComponentsEvent
 import hap.ruleengine.editor.viewmodel.parts.ComponentVM
 import hap.ruleengine.parts.composite.CompositeComponent
+import hap.ui.event.AppShutdownEvent
 import javafx.geometry.Point2D
 import javafx.scene.Group
 import javafx.scene.input.TransferMode
@@ -136,6 +137,10 @@ class DrawingSurfaceView : Fragment(), IDrawingSurfaceView
 
 		subscribe<SetLiveComponentsEvent> {
 			vm.toggleLiveComponents(it.isLive)
+		}
+
+		subscribe<AppShutdownEvent> {
+			vm.shutdown()
 		}
 	}
 

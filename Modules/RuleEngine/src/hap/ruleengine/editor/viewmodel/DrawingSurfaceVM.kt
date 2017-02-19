@@ -22,8 +22,8 @@ class DrawingSurfaceVM : ViewModel()
 {
 	private var interaction: UserInteractionFSM by singleAssign()
 	private var currentCC: CompositeComponent = CompositeComponent(UUID.randomUUID(), null, false)
-	private val tickTimer = java.util.Timer()
-	private var liveComponents = false;
+	private val tickTimer = java.util.Timer(true)
+	private var liveComponents = false
 
 	var surface: IDrawingSurfaceView by singleAssign()
 
@@ -36,7 +36,6 @@ class DrawingSurfaceVM : ViewModel()
 				currentCC.tick()
 			}
 		}, 10, 10)
-
 	}
 
 	fun init(s: IDrawingSurfaceView)
@@ -188,6 +187,14 @@ class DrawingSurfaceVM : ViewModel()
 	{
 		liveComponents = live
 		currentCC.executionState = live
+	}
+
+	fun shutdown()
+	{
+		toggleLiveComponents(false)
+		tickTimer.cancel()
+		// Give the component a last tick so that they can shutdown any timers and threads.
+		currentCC.tick()
 	}
 
 }

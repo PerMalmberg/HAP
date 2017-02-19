@@ -14,7 +14,7 @@ class RuleEngineTab : Fragment()
 			menubar {
 				menu("_File") {
 					menuitem("_Open Composite") {
-						fire(OpenCompositeFromFile(this@borderpane.scene.window, config.boolean("LiveComponents")))
+						fire(OpenCompositeFromFile(this@borderpane.scene.window))
 					}
 					separator()
 					menuitem("_Save") {
