@@ -11,7 +11,6 @@ import hap.ruleengine.parts.property.StringProperty;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public abstract class MqttCommon extends Component implements IMqttMessageReceiver
 {
@@ -62,18 +61,15 @@ public abstract class MqttCommon extends Component implements IMqttMessageReceiv
 			{
 				proxy = MQTTProxyPool.Factory.getProxy( getProperty( "Broker", "localhost" ) );
 
-				if( getExecutionState() )
-				{
-					proxy.start( getProperty( "User", "" ),
-							getProperty( "Password", "" ),
-							getProperty( "Port", 0 ),
-							getProperty( "Secure", false ) );
+				proxy.start( getProperty( "User", "" ),
+						getProperty( "Password", "" ),
+						getProperty( "Port", 0 ),
+						getProperty( "Secure", false ) );
 
-					String topic = getProperty( "topic", "" );
-					if( ! topic.isEmpty() )
-					{
-						proxy.subscribe( topic, this );
-					}
+				String topic = getProperty( "topic", "" );
+				if( ! topic.isEmpty() )
+				{
+					proxy.subscribe( topic, this );
 				}
 			}
 		}
@@ -82,6 +78,7 @@ public abstract class MqttCommon extends Component implements IMqttMessageReceiv
 		if( ! getExecutionState() && proxy != null )
 		{
 			proxy.stop();
+			proxy = null;
 		}
 
 		if( isConnected.getValue() != connectionStatus )

@@ -53,11 +53,8 @@ class MQTTProxy(val server: String) : MqttCallback, IMqttActionListener
 
 	fun stop()
 	{
-		if (client != null)
-		{
-			client!!.disconnect()
-			client = null
-		}
+		client?.disconnect()
+		client = null
 	}
 
 	override fun onSuccess(token: IMqttToken?)
@@ -118,19 +115,19 @@ class MQTTProxy(val server: String) : MqttCallback, IMqttActionListener
 		synchronized(subscriptions)
 		{
 			// Remove receivers
-			subscriptions.map {
-				if (it.value.contains(receiver))
+			subscriptions.toList().map {
+				if (it.second.contains(receiver))
 				{
-					it.value.remove(receiver)
+					it.second.remove(receiver)
 				}
 			}
 
 			// Remove element if no receivers are left
-			subscriptions.map {
-				if (it.value.isEmpty())
+			subscriptions.toList().map {
+				if (it.second.isEmpty())
 				{
-					client?.unsubscribe(it.key)
-					subscriptions.remove(it.key)
+					client?.unsubscribe(it.first)
+					subscriptions.remove(it.first)
 				}
 			}
 

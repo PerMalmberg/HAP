@@ -16,147 +16,178 @@ import tornadofx.property
 import tornadofx.singleAssign
 import java.io.File
 import java.util.*
+import kotlin.concurrent.timerTask
 
-class DrawingSurfaceVM : ViewModel() {
-    private var interaction: UserInteractionFSM by singleAssign()
-    private var currentCC: CompositeComponent = CompositeComponent(UUID.randomUUID(), null, false)
+class DrawingSurfaceVM : ViewModel()
+{
+	private var interaction: UserInteractionFSM by singleAssign()
+	private var currentCC: CompositeComponent = CompositeComponent(UUID.randomUUID(), null, false)
+	private val tickTimer = java.util.Timer()
+	private var liveComponents = false;
 
-    var surface: IDrawingSurfaceView by singleAssign()
+	var surface: IDrawingSurfaceView by singleAssign()
 
-    init {
-        subscribeToEvents()
-    }
+	init
+	{
+		subscribeToEvents()
 
-    fun init(s: IDrawingSurfaceView) {
-        surface = s
-        interaction = UserInteractionFSM(surface)
-    }
+		tickTimer.schedule(timerTask {
+			Platform.runLater {
+				currentCC.tick()
+			}
+		}, 10, 10)
 
-    private fun subscribeToEvents() {
-        subscribe<DragCompositeFromComponentPallet> {
-            interaction.dragCompositeFromComponentPallet(it.sourcefile)
-        }
+	}
 
-        subscribe<DragComponentFromComponentPallet> {
-            interaction.dragComponentFromComponentPallet(it.componentType)
-        }
+	fun init(s: IDrawingSurfaceView)
+	{
+		surface = s
+		interaction = UserInteractionFSM(surface)
+	}
 
-        subscribe<EndDragComponentFromPallet> {
-            interaction.endDragComponentFromComponentPallet()
-        }
+	private fun subscribeToEvents()
+	{
+		subscribe<DragCompositeFromComponentPallet> {
+			interaction.dragCompositeFromComponentPallet(it.sourcefile)
+		}
 
-        subscribe<MouseDragDropReleased> {
-            interaction.mouseDragDropReleased(it, surface, currentCC)
-        }
+		subscribe<DragComponentFromComponentPallet> {
+			interaction.dragComponentFromComponentPallet(it.componentType)
+		}
 
-        subscribe<OpenCompositeFromFile> {
-            interaction.openComposite(this, it.window)
-        }
+		subscribe<EndDragComponentFromPallet> {
+			interaction.endDragComponentFromComponentPallet()
+		}
 
-        subscribe<SelectComponent> {
-            interaction.selectComponent(it.component, it.addToOrRemoveFromSelection)
-        }
+		subscribe<MouseDragDropReleased> {
+			interaction.mouseDragDropReleased(it, surface, currentCC)
+		}
 
-        subscribe<ComponentDragged> {
-            interaction.componentDragged(it)
-        }
+		subscribe<OpenCompositeFromFile> {
+			interaction.openComposite(this, it.window)
+		}
 
-        subscribe<MouseReleased> {
-            interaction.mouseReleased()
-        }
+		subscribe<SelectComponent> {
+			interaction.selectComponent(it.component, it.addToOrRemoveFromSelection)
+		}
 
-        subscribe<SaveComposite> {
-            interaction.saveComposite(this, it.window)
-        }
+		subscribe<ComponentDragged> {
+			interaction.componentDragged(it)
+		}
 
-        subscribe<BeginConnectWire> {
-            interaction.beginConnectWire(it.connectionPoint, it.sceneRelativeCenter)
-        }
+		subscribe<MouseReleased> {
+			interaction.mouseReleased()
+		}
 
-        subscribe<MouseEnteredConnectionPoint> {
-            interaction.mouseEnteredConnectionPoint(it.connectionPoint)
-        }
+		subscribe<SaveComposite> {
+			interaction.saveComposite(this, it.window)
+		}
 
-        subscribe<UpdateDragWire> {
-            interaction.updateDragWire(it.sceneX, it.sceneY)
-        }
+		subscribe<BeginConnectWire> {
+			interaction.beginConnectWire(it.connectionPoint, it.sceneRelativeCenter)
+		}
 
-        subscribe<DeleteWire> {
-            interaction.deleteWire(it.wire)
-        }
+		subscribe<MouseEnteredConnectionPoint> {
+			interaction.mouseEnteredConnectionPoint(it.connectionPoint)
+		}
 
-        subscribe<DeleteComponent> {
-            interaction.deleteComponent( it.component )
-        }
-    }
+		subscribe<UpdateDragWire> {
+			interaction.updateDragWire(it.sceneX, it.sceneY)
+		}
 
-    private fun visualize() {
-        // Visualize all components in the current composite
-        currentCC.components
-                .map {
-                    val vm = ComponentVM(it)
-                    vm.x.value = it.x
-                    vm.y.value = it.y
-                    surface.add(vm)
-                }
+		subscribe<DeleteWire> {
+			interaction.deleteWire(it.wire)
+		}
 
-        // Once all components are visualized, draw the wires.
-        // It is run 'later' so that the GridPane has completed its layout phase.
-        // If we don't wait for that to complete, we get invalid coordinates when calling boundsInParent etc.
-        Platform.runLater {
-            surface.drawWires(currentCC)
-        }
-    }
+		subscribe<DeleteComponent> {
+			interaction.deleteComponent(it.component)
+		}
+	}
 
-    fun setComposite(cc: CompositeComponent) {
-        surface.clearComponents()
-        currentCC = cc
-        visualize()
-    }
+	private fun visualize()
+	{
+		// Visualize all components in the current composite
+		currentCC.components
+				.map {
+					val vm = ComponentVM(it)
+					vm.x.value = it.x
+					vm.y.value = it.y
+					surface.add(vm)
+				}
 
-    fun saveComposite(file: File): Boolean {
-        val serializer = CompositeSerializer()
-        return serializer.serialize(currentCC, file)
-    }
+		// Once all components are visualized, draw the wires.
+		// It is run 'later' so that the GridPane has completed its layout phase.
+		// If we don't wait for that to complete, we get invalid coordinates when calling boundsInParent etc.
+		Platform.runLater {
+			surface.drawWires(currentCC)
+		}
+	}
 
-    fun addWire(startPoint: IConnectionPoint, lastEntered: IConnectionPoint) {
-        val wire: IWire? = currentCC.addWire(startPoint, lastEntered)
-        if (wire != null) {
-            surface.drawWires(currentCC)
-        }
-    }
+	fun setComposite(cc: CompositeComponent)
+	{
+		surface.clearComponents()
+		currentCC = cc
+		visualize()
+		currentCC.executionState = liveComponents
+	}
 
-    fun delete(wire: IWire?) {
-        currentCC.deleteWire(wire)
-    }
+	fun saveComposite(file: File): Boolean
+	{
+		val serializer = CompositeSerializer()
+		return serializer.serialize(currentCC, file)
+	}
 
-    fun setDragWire(startSceneRelativeCenter: Point2D, sceneX: Double, sceneY: Double) {
-        dragLineVisible = true
-        var xy = surface.sceneToLocal(startSceneRelativeCenter.x, startSceneRelativeCenter.y)
-        dragLineStartX = xy.x
-        dragLineStartY = xy.y
-        xy = surface.sceneToLocal(sceneX, sceneY)
-        dragLineEndX = xy.x
-        dragLineEndY = xy.y
-    }
+	fun addWire(startPoint: IConnectionPoint, lastEntered: IConnectionPoint)
+	{
+		val wire: IWire? = currentCC.addWire(startPoint, lastEntered)
+		if (wire != null)
+		{
+			surface.drawWires(currentCC)
+		}
+	}
 
-    fun hideDragWire() {
-        dragLineVisible = false
-    }
+	fun delete(wire: IWire?)
+	{
+		currentCC.deleteWire(wire)
+	}
 
-    fun deleteComponent(component: ComponentView) {
-        currentCC.deleteComponent(component.vm.component)
-        component.delete()
-    }
+	fun setDragWire(startSceneRelativeCenter: Point2D, sceneX: Double, sceneY: Double)
+	{
+		dragLineVisible = true
+		var xy = surface.sceneToLocal(startSceneRelativeCenter.x, startSceneRelativeCenter.y)
+		dragLineStartX = xy.x
+		dragLineStartY = xy.y
+		xy = surface.sceneToLocal(sceneX, sceneY)
+		dragLineEndX = xy.x
+		dragLineEndY = xy.y
+	}
 
-    var dragLineStartX: Double by property(0.0)
-    fun dragLineStartXProperty() = getProperty(DrawingSurfaceVM::dragLineStartX)
-    var dragLineStartY: Double by property(0.0)
-    fun dragLineStartYProperty() = getProperty(DrawingSurfaceVM::dragLineStartY)
-    var dragLineEndX: Double by property(0.0)
-    fun dragLineEndXProperty() = getProperty(DrawingSurfaceVM::dragLineEndX)
-    var dragLineEndY: Double by property(0.0)
-    fun dragLineEndYProperty() = getProperty(DrawingSurfaceVM::dragLineEndY)
-    var dragLineVisible: Boolean by property(false)
-    fun dragLineVisibleProperty() = getProperty(DrawingSurfaceVM::dragLineVisible)
+	fun hideDragWire()
+	{
+		dragLineVisible = false
+	}
+
+	fun deleteComponent(component: ComponentView)
+	{
+		currentCC.deleteComponent(component.vm.component)
+		component.delete()
+	}
+
+	var dragLineStartX: Double by property(0.0)
+	fun dragLineStartXProperty() = getProperty(DrawingSurfaceVM::dragLineStartX)
+	var dragLineStartY: Double by property(0.0)
+	fun dragLineStartYProperty() = getProperty(DrawingSurfaceVM::dragLineStartY)
+	var dragLineEndX: Double by property(0.0)
+	fun dragLineEndXProperty() = getProperty(DrawingSurfaceVM::dragLineEndX)
+	var dragLineEndY: Double by property(0.0)
+	fun dragLineEndYProperty() = getProperty(DrawingSurfaceVM::dragLineEndY)
+	var dragLineVisible: Boolean by property(false)
+	fun dragLineVisibleProperty() = getProperty(DrawingSurfaceVM::dragLineVisible)
+
+	fun toggleLiveComponents(live: Boolean)
+	{
+		liveComponents = live
+		currentCC.executionState = live
+	}
+
 }

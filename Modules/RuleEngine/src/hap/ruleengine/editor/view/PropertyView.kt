@@ -5,12 +5,13 @@ import tornadofx.stackpane
 import tornadofx.vbox
 
 
-class PropertyView : Fragment() {
-    override val root = stackpane {
-        vbox {
-            this += ComponentPropertyEditor::class
-            this += PropertyEditorView::class
-            this += DebugView::class
-        }
-    }
+class PropertyView : Fragment()
+{
+	override val root = stackpane {
+		vbox {
+			add(ComponentPropertyEditor::class)
+			add(PropertyEditorView::class)
+			add(DebugView::class)
+		}
+	}
 }

@@ -10,17 +10,17 @@ import tornadofx.*
 class DebugView : View("")
 {
 	override val root = borderpane {
-		top {
-			text("Debug Data") {
-				style {
-					fontSize = 14.px
-					fontWeight = FontWeight.BOLD
+		subscribe<SelectedComponentsChanged> {
+			top {
+				text("Debug Data") {
+					style {
+						fontSize = 14.px
+						fontWeight = FontWeight.BOLD
+					}
 				}
 			}
-		}
-		center {
-			vbox {
-				subscribe<SelectedComponentsChanged> {
+			center {
+				vbox {
 					this.replaceChildren {
 						if (it.selectedComponents.size == 1)
 						{
@@ -78,10 +78,6 @@ class DebugView : View("")
 									}
 								}
 							}
-						}
-						else
-						{
-							text("Select single component to see debug properties")
 						}
 					}
 				}
