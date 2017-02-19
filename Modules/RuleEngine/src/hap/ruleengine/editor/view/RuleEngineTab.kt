@@ -27,6 +27,7 @@ class RuleEngineTab : Fragment() {
                 add(ComponentPalletView::class)
                 add(DrawingSurfaceView::class)
                 add(PropertyView::class)
+                setDividerPositions(0.3, 0.8, 0.9)
             }
         }
     }
