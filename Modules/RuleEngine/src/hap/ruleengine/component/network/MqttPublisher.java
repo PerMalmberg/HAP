@@ -17,7 +17,7 @@ public class MqttPublisher extends MqttCommon
 
 	public MqttPublisher( UUID id, boolean executionAllowed )
 	{
-		super( id, executionAllowed );
+		super( id, executionAllowed, false );
 	}
 
 	public void setup( CompositeComponent cc )
@@ -32,7 +32,7 @@ public class MqttPublisher extends MqttCommon
 	{
 		// Only have a single input..
 		String topic = getProperty( "topic", "" );
-		proxy.publish( topic, input.getValue() );
+		connection.publish( topic, input.getValue() );
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class MqttSubscriber extends MqttCommon
 
 	public MqttSubscriber( UUID id, boolean executionAllowed )
 	{
-		super( id, executionAllowed );
+		super( id, executionAllowed, true );
 	}
 
 	public void setup( CompositeComponent cc )
@@ -34,13 +34,10 @@ public class MqttSubscriber extends MqttCommon
 	{
 		super.tick();
 
-		if( getExecutionState() )
+		if( ! incoming.isEmpty() )
 		{
-			if( ! incoming.isEmpty() )
-			{
-				Pair msg = incoming.poll();
-				dataOut.set( new String( msg.msg.getPayload() ) );
-			}
+			Pair msg = incoming.poll();
+			dataOut.set( new String( msg.msg.getPayload() ) );
 		}
 	}
 

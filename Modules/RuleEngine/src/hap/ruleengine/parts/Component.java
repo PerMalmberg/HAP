@@ -47,28 +47,36 @@ public abstract class Component implements IComponent, IComponentPropertyAccess
 		myExecutionState = executionAllowed;
 	}
 
+	protected void propertyChanged( String key )
+	{
+	}
+
 	@Override
 	public void setProperty( String key, String value )
 	{
 		myProperties.put( key, value );
+		propertyChanged( key );
 	}
 
 	@Override
 	public void setProperty( String key, int value )
 	{
 		myProperties.put( key, String.valueOf( value ) );
+		propertyChanged( key );
 	}
 
 	@Override
 	public void setProperty( String key, boolean value )
 	{
 		myProperties.put( key, String.valueOf( value ) );
+		propertyChanged( key );
 	}
 
 	@Override
 	public void setProperty( String key, double value )
 	{
 		myProperties.put( key, String.valueOf( value ) );
+		propertyChanged( key );
 	}
 
 	@Override
@@ -143,13 +151,23 @@ public abstract class Component implements IComponent, IComponentPropertyAccess
 	@Override
 	public void setExecutionState( boolean status )
 	{
+		boolean original = myExecutionState;
 		myExecutionState = status;
+		if( original != myExecutionState )
+		{
+			executionStateChanged( myExecutionState );
+		}
 	}
 
 	@Override
 	public boolean getExecutionState()
 	{
 		return myExecutionState;
+	}
+
+	protected void executionStateChanged( boolean executionState )
+	{
+
 	}
 
 	// Called during creation of parts. Use it to add in- and outputs.
