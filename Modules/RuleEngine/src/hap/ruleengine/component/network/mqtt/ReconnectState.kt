@@ -20,7 +20,7 @@ class ReconnectState(fsm:MqttConnection) : MqttState(fsm)
 	{
 		if (fsm.getClient().isConnected)
 		{
-			token = fsm.getClient().disconnect()
+			token = fsm.getClient().disconnect(null, fsm)
 		}
 		else
 		{

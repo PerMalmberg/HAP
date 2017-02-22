@@ -1,5 +1,6 @@
 package hap.ruleengine.component.network;
 
+import hap.ruleengine.component.network.mqtt.ConnectionInfo;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -8,5 +9,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 public interface IMqttMessageReceiver
 {
 	void messageArrived( String topic, MqttMessage msg);
+	ConnectionInfo getConnectionInfo();
 	void connectionStatus( boolean isConnected );
 }

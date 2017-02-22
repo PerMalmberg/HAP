@@ -15,7 +15,7 @@ class PropertyEditorView : Fragment()
 						if (it.selectedComponents.size == 1)
 						{
 							val single = it.selectedComponents.values.first()
-							val vb = ViewBuilder(this)
+							val vb = ViewBuilder(this, single.component)
 							single.component.showProperties(vb)
 						}
 					}

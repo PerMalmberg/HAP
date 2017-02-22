@@ -8,11 +8,9 @@ import java.util.*
 /**
  * Created by Per Malmberg on 2017-02-21.
  */
-class MqttConnection( val receiver : IMqttMessageReceiver) : chainedfsm.FSM<MqttState>(), MqttCallback, IMqttActionListener, IMqttMessageListener
+class MqttConnection(val receiver: IMqttMessageReceiver) : chainedfsm.FSM<MqttState>(), MqttCallback, IMqttActionListener, IMqttMessageListener
 {
-	private val opt = MqttConnectOptions()
 	private val client = MqttAsyncClient("tcp://ignored.tld", UUID.randomUUID().toString(), MemoryPersistence())
-	private var connectInfo = ConnectionInfo("", "", "", 0, false, "")
 
 	init
 	{
@@ -57,37 +55,9 @@ class MqttConnection( val receiver : IMqttMessageReceiver) : chainedfsm.FSM<Mqtt
 	fun getClient() = client
 
 
-	fun connect(info: ConnectionInfo)
+	fun connect()
 	{
 		synchronized(client) {
-			connectInfo = info
-
-			opt.isAutomaticReconnect = false
-			opt.isCleanSession = true
-
-			if (info.user.isNotEmpty() && info.password.isNotEmpty())
-			{
-				opt.userName = info.user
-				opt.password = info.password.toCharArray()
-			}
-
-			var url: String
-			if (info.secure)
-			{
-				url = "ssl://"
-			}
-			else
-			{
-				url = "tcp://"
-			}
-			url += info.broker
-			if (info.port != 0)
-			{
-				url += ":" + info.port
-			}
-
-			opt.serverURIs = arrayOf(url)
-
 			currentState.connect()
 		}
 	}
@@ -99,15 +69,52 @@ class MqttConnection( val receiver : IMqttMessageReceiver) : chainedfsm.FSM<Mqtt
 		}
 	}
 
-	fun publish(topic:String, msg:String)
+	fun reconnect()
+	{
+		synchronized(client) {
+			setState(ReconnectState(this))
+		}
+	}
+
+	fun publish(topic: String, msg: String)
 	{
 		synchronized(client) {
 			currentState.publish(topic, msg)
 		}
 	}
 
-	fun getOptions() = opt
+	fun getOptions(): MqttConnectOptions
+	{
+		val info = receiver.connectionInfo
+		val opt = MqttConnectOptions()
+		opt.isAutomaticReconnect = false
+		opt.isCleanSession = true
 
-	fun getTopic() = connectInfo.topic
+		if (info.user.isNotEmpty() && info.password.isNotEmpty())
+		{
+			opt.userName = info.user
+			opt.password = info.password.toCharArray()
+		}
+
+		var url: String
+		if (info.secure)
+		{
+			url = "ssl://"
+		}
+		else
+		{
+			url = "tcp://"
+		}
+		url += info.broker
+		if (info.port != 0)
+		{
+			url += ":" + info.port
+		}
+
+		opt.serverURIs = arrayOf(url)
+		return opt
+	}
+
+	fun getTopic() = receiver.connectionInfo.topic
 
 }

@@ -2,6 +2,7 @@ package hap.ruleengine.editor.viewmodel
 
 import hap.ruleengine.component.IPropertyDisplay
 import hap.ruleengine.editor.view.css.PropertyEditorStyle
+import hap.ruleengine.parts.IComponent
 import hap.ruleengine.parts.property.BooleanProperty
 import hap.ruleengine.parts.property.DoubleProperty
 import hap.ruleengine.parts.property.IntProperty
@@ -14,7 +15,7 @@ import java.util.*
 /**
  * Created by Per Malmberg on 2017-01-20.
  */
-class ViewBuilder(root: StackPane) : IPropertyDisplay
+class ViewBuilder(root: StackPane, val component: IComponent) : IPropertyDisplay
 {
 	private val myProps = ArrayList<ViewModel>()
 
@@ -137,7 +138,9 @@ class ViewBuilder(root: StackPane) : IPropertyDisplay
 						addClass(PropertyEditorStyle.applyButton)
 						tooltip("Apply all")
 						setOnAction {
-							myProps.any { !it.commit() }
+							if( !myProps.any { !it.commit() } ) {
+								component.propertiesApplied()
+							}
 						}
 					}
 					button {

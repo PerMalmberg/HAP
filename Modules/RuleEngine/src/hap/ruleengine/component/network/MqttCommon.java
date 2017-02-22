@@ -57,20 +57,14 @@ public abstract class MqttCommon extends Component implements IMqttMessageReceiv
 	}
 
 	@Override
-	protected void propertyChanged( String key )
+	public void propertiesApplied()
 	{
-		connect();
+		connection.reconnect();
 	}
 
 	private void connect()
 	{
-		connection.connect( new ConnectionInfo(
-				getProperty( "Broker", "localhost" ),
-				getProperty( "User", "" ),
-				getProperty( "Password", "" ),
-				getProperty( "Port", 0 ),
-				getProperty( "Secure", false ),
-				doSubscription ? getProperty( "Topic", "" ) : "" ) );
+		connection.connect();
 	}
 
 	@Override
@@ -108,8 +102,21 @@ public abstract class MqttCommon extends Component implements IMqttMessageReceiv
 	}
 
 	@Override
+	public ConnectionInfo getConnectionInfo()
+	{
+		return new ConnectionInfo(
+				getProperty( "Broker", "localhost" ),
+				getProperty( "User", "" ),
+				getProperty( "Password", "" ),
+				getProperty( "Port", 0 ),
+				getProperty( "Secure", false ),
+				doSubscription ? getProperty( "Topic", "" ) : "" );
+	}
+
+	@Override
 	public void connectionStatus( boolean isConnected )
 	{
 		connectionStatus = isConnected;
 	}
+
 }

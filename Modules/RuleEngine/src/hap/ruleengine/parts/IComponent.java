@@ -68,4 +68,7 @@ public interface IComponent
 	void tick();
 
 	void tearDown();
+
+	// Called when the property editor has applied new properties.
+	void propertiesApplied();
 }

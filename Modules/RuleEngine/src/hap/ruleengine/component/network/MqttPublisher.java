@@ -31,7 +31,7 @@ public class MqttPublisher extends MqttCommon
 	public void inputChanged( StringInput input )
 	{
 		// Only have a single input..
-		String topic = getProperty( "topic", "" );
+		String topic = getProperty( "Topic", "" );
 		connection.publish( topic, input.getValue() );
 	}
 
