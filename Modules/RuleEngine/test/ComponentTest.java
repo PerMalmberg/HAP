@@ -4,6 +4,7 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import hap.SysUtil;
+import hap.ruleengine.component.bool.Nand;
 import hap.ruleengine.parts.ComponentFactory;
 import hap.ruleengine.parts.CompositeSerializer;
 import hap.ruleengine.parts.IComponent;
@@ -88,15 +89,25 @@ public class ComponentTest
 		BooleanInput b = c.getBooleanInputs().get( UUID.fromString( "bf7db3d9-5002-4774-a4a2-db8bfc6728d0" ) );
 		BooleanOutput out = c.getBooleanOutputs().get( UUID.fromString( "cf9cb9cb-fc5d-4122-a5de-550c0566b728" ) );
 
-		assertFalse( out.getValue() );
-		a.set( true );
-		assertFalse( out.getValue() );
-		b.set( true );
-		assertTrue( out.getValue() );
-		a.set( false );
-		assertFalse( out.getValue() );
-		b.set( false );
-		assertFalse( out.getValue() );
+		assertFalse( Read2Way( a, b, out, false, false ) );
+		assertFalse( Read2Way( a, b, out, true, false ) );
+		assertFalse( Read2Way( a, b, out, false, true ) );
+		assertTrue( Read2Way( a, b, out, true, true ) );
+	}
+
+	@Test
+	public void testNandComponent()
+	{
+		CompositeComponent c = loadComponent( "TestNandComponent.xml" );
+
+		BooleanInput a = c.getBooleanInputs().get( UUID.fromString( "0a75869e-9c6f-4e4f-b4b3-d55311374038" ) );
+		BooleanInput b = c.getBooleanInputs().get( UUID.fromString( "ccd9b243-649f-4af1-ae96-53f968b47fc7" ) );
+		BooleanOutput out = c.getBooleanOutputs().get( UUID.fromString( "35a1ac39-2cb4-45f1-a762-f8a423f0f54f" ) );
+
+		assertTrue( Read2Way( a, b, out, false, false) );
+		assertTrue( Read2Way( a, b, out, true, false) );
+		assertFalse( Read2Way( a, b, out, true, true) );
+		assertTrue( Read2Way( a, b, out, false, true) );
 	}
 
 	@Test
@@ -232,6 +243,13 @@ public class ComponentTest
 		assertEquals( 5.5, out.getValue(), 0.0 );
 		b.set( 4.5 );
 		assertEquals( 10, out.getValue(), 0.0 );
+	}
+
+	private boolean Read2Way( BooleanInput a, BooleanInput b, BooleanOutput out, boolean aValue, boolean bValue )
+	{
+		a.set( aValue );
+		b.set( bValue );
+		return out.getValue();
 	}
 
 }
