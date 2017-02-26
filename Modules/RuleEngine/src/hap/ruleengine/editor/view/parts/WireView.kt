@@ -1,23 +1,14 @@
 package hap.ruleengine.editor.view.parts
 
 import hap.ruleengine.editor.viewmodel.event.DeleteWire
-import hap.ruleengine.parts.IValueChangeReceiver
 import hap.ruleengine.parts.Wire.IWire
 import javafx.geometry.Point2D
 import javafx.scene.input.MouseButton
 import javafx.scene.shape.Line
 import tornadofx.*
 
-class WireView(val source: OutputView, val target: InputView) : Line(), IValueChangeReceiver
+class WireView(val source: OutputView, val target: InputView) : Line()
 {
-	var currentValue: String by tornadofx.property("")
-	fun currentValueProperty() = getProperty(WireView::currentValue)
-
-	override fun newValue(value: String?)
-	{
-		currentValueProperty().value = value
-	}
-
 	init
 	{
 		source.addWire(this)
@@ -44,7 +35,7 @@ class WireView(val source: OutputView, val target: InputView) : Line(), IValueCh
 		}
 
 		tooltip {
-			textProperty().bind( source.vm.currentValueProperty() )
+			textProperty().bind(source.vm.currentValueProperty())
 		}
 	}
 
