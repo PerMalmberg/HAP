@@ -53,14 +53,7 @@ public abstract class ConnectionPoint implements IConnectionPoint
 	{
 		boolean res;
 
-		if( myParent.isVisualized() )
-		{
-			res = myIsVisibleWhenParentIsVisualized;
-		}
-		else
-		{
-			res = true;
-		}
+		res = ! myParent.isVisualized() || myIsVisibleWhenParentIsVisualized;
 
 		return res;
 	}
