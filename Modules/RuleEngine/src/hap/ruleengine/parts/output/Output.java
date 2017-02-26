@@ -5,6 +5,7 @@ package hap.ruleengine.parts.output;
 
 import hap.ruleengine.parts.ConnectionPoint;
 import hap.ruleengine.parts.IComponent;
+import hap.ruleengine.parts.IValueChangeReceiver;
 import hap.ruleengine.parts.data.CompositeDef;
 import hap.ruleengine.parts.data.WireDef;
 import hap.ruleengine.parts.input.Input;
@@ -33,11 +34,21 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 			++ myCallCount;
 			myValue = value;
 			myRemote.forEach( o -> o.set( value ) );
+			notifyValueSubscribers();
 			-- myCallCount;
 		}
 		else
 		{
 			// TODO: Log event
+		}
+	}
+
+	@Override
+	public void notifyValueSubscribers()
+	{
+		for( IValueChangeReceiver rec : valueChangeReceivers )
+		{
+			rec.newValue( getValue() == null ? "" : getValue().toString() );
 		}
 	}
 
@@ -53,6 +64,9 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 		{
 			myRemote.add( remote );
 			remote.markConnected();
+
+			// Transfer current value
+			set(getValue());
 		}
 		return res;
 	}
@@ -66,7 +80,8 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 	@Override
 	public void disconnectAll()
 	{
-		for( Input<T> input : myRemote ) {
+		for( Input<T> input : myRemote )
+		{
 			input.markDisconnected();
 		}
 		myRemote.clear();

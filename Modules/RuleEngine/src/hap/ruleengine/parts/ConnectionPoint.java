@@ -2,6 +2,7 @@ package hap.ruleengine.parts;
 
 import hap.ruleengine.parts.composite.CompositeComponent;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class ConnectionPoint implements IConnectionPoint
@@ -10,6 +11,7 @@ public abstract class ConnectionPoint implements IConnectionPoint
 	private UUID myId;
 	private final boolean myIsVisibleWhenParentIsVisualized;
 	private IComponent myParent;
+	protected final ArrayList<IValueChangeReceiver> valueChangeReceivers = new ArrayList<>();
 
 	// Used to report the owning component. This is the same as the owner of the component the connection point
 	// is a part of, except when we act as an input/output to a composite.
@@ -66,5 +68,26 @@ public abstract class ConnectionPoint implements IConnectionPoint
 	public UUID getOwningComponentId()
 	{
 		return myOwningComponent;
+	}
+
+	@Override
+	public void subscribeToValueChanges( IValueChangeReceiver receiver )
+	{
+		valueChangeReceivers.add( receiver );
+		notifyValueSubscribers();
+	}
+
+	@Override
+	public void unsubscribeToValueChanges( IValueChangeReceiver receiver )
+	{
+		if( valueChangeReceivers.contains( receiver ) )
+		{
+			valueChangeReceivers.remove( receiver );
+		}
+	}
+
+	@Override
+	public void notifyValueSubscribers()
+	{
 	}
 }

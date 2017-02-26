@@ -22,4 +22,9 @@ public interface IConnectionPoint
 	IWire connectTo( IConnectionPoint other, CompositeComponent cc );
 
 	void disconnectAll();
+
+	void subscribeToValueChanges( IValueChangeReceiver receiver );
+	void unsubscribeToValueChanges( IValueChangeReceiver receiver );
+
+	void notifyValueSubscribers();
 }

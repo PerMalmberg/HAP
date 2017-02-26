@@ -5,60 +5,63 @@ import hap.ruleengine.editor.viewmodel.event.MouseDragDropReleased
 import hap.ruleengine.editor.viewmodel.event.UpdateDragWire
 import hap.ruleengine.editor.viewmodel.parts.OutputVM
 import javafx.scene.input.TransferMode
-import tornadofx.addClass
-import tornadofx.rectangle
-import tornadofx.stackpane
+import tornadofx.*
 import java.util.*
 
-class OutputView : ConnectionPointView() {
-    val vm: OutputVM by param()
+class OutputView : ConnectionPointView()
+{
+	val vm: OutputVM by param()
 
-    override val root =
-            stackpane {
-                rectangle(0.0, 0.0, connectionPointSize, connectionPointSize) {
-                    fill = vm.color
-                    addClass(ComponentStyle.output)
+	override val root =
+			stackpane {
+				rectangle(0.0, 0.0, connectionPointSize, connectionPointSize) {
+					fill = vm.color
+					addClass(ComponentStyle.output)
 
-                    setOnDragDetected {
-                        startConnectWire(vm.connectionPoint, getSceneRelativeCenter())
-                        startFullDrag()
-                    }
+					setOnDragDetected {
+						startConnectWire(vm.connectionPoint, getSceneRelativeCenter())
+						startFullDrag()
+					}
 
-                    setOnMouseDragged {
-                        fire(UpdateDragWire( it.sceneX, it.sceneY))
-                    }
+					setOnMouseDragged {
+						fire(UpdateDragWire(it.sceneX, it.sceneY))
+					}
 
-                    setOnMouseDragExited {
-                        enteredConnectionPoint(null)
-                    }
+					setOnMouseDragExited {
+						enteredConnectionPoint(null)
+					}
 
-                    setOnMouseDragEntered {
-                        enteredConnectionPoint(vm.connectionPoint)
-                    }
+					setOnMouseDragEntered {
+						enteredConnectionPoint(vm.connectionPoint)
+					}
 
-                    setOnMouseDragReleased {
-                        fire(MouseDragDropReleased(it.sceneX, it.sceneY))
-                    }
+					setOnMouseDragReleased {
+						fire(MouseDragDropReleased(it.sceneX, it.sceneY))
+					}
 
-                    setOnDragOver {
-                        it.acceptTransferModes(TransferMode.COPY)
-                    }
+					setOnDragOver {
+						it.acceptTransferModes(TransferMode.COPY)
+					}
 
-                }.apply {
-                    myConnectionPoint = this
-                }
-            }
+					tooltip {
+						this.textProperty().bind(vm.currentValueProperty())
+					}
+				}.apply {
+					myConnectionPoint = this
+				}
+			}
 
-    fun connect(targetInput: InputView): WireView {
-        return WireView(this, targetInput)
-    }
+	fun connect(targetInput: InputView): WireView
+	{
+		return WireView(this, targetInput)
+	}
 
-    override fun disconnect( wire: WireView )
-    {
-        myWire.remove(wire)
-    }
+	override fun disconnect(wire: WireView)
+	{
+		myWire.remove(wire)
+	}
 
-    val id : UUID = vm.id.value
-    val name: String = vm.name.value
-    val color = vm.color
+	val id: UUID = vm.id.value
+	val name: String = vm.name.value
+	val color = vm.color
 }

@@ -25,8 +25,11 @@ public abstract class Input<T> extends ConnectionPoint implements IInput
 
 	public void set( T value )
 	{
-		myValue = value;
-		myParent.inputChanged( this );
+		if( myValue != value)
+		{
+			myValue = value;
+			myParent.inputChanged( this );
+		}
 	}
 
 	@Override
