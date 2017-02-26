@@ -14,9 +14,9 @@ import java.util.*
 
 class Format(id: UUID, executionState: Boolean) : Component(id, executionState)
 {
-	private var inputA = StringInput("A", UUID.fromString("dff06bb5-94e3-4c6f-9357-287e5adc16d9"), this)
-	private var inputB = StringInput("A", UUID.fromString("dff06bb5-94e3-4c6f-9357-287e5adc16d9"), this)
-	private var out = StringOutput("Out", UUID.fromString("78dc1482-6159-40f5-9e40-747165e96423"), this)
+	private var inputA = StringInput("A", UUID.fromString("4af0d4d9-3b60-4577-8812-82e81b5979a7"), this)
+	private var inputB = StringInput("B", UUID.fromString("edfde957-f2bb-49d8-9710-67a2f9bc0748"), this)
+	private var out = StringOutput("Out", UUID.fromString("a9711d6f-62e3-4da2-8c21-9b6928cfc3c6"), this)
 	private val sb = StringBuilder()
 	private val formatter = Formatter(sb)
 
@@ -34,6 +34,11 @@ class Format(id: UUID, executionState: Boolean) : Component(id, executionState)
 
 	override fun inputChanged(input: StringInput)
 	{
+		Update()
+	}
+
+	private fun Update()
+	{
 		if (inputA.value != null && inputB.value != null)
 		{
 			try
@@ -47,5 +52,10 @@ class Format(id: UUID, executionState: Boolean) : Component(id, executionState)
 
 			}
 		}
+	}
+
+	override fun propertiesApplied()
+	{
+		Update()
 	}
 }
