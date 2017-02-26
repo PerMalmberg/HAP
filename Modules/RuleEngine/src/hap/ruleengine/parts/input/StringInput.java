@@ -16,8 +16,7 @@ import java.util.UUID;
 
 public class StringInput extends Input<String>
 {
-	public StringInput( String name, UUID id, IComponent parent, boolean isVisibleInComponent
-	)
+	public StringInput( String name, UUID id, IComponent parent, boolean isVisibleInComponent )
 	{
 		super( name, id, parent, null, isVisibleInComponent );
 	}
@@ -42,7 +41,8 @@ public class StringInput extends Input<String>
 			StringOutput output = (StringOutput) other;
 			wire = new StringWire( Wire.createDef( output, this, StringWire.class.getSimpleName() ) );
 			boolean res = wire.connect( cc );
-			if( !res ) {
+			if( ! res )
+			{
 				wire = null;
 			}
 		}
