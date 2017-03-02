@@ -80,11 +80,16 @@ public class SysUtil
 
 					if( res && outFile.createNewFile() )
 					{
+						System.out.println(outFile.toString());
+						byte[] data = new byte[4096];
 						try( FileOutputStream fos = new FileOutputStream( outFile ) )
 						{
-							byte[] data = new byte[(int) ze.getSize()];
-							zip.read( data, 0, (int) ze.getSize() );
-							fos.write( data );
+							int readLen = zip.read(data, 0, data.length);
+							while( readLen != -1 ) {
+								System.out.println(readLen);
+								fos.write( data, 0, readLen );
+								readLen = zip.read(data, 0, data.length);
+							}
 						}
 
 						extractedFiles.add( outFile );
