@@ -18,6 +18,7 @@
     </orderEntry>
     <orderEntry type="module" module-name="CmdParser4J" exported="" />
     <orderEntry type="module" module-name="FSM" exported="" />
-    <orderEntry type="library" name="no.tornado:tornadofx:1.6.1" level="project" />
+    <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
+    <orderEntry type="library" name="no.tornado:tornadofx:1.6.2" level="project" />
   </component>
 </module>
