@@ -41,4 +41,11 @@ public class StringOutput extends Output<String>
 
 		return wire;
 	}
+
+	@Override
+	public String getValue()
+	{
+		// Never return a null value.
+		return super.getValue() == null ? "" : super.getValue();
+	}
 }

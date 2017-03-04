@@ -19,18 +19,7 @@ class ConnectingState(fsm: MqttConnection) : MqttState(fsm)
 		fsm.getClient().connect(fsm.getOptions(), null, fsm)
 	}
 
-	override fun failure(token: IMqttToken)
-	{
-		if (shouldDisconnect)
-		{
-			fsm.setState(DisconnectState(fsm))
-		}
-		else
-		{
-			// Try again
-			fsm.setState(ConnectingState(fsm))
-		}
-	}
+
 
 	override fun success(token: IMqttToken)
 	{

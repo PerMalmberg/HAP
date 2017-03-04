@@ -21,8 +21,8 @@ class BoolToString(id: UUID, executionState: Boolean) : Component(id, executionS
 		addOutput(out)
 	}
 
-	override fun inputChanged(input: StringInput?)
+	override fun inputChanged(input: BooleanInput?)
 	{
-		out.set(if (inA.value == true) "true" else "false")
+		out.set(if (inA.value ) "true" else "false")
 	}
 }

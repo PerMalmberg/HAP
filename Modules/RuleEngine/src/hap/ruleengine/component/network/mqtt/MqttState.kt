@@ -34,7 +34,15 @@ open class MqttState(val fsm: MqttConnection) : EnterLeaveState()
 
 	open fun failure(token: IMqttToken)
 	{
-
+		if (shouldDisconnect)
+		{
+			fsm.setState(DisconnectState(fsm))
+		}
+		else
+		{
+			// Try again
+			fsm.setState(ReconnectState(fsm))
+		}
 	}
 
 	open fun disconnect()

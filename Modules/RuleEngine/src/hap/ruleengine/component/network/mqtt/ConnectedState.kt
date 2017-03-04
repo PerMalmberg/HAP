@@ -40,11 +40,6 @@ class ConnectedState(fsm: MqttConnection) : MqttState(fsm)
 		}
 	}
 
-	override fun failure(token: IMqttToken)
-	{
-		fsm.setState(IdleState(fsm))
-	}
-
 	override fun publish(topic: String, msg: String)
 	{
 		val toSend = MqttMessage(msg.toByteArray())
