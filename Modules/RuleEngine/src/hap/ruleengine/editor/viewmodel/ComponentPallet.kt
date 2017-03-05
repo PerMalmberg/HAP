@@ -79,7 +79,7 @@ class ComponentPallet : Controller() {
             val category = it.substringBeforeLast('.')
             definition.name = it.replaceBeforeLast('.', "").replaceFirst(".", "")
             definition.nativeType = it
-            val component = factory.create(definition, CompositeComponent(false))
+            val component = factory.create(definition, CompositeComponent(false), false)
             if (component == null) {
                 res = false
             } else {

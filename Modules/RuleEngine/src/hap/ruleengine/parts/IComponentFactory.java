@@ -17,9 +17,9 @@ public interface IComponentFactory
 	CompositeComponent create( File componentData, UUID uid );
 	CompositeComponent create( File compositeFile, UUID uid, CompositeComponent parent );
 
-	IComponent create( ComponentDef c, CompositeComponent cc );
+	IComponent create( ComponentDef c, CompositeComponent cc, boolean liveComponent );
 
-	IComponent createFromName( String componentType, CompositeComponent parent );
+	IComponent createFromName( String componentType, CompositeComponent parent, boolean liveComponent );
 
 	// All composite components are stored in the same folder structure (i.e. 'the component library'). As such it is possible to
 	// locate any imported file by its name.

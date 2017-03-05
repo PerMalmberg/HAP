@@ -44,7 +44,7 @@ public class ComponentTest
 	public void createComponentFromNameTest()
 	{
 		CompositeComponent cc = new CompositeComponent( UUID.randomUUID(), null, false );
-		IComponent c = f.createFromName( "hap.ruleengine.component.bool.And", cc );
+		IComponent c = f.createFromName( "hap.ruleengine.component.bool.And", cc, false );
 		assertNotNull( c );
 		assertEquals( 1, cc.getSubComponentCount() );
 	}
@@ -144,9 +144,9 @@ public class ComponentTest
 		StringInput b = c.getStringInputs().get( UUID.fromString( "0f5e9b0d-0546-43d1-be1c-c3cd3fe20fa0" ) );
 		StringOutput out = c.getStringOutputs().get( UUID.fromString( "dc52864f-3365-4db7-8c13-5d6addd3626c" ) );
 
-		assertEquals( null, out.getValue() );
+		assertEquals( "", out.getValue() );
 		a.set( "" );
-		assertEquals( null, out.getValue() );
+		assertEquals( "", out.getValue() );
 		b.set( "" );
 		assertEquals( "", out.getValue() );
 		a.set( "ABCD" );

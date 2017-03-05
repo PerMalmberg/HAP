@@ -17,7 +17,7 @@ import javafx.stage.Window
 import java.io.File
 import java.util.*
 
-class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<UserInteractionState>(), IUserInteraction {
+class UserInteractionFSM(val surface: IDrawingSurfaceView, val vm : DrawingSurfaceVM) : chainedfsm.FSM<UserInteractionState>(), IUserInteraction {
     override fun endDragComponentFromComponentPallet() {
         currentState.endDragComponentFromComponentPallet()
     }
@@ -88,4 +88,5 @@ class UserInteractionFSM(val surface: IDrawingSurfaceView) : chainedfsm.FSM<User
 
     var currentFile: File? = null
     val selectedComponents = HashMap<UUID, ComponentVM>()
+    fun liveComponents() = vm.getLiveComponents()
 }

@@ -45,7 +45,7 @@ class DisconnectState(fsm: MqttConnection) : MqttState(fsm)
 	{
 		if (token == this.token)
 		{
-			System.out.println("Diconnected")
+			System.out.println("Disconnected")
 			fsm.setState(IdleState(fsm))
 		}
 	}

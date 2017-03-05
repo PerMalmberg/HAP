@@ -11,7 +11,7 @@ class DraggingComponentFromPallet constructor(val componentType: String, fsm: Us
     private val factory = ComponentFactory()
 
     override fun mouseDragDropReleased(event: MouseDragDropReleased, view: IDrawingSurfaceView, currentCC: CompositeComponent) {
-        val c = factory.createFromName(componentType, currentCC)
+        val c = factory.createFromName(componentType, currentCC, fsm.liveComponents())
         if (c != null) {
             // Component has been created, now visualize it.
             val localPosition = view.sceneToLocal(event.sceneX, event.sceneY)

@@ -116,7 +116,7 @@ public class ComponentFactory implements IComponentFactory
 	//
 	///////////////////////////////////////////////////////////////////////////
 	@Override
-	public IComponent create( ComponentDef def, CompositeComponent cc )
+	public IComponent create( ComponentDef def, CompositeComponent cc, boolean allowExecution )
 	{
 		Component c = null;
 
@@ -127,7 +127,7 @@ public class ComponentFactory implements IComponentFactory
 			if( componentClass != null )
 			{
 				Constructor<?> ctor = componentClass.getConstructor(UUID.class, boolean.class);
-				c = (Component) ctor.newInstance(UUID.fromString(def.getInstanceId()), false);
+				c = (Component) ctor.newInstance(UUID.fromString(def.getInstanceId()), allowExecution);
 
 				// Let the parts load itself
 				if( !c.loadComponentFromData(def) )
@@ -155,12 +155,12 @@ public class ComponentFactory implements IComponentFactory
 	//
 	///////////////////////////////////////////////////////////////////////////
 	@Override
-	public IComponent createFromName( @NotNull String componentType, @NotNull CompositeComponent parent )
+	public IComponent createFromName( @NotNull String componentType, @NotNull CompositeComponent parent, boolean allowExecution )
 	{
 		ComponentDef def = new ComponentDef();
 		def.setNativeType(componentType);
 		def.setInstanceId(UUID.randomUUID().toString());
-		return create(def, parent);
+		return create(def, parent, allowExecution);
 	}
 
 	///////////////////////////////////////////////////////////////////////////

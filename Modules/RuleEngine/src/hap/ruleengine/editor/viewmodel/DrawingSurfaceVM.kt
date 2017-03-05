@@ -27,6 +27,8 @@ class DrawingSurfaceVM : ViewModel()
 
 	var surface: IDrawingSurfaceView by singleAssign()
 
+	fun getLiveComponents() = liveComponents
+
 	init
 	{
 		subscribeToEvents()
@@ -41,7 +43,7 @@ class DrawingSurfaceVM : ViewModel()
 	fun init(s: IDrawingSurfaceView)
 	{
 		surface = s
-		interaction = UserInteractionFSM(surface)
+		interaction = UserInteractionFSM(surface, this)
 	}
 
 	private fun subscribeToEvents()

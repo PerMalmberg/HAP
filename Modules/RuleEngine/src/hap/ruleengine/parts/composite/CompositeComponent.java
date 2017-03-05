@@ -193,7 +193,7 @@ public class CompositeComponent extends Component
 		{
 			ComponentDef def = definitions.get( i );
 
-			IComponent comp = factory.create( def, this );
+			IComponent comp = factory.create( def, this, getExecutionState() );
 			if( comp != null )
 			{
 				addComponent( comp );

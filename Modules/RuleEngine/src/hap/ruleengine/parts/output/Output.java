@@ -19,6 +19,7 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 	private T myValue;
 	private List<Input<T>> myRemote = new ArrayList<>();
 	private int myCallCount = 0;
+	private boolean firstSet = true;
 
 	Output( String name, UUID id, IComponent parent, T defaultValue, boolean isVisibleWhenParentIsVisualized )
 	{
@@ -29,8 +30,10 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 	public void set( T value )
 	{
 		// Prevent recursive call-chains
-		if( myCallCount == 0 )
+		// Only allow update if calue has changed, or if it is the first time it is set.
+		if( myCallCount == 0 && ( value != myValue || firstSet ) )
 		{
+			firstSet = false;
 			++ myCallCount;
 			myValue = value;
 			myRemote.forEach( o -> o.set( value ) );

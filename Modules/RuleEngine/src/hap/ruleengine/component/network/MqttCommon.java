@@ -59,7 +59,10 @@ public abstract class MqttCommon extends Component implements IMqttMessageReceiv
 	@Override
 	public void propertiesApplied()
 	{
-		connection.reconnect();
+		if( getExecutionState() )
+		{
+			connection.reconnect();
+		}
 	}
 
 	private void connect()
