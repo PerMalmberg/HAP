@@ -30,7 +30,7 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 	public void set( T value )
 	{
 		// Prevent recursive call-chains
-		// Only allow update if calue has changed, or if it is the first time it is set.
+		// Only allow update if value has changed, or if it is the first time it is set.
 		if( myCallCount == 0 && ( value != myValue || firstSet ) )
 		{
 			firstSet = false;
