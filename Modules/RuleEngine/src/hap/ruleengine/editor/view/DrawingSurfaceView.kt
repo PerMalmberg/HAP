@@ -12,6 +12,7 @@ import hap.ruleengine.parts.composite.CompositeComponent
 import hap.ui.event.AppShutdownEvent
 import javafx.geometry.Point2D
 import javafx.scene.Group
+import javafx.scene.control.ScrollPane
 import javafx.scene.input.TransferMode
 import javafx.scene.paint.Color
 import javafx.scene.shape.Line
@@ -32,6 +33,7 @@ class DrawingSurfaceView : Fragment(), IDrawingSurfaceView
 	private var dragLine: Line by singleAssign()
 	val components: HashMap<UUID, ComponentView> = HashMap()
 	val drawingSize = 5000.0
+	private var pane: ScrollPane by singleAssign()
 	override fun getVM() = vm
 
 	private fun getComponentView(id: UUID): ComponentView?
@@ -71,6 +73,14 @@ class DrawingSurfaceView : Fragment(), IDrawingSurfaceView
 		wireLayer.children.clear()
 		wireLayer += wireBackground
 		wireLayer += dragLine
+	}
+
+	override fun getScrollOffset(): Point2D
+	{
+		// Force a layout update so that pane.viewportBounds.minX/Y is updated
+		pane.requestLayout()
+		pane.layout()
+		return Point2D(pane.viewportBounds.minX, pane.viewportBounds.minY)
 	}
 
 	override val root = scrollpane {
@@ -128,6 +138,8 @@ class DrawingSurfaceView : Fragment(), IDrawingSurfaceView
 				componentLayer = this
 			}
 		}
+	}.apply {
+		pane = this
 	}
 
 

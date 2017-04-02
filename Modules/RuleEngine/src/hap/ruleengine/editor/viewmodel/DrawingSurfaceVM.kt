@@ -155,13 +155,14 @@ class DrawingSurfaceVM : ViewModel()
 
 	fun setDragWire(startSceneRelativeCenter: Point2D, sceneX: Double, sceneY: Double)
 	{
-		dragLineVisible = true
-		var xy = surface.sceneToLocal(startSceneRelativeCenter.x, startSceneRelativeCenter.y)
+		val offset =  surface.getScrollOffset()
+		var xy = surface.sceneToLocal(startSceneRelativeCenter.x - offset.x, startSceneRelativeCenter.y - offset.y)
 		dragLineStartX = xy.x
 		dragLineStartY = xy.y
-		xy = surface.sceneToLocal(sceneX, sceneY)
+		xy = surface.sceneToLocal(sceneX - offset.x, sceneY - offset.y)
 		dragLineEndX = xy.x
 		dragLineEndY = xy.y
+		dragLineVisible = true
 	}
 
 	fun hideDragWire()

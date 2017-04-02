@@ -10,24 +10,32 @@ import hap.ruleengine.parts.composite.CompositeComponent
 import java.io.File
 import java.util.*
 
-class DraggingCompositeFromPallet constructor(val sourceFile: String, fsm: UserInteractionFSM) : UserInteractionState(fsm) {
-    private val factory = ComponentFactory()
+class DraggingCompositeFromPallet constructor(val sourceFile: String, fsm: UserInteractionFSM) : UserInteractionState(fsm)
+{
+	private val factory = ComponentFactory()
 
-    override fun mouseDragDropReleased(event: MouseDragDropReleased, view: IDrawingSurfaceView, currentCC: CompositeComponent) {
-        val c = factory.create(File(sourceFile), UUID.randomUUID(), currentCC )
-        if (c != null) {
-            // Component has been created, now visualize it.
-            val localPosition = view.sceneToLocal(event.sceneX, event.sceneY)
-            val vm = CompositeVM(sourceFile, c)
-            vm.x.value = localPosition.x
-            vm.y.value = localPosition.y
-            view.add(vm)
-        }
+	override fun mouseDragDropReleased(event: MouseDragDropReleased, view: IDrawingSurfaceView, currentCC: CompositeComponent)
+	{
+		val c = factory.create(File(sourceFile), UUID.randomUUID(), currentCC)
+		if (c != null)
+		{
+			// Component has been created, now visualize it.
+			val vm = CompositeVM(sourceFile, c)
 
-        fsm.setState(NoAction(fsm))
-    }
+			val offset = view.getScrollOffset()
+			val localPosition = view.sceneToLocal(event.sceneX - offset.x, event.sceneY - offset.y)
 
-    override fun endDragComponentFromComponentPallet() {
-        fsm.setState(NoAction(fsm))
-    }
+			vm.x.value = localPosition.x
+			vm.y.value = localPosition.y
+
+			view.add(vm)
+		}
+
+		fsm.setState(NoAction(fsm))
+	}
+
+	override fun endDragComponentFromComponentPallet()
+	{
+		fsm.setState(NoAction(fsm))
+	}
 }
