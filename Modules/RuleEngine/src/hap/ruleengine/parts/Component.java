@@ -79,14 +79,7 @@ public abstract class Component implements IComponent, IComponentPropertyAccess
 	@Override
 	public String getProperty( String key, String defaultValue )
 	{
-		if( myProperties.containsKey( key ) )
-		{
-			return myProperties.get( key );
-		}
-		else
-		{
-			return defaultValue;
-		}
+		return myProperties.getOrDefault( key, defaultValue );
 	}
 
 	@Override
@@ -173,16 +166,19 @@ public abstract class Component implements IComponent, IComponentPropertyAccess
 	public void addInput( BooleanInput input )
 	{
 		myBooleanInput.put( input.getId(), input );
+		inputChanged( input );
 	}
 
 	public void addInput( DoubleInput input )
 	{
 		myDoubleInput.put( input.getId(), input );
+		inputChanged( input );
 	}
 
 	public void addInput( StringInput input )
 	{
 		myStringInput.put( input.getId(), input );
+		inputChanged( input );
 	}
 
 	public void addOutput( BooleanOutput output )

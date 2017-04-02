@@ -19,7 +19,6 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 	private T myValue;
 	private List<Input<T>> myRemote = new ArrayList<>();
 	private int myCallCount = 0;
-	private boolean firstSet = true;
 
 	Output( String name, UUID id, IComponent parent, T defaultValue, boolean isVisibleWhenParentIsVisualized )
 	{
@@ -31,12 +30,10 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 	{
 		// Prevent recursive call-chains
 		// Only allow update if value has changed, or if it is the first time it is set.
-		if( myCallCount == 0
-				&& ( value != myValue || firstSet ) )
+		if( myCallCount == 0 )
 		{
 			try
 			{
-				firstSet = false;
 				++ myCallCount;
 				myValue = value;
 				myRemote.forEach( o -> o.set( value ) );
@@ -44,6 +41,8 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 			}
 			catch( Exception ignored )
 			{
+				// The remote component might leak exceptions so we protect our selves from them,
+				// but we can't do anything about them.
 			}
 			finally
 			{

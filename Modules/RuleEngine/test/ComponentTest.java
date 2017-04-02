@@ -104,6 +104,7 @@ public class ComponentTest
 		BooleanInput b = c.getBooleanInputs().get( UUID.fromString( "ccd9b243-649f-4af1-ae96-53f968b47fc7" ) );
 		BooleanOutput out = c.getBooleanOutputs().get( UUID.fromString( "35a1ac39-2cb4-45f1-a762-f8a423f0f54f" ) );
 
+		assertTrue( out.getValue() );
 		assertTrue( Read2Way( a, b, out, false, false) );
 		assertTrue( Read2Way( a, b, out, true, false) );
 		assertFalse( Read2Way( a, b, out, true, true) );

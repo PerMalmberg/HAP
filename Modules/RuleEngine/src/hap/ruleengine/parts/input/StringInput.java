@@ -18,12 +18,12 @@ public class StringInput extends Input<String>
 {
 	public StringInput( String name, UUID id, IComponent parent, boolean isVisibleInComponent )
 	{
-		super( name, id, parent, null, isVisibleInComponent );
+		super( name, id, parent, "", isVisibleInComponent );
 	}
 
 	public StringInput( String name, UUID id, IComponent parent )
 	{
-		super( name, id, parent, null, true );
+		super( name, id, parent, "", true );
 	}
 
 	@Override

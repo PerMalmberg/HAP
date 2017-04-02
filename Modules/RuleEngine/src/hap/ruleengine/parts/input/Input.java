@@ -25,8 +25,13 @@ public abstract class Input<T> extends ConnectionPoint implements IInput
 
 	public void set( T value )
 	{
-		myValue = value;
-		myParent.inputChanged( this );
+		// Don't propagate if value is the same
+		// Note: use equals since the type might be a String
+		if( !value.equals( myValue ) )
+		{
+			myValue = value;
+			myParent.inputChanged( this );
+		}
 	}
 
 	@Override
