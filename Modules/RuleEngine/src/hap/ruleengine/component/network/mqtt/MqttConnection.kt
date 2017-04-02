@@ -87,9 +87,8 @@ class MqttConnection(val receiver: IMqttMessageReceiver) : chainedfsm.FSM<MqttSt
 	{
 		val info = receiver.connectionInfo
 		val opt = MqttConnectOptions()
-		opt.isAutomaticReconnect = false
+		opt.isAutomaticReconnect = true
 		opt.isCleanSession = true
-		opt.keepAliveInterval = 5
 
 		if (info.user.isNotEmpty() && info.password.isNotEmpty())
 		{

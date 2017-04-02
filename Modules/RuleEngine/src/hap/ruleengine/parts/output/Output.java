@@ -31,18 +31,24 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 	{
 		// Prevent recursive call-chains
 		// Only allow update if value has changed, or if it is the first time it is set.
-		if( myCallCount == 0 && ( value != myValue || firstSet ) )
+		if( myCallCount == 0
+				&& ( value != myValue || firstSet ) )
 		{
-			firstSet = false;
-			++ myCallCount;
-			myValue = value;
-			myRemote.forEach( o -> o.set( value ) );
-			notifyValueSubscribers();
-			-- myCallCount;
-		}
-		else
-		{
-			// TODO: Log event
+			try
+			{
+				firstSet = false;
+				++ myCallCount;
+				myValue = value;
+				myRemote.forEach( o -> o.set( value ) );
+				notifyValueSubscribers();
+			}
+			catch( Exception ignored )
+			{
+			}
+			finally
+			{
+				-- myCallCount;
+			}
 		}
 	}
 
@@ -69,7 +75,7 @@ public abstract class Output<T> extends ConnectionPoint implements IOutput
 			remote.markConnected();
 
 			// Transfer current value
-			set(getValue());
+			set( getValue() );
 		}
 		return res;
 	}

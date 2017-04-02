@@ -17,14 +17,6 @@ open class MqttState(val fsm: MqttConnection) : EnterLeaveState()
 
 	open fun connectionLost()
 	{
-		if (shouldDisconnect)
-		{
-			fsm.setState(DisconnectState(fsm))
-		}
-		else
-		{
-			fsm.setState(ConnectingState(fsm))
-		}
 	}
 
 	open fun success(token: IMqttToken)

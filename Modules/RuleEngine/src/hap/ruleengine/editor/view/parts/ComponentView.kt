@@ -33,11 +33,11 @@ class ComponentView : Fragment()
 				layoutXProperty().bindBidirectional(vm.x)
 				layoutYProperty().bindBidirectional(vm.y)
 
-				layoutXProperty().addListener { xValue, old, newValue ->
+				layoutXProperty().addListener { _, _, _ ->
 					updateWires()
 				}
 
-				layoutYProperty().addListener { yValue, old, newValue ->
+				layoutYProperty().addListener { _, _, _ ->
 					updateWires()
 				}
 
@@ -151,7 +151,7 @@ class ComponentView : Fragment()
 								}
 							}
 
-							vm.isSelectedProperty().addListener { observableValue, oldValue, newValue ->
+							vm.isSelectedProperty().addListener { _, _, newValue ->
 								if (newValue)
 								{
 									addClass(ComponentStyle.componentSelected)
