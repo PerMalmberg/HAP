@@ -143,7 +143,7 @@ public class ComponentFactory implements IComponentFactory
 		}
 		catch( ClassNotFoundException | NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e )
 		{
-			myLogger.severe(e.getMessage());
+			myLogger.finest(e.getMessage());
 		}
 
 		return c;
