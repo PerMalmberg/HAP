@@ -1,12 +1,26 @@
 # HAP
 Home Automation Platform
 
+The goal of this project has changed quite a bit from the initial design (found below). The current goal is as follows:
+ 
+ * Make the `RuleEngine` module the main server-side application.
+   * Rework the module so that it doesn't need the `ModuleRunner`
+   * Create a RuleEngine component for 1-Wire communication and scrap the `OneWire` project.
+ * Scrap the Core, CLI, ModuleRunner projects.
+ * Open up a channel for online-configuration of RuleEngine via the editor `HAPed`
+ * Write documentation for how to set up the system.
+ 
+ ## System requirements
+ * Java 8
+
+# Original (obsolete) design below this line
+
 This is a very early work-in-progress, don't expect things to work.
 
-## Requirements
+### Requirements
 * Java-based
 
-###Central process
+####Central process
 * Runs on low-end hardware, such as the Raspberry Pi.
 * Central process
   * No reload needed to update configuraton.
@@ -16,7 +30,7 @@ This is a very early work-in-progress, don't expect things to work.
     * Provides access to the commands exposed by each of the modules.
     * If possible, provide bash-like editing ability, otherwise allow a command to be automatically repeated so that statuses can be printed in a polled fashion.
     
-###Modules
+####Modules
 * Each module is a separate process started by the central server, this enables adding/removing/starting/stopping modules at run-time.
 * Each module process is started with a low initial memory footprint specified by the Java Xms-swich, eg. -Xms20m, to prevent unnecessary large memory usage, at the cost of longer startup-times.
 * Each module is self-contained, i.e. no shared class files. This enables individual updates and prevents versioning problems between modules.
@@ -29,9 +43,9 @@ This is a very early work-in-progress, don't expect things to work.
 * Modules communicates to external parties via MQTT with the topic scheme ```/<ModuleType>/<UserDefinedID>/<topic>``` and data is in JSON format.
   
 
-##External dependencies
+###External dependencies
 MQTT broker
 
 
-## Misc links
+### Misc links
 https://github.com/Pi4J/pi4j
