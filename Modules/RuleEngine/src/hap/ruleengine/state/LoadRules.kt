@@ -9,7 +9,6 @@ import chainedfsm.interfaces.IEnter
 import chainedfsm.interfaces.ILeave
 import cmdparser4j.CmdParser4J
 import hap.SysUtil
-import hap.communication.Communicator
 import hap.ruleengine.RuleEngine
 import hap.ruleengine.config.HAP
 import hap.ruleengine.parts.ComponentFactory

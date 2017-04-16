@@ -10,8 +10,6 @@ import hap.ruleengine.parts.composite.CompositeComponent
 import hap.ruleengine.state.BaseState
 import hap.ruleengine.state.LoadRules
 import java.io.IOException
-import java.net.URI
-import java.net.URISyntaxException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -147,7 +145,7 @@ class RuleEngine private constructor() : chainedfsm.FSM<BaseState>()
 		{
 			val m = RuleEngine()
 
-			val result = if( m.initialize(args) && m.run() ) 0 else 1
+			val result = if (m.initialize(args) && m.run()) 0 else 1
 
 			System.exit(result)
 		}

@@ -80,13 +80,11 @@ public class SysUtil
 
 					if( res && outFile.createNewFile() )
 					{
-						System.out.println(outFile.toString());
 						byte[] data = new byte[4096];
 						try( FileOutputStream fos = new FileOutputStream( outFile ) )
 						{
 							int readLen = zip.read(data, 0, data.length);
 							while( readLen != -1 ) {
-								System.out.println(readLen);
 								fos.write( data, 0, readLen );
 								readLen = zip.read(data, 0, data.length);
 							}
