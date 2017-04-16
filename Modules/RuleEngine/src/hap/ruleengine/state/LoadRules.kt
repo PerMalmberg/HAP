@@ -10,6 +10,7 @@ import chainedfsm.interfaces.ILeave
 import cmdparser4j.CmdParser4J
 import hap.SysUtil
 import hap.communication.Communicator
+import hap.ruleengine.RuleEngine
 import hap.ruleengine.config.HAP
 import hap.ruleengine.parts.ComponentFactory
 import hap.ruleengine.parts.composite.CompositeComponent
@@ -22,7 +23,7 @@ import javax.xml.XMLConstants
 import javax.xml.bind.JAXBContext
 import javax.xml.validation.SchemaFactory
 
-class LoadRules(val loadedSchema: HashMap<UUID, CompositeComponent>, val parser: CmdParser4J, val com: Communicator) : BaseState(com), IEnter, ILeave
+class LoadRules(val loadedSchema: HashMap<UUID, CompositeComponent>, val parser: CmdParser4J, engine : RuleEngine) : BaseState(engine), IEnter, ILeave
 {
 	private var xsdPath = Files.createTempDirectory("RuleEngine-tmp")
 	private val factory = ComponentFactory(ComponentFactory.STANDARD_LIBRARY)
@@ -72,7 +73,7 @@ class LoadRules(val loadedSchema: HashMap<UUID, CompositeComponent>, val parser:
 		}
 
 
-		com.setState( Execute( loadedSchema, com ) )
+		engine.setState( Execute( loadedSchema, engine ) )
 	}
 
 	override fun leave()
