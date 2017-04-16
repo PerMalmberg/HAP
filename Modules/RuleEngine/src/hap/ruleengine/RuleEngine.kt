@@ -6,10 +6,6 @@ package hap.ruleengine
 import cmdparser4j.*
 import hap.LogFormatter
 import hap.SysUtil
-import hap.basemodule.ModuleRunner
-import hap.communication.Communicator
-import hap.communication.state.CommState
-import hap.message.Message
 import hap.ruleengine.parts.composite.CompositeComponent
 import hap.ruleengine.state.BaseState
 import hap.ruleengine.state.LoadRules
@@ -37,7 +33,7 @@ class RuleEngine private constructor() : chainedfsm.FSM<BaseState>()
 
 	private fun initialize(args: Array<String>): Boolean
 	{
-		myParser.accept("--config").asString(1).describedAs("Full path to configuration file").setMandatory().withAlias("-c")
+		myParser.accept("--config").asString(1).describedAs("Full path to configuration file").withAlias("-c")
 		myParser.accept("--working-dir").asString(1).describedAs("The working directory").withAlias("-w")
 		myParser.accept("--log-to-console").asBoolean(1).describedAs("If specified, logging to console will be enabled").withAlias("-l")
 		myParser.accept("--log-to-file").asBoolean(1).describedAs("If specified, logging to file will be enabled").withAlias("-f")
@@ -85,7 +81,7 @@ class RuleEngine private constructor() : chainedfsm.FSM<BaseState>()
 			}
 			else
 			{
-				myWorkDir = Paths.get(SysUtil.getFullOrRelativePath(ModuleRunner::class.java, myParser.getString("--working-dir", 0, "data")))
+				myWorkDir = Paths.get(SysUtil.getFullOrRelativePath(RuleEngine::class.java, myParser.getString("--working-dir", 0, "data")))
 
 				if (Files.exists(myWorkDir))
 				{
@@ -110,25 +106,9 @@ class RuleEngine private constructor() : chainedfsm.FSM<BaseState>()
 					myLog.severe("Working directory does not exist (" + myWorkDir.toString() + ")")
 					res = false
 				}
-
-				try
-				{
-					val uri = URI(parser.getString("--broker"))
-					if (uri.scheme == null)
-					{
-						myLog.severe("Broker must be specified with URI scheme, i.e. tcp://<DNS|IP>")
-						res = false
-					}
-				}
-				catch (e: URISyntaxException)
-				{
-					myLog.severe("Invalid broker specified")
-					res = false
-				}
-
 			}
 
-			if (!parser.getBool("--log-to-console"))
+			if (!parser.getBool("--log-to-console", 0, true))
 			{
 				myLog.removeHandler(console)
 			}
@@ -167,12 +147,7 @@ class RuleEngine private constructor() : chainedfsm.FSM<BaseState>()
 		{
 			val m = RuleEngine()
 
-			var result = 1
-
-			if (m.initialize(args))
-			{
-				result = if (m.run()) 0 else 1
-			}
+			val result = if( m.initialize(args) && m.run() ) 0 else 1
 
 			System.exit(result)
 		}

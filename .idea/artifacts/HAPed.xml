@@ -7,7 +7,6 @@
       <element id="module-output" name="Common" />
       <element id="module-output" name="CmdParser4J" />
       <element id="module-output" name="FSM" />
-      <element id="module-output" name="BaseModule" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/org.eclipse.paho.client.mqttv3-1.1.0.jar" path-in-jar="/" />
       <element id="dir-copy" path="$PROJECT_DIR$/resources/famfamfam" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-runtime.jar" path-in-jar="/" />

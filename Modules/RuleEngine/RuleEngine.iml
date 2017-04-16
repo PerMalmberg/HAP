@@ -26,7 +26,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="BaseModule" exported="" />
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>

@@ -59,19 +59,22 @@ class LoadRules(val loadedSchema: HashMap<UUID, CompositeComponent>, val parser:
 
 		val configFile = parser.getString("--config")
 
-
-		val config = u.unmarshal(File(configFile)) as HAP
-
-		for (c in config.composites.composite)
+		if( configFile != null )
 		{
-			val uuid = UUID.randomUUID()
-			val composite = factory.create( factory.findImport( c.src), uuid)
-			if (composite != null)
+			val config = u.unmarshal(File(configFile)) as HAP
+
+			for (c in config.composites.composite)
 			{
-				loadedSchema.put(uuid, composite)
+				val uuid = UUID.randomUUID()
+				val composite = factory.create(factory.findImport(c.src), uuid)
+				if (composite != null)
+				{
+					loadedSchema.put(uuid, composite)
+				}
 			}
 		}
 
+		myLog.info("Loaded ${loadedSchema.size} composites")
 
 		engine.setState( Execute( loadedSchema, engine ) )
 	}

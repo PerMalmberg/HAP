@@ -3,10 +3,8 @@
     <output-path>$PROJECT_DIR$/out/artifacts/modules</output-path>
     <root id="archive" name="RuleEngine.jar">
       <element id="module-output" name="RuleEngine" />
-      <element id="module-output" name="Common" />
       <element id="module-output" name="CmdParser4J" />
       <element id="module-output" name="FSM" />
-      <element id="module-output" name="BaseModule" />
       <element id="directory" name="org">
         <element id="extracted-dir" path="$PROJECT_DIR$/lib/org.eclipse.paho.client.mqttv3-1.1.0.jar" path-in-jar="/org/" />
       </element>
@@ -24,6 +22,7 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-codec-1.9.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/org.apache.felix.framework-5.4.0.jar" path-in-jar="/" />
       <element id="library" level="project" name="no.tornado:tornadofx:1.6.2" />
+      <element id="module-output" name="Common" />
     </root>
   </artifact>
 </component>

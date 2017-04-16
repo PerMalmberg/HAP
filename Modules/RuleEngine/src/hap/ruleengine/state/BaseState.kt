@@ -4,10 +4,12 @@
 package hap.ruleengine.state
 
 import hap.ruleengine.RuleEngine
+import java.util.logging.Logger
 
 
 abstract class BaseState(val engine : RuleEngine) : chainedfsm.EnterLeaveState()
 {
+	protected var myLog: Logger = Logger.getLogger("RuleEngine")
 	open fun tick() {}
 }
 
