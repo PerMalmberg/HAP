@@ -11,9 +11,6 @@
     <content url="file://$MODULE_DIR$/../../config">
       <sourceFolder url="file://$MODULE_DIR$/../../config" type="java-test-resource" />
     </content>
-    <content url="file://$MODULE_DIR$/../../resources">
-      <sourceFolder url="file://$MODULE_DIR$/../../resources/famfamfam" type="java-resource" />
-    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Common" exported="" />
