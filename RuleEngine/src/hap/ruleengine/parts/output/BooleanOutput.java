@@ -42,4 +42,10 @@ public class BooleanOutput extends Output<Boolean>
 
 		return wire;
 	}
+
+	public void toggle()
+	{
+		set( !getValue() );
+		set( !getValue() );
+	}
 }

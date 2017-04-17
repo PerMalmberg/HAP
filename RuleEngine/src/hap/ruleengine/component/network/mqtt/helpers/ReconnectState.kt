@@ -1,4 +1,4 @@
-package hap.ruleengine.component.network.mqtt
+package hap.ruleengine.component.network.mqtt.helpers
 
 import chainedfsm.EnterChain
 import chainedfsm.interfaces.IEnter
@@ -7,7 +7,7 @@ import org.eclipse.paho.client.mqttv3.IMqttToken
 /**
  * Created by Per Malmberg on 2017-02-21.
  */
-class DisconnectState(fsm: MqttConnection) : MqttState(fsm)
+class ReconnectState(fsm:MqttConnection) : MqttState(fsm)
 {
 	private var token: IMqttToken? = null
 
@@ -24,7 +24,7 @@ class DisconnectState(fsm: MqttConnection) : MqttState(fsm)
 		}
 		else
 		{
-			fsm.setState(IdleState(fsm))
+			fsm.setState(ConnectingState(fsm))
 		}
 	}
 
@@ -38,15 +38,14 @@ class DisconnectState(fsm: MqttConnection) : MqttState(fsm)
 		{
 
 		}
-		fsm.setState(IdleState(fsm))
+		fsm.setState(ReconnectState(fsm))
 	}
 
 	override fun success(token: IMqttToken)
 	{
 		if (token == this.token)
 		{
-			System.out.println("Disconnected")
-			fsm.setState(IdleState(fsm))
+			fsm.setState(ConnectingState(fsm))
 		}
 	}
 }

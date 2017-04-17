@@ -1,4 +1,4 @@
-package hap.ruleengine.component.network.mqtt
+package hap.ruleengine.component.network.mqtt.helpers
 
 /**
  * Created by Per Malmberg on 2017-02-21.

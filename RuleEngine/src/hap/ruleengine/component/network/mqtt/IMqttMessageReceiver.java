@@ -1,6 +1,6 @@
-package hap.ruleengine.component.network;
+package hap.ruleengine.component.network.mqtt;
 
-import hap.ruleengine.component.network.mqtt.ConnectionInfo;
+import hap.ruleengine.component.network.mqtt.helpers.ConnectionInfo;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**

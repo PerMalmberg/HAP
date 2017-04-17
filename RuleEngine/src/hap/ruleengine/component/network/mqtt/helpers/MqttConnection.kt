@@ -1,6 +1,6 @@
-package hap.ruleengine.component.network.mqtt
+package hap.ruleengine.component.network.mqtt.helpers
 
-import hap.ruleengine.component.network.IMqttMessageReceiver
+import hap.ruleengine.component.network.mqtt.IMqttMessageReceiver
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import java.util.*
@@ -19,35 +19,44 @@ class MqttConnection(val receiver: IMqttMessageReceiver) : chainedfsm.FSM<MqttSt
 
 	override fun messageArrived(topic: String?, message: MqttMessage?)
 	{
-		synchronized(client) {
+		synchronized(client)
+		{
+			receiver.connectionStatus(client.isConnected)
 			receiver.messageArrived(topic, message)
 		}
 	}
 
 	override fun connectionLost(cause: Throwable?)
 	{
-		synchronized(client) {
+		synchronized(client)
+		{
+			receiver.connectionStatus(client.isConnected)
 			currentState.connectionLost()
 		}
-		receiver.connectionStatus(false)
 	}
 
 	override fun deliveryComplete(token: IMqttDeliveryToken?)
 	{
-		synchronized(client) {
+		synchronized(client)
+		{
+			receiver.connectionStatus(client.isConnected)
 		}
 	}
 
 	override fun onSuccess(token: IMqttToken)
 	{
-		synchronized(client) {
+		synchronized(client)
+		{
+			receiver.connectionStatus(client.isConnected)
 			currentState.success(token)
 		}
 	}
 
 	override fun onFailure(token: IMqttToken, exception: Throwable?)
 	{
-		synchronized(client) {
+		synchronized(client)
+		{
+			receiver.connectionStatus(client.isConnected)
 			currentState.failure(token)
 		}
 	}
@@ -57,28 +66,32 @@ class MqttConnection(val receiver: IMqttMessageReceiver) : chainedfsm.FSM<MqttSt
 
 	fun connect()
 	{
-		synchronized(client) {
+		synchronized(client)
+		{
 			currentState.connect()
 		}
 	}
 
 	fun disconnect()
 	{
-		synchronized(client) {
+		synchronized(client)
+		{
 			currentState.disconnect()
 		}
 	}
 
 	fun reconnect()
 	{
-		synchronized(client) {
+		synchronized(client)
+		{
 			setState(ReconnectState(this))
 		}
 	}
 
 	fun publish(topic: String, msg: String)
 	{
-		synchronized(client) {
+		synchronized(client)
+		{
 			currentState.publish(topic, msg)
 		}
 	}

@@ -1,4 +1,4 @@
-package hap.ruleengine.component.network.mqtt
+package hap.ruleengine.component.network.mqtt.helpers
 
 import chainedfsm.EnterLeaveState
 import org.eclipse.paho.client.mqttv3.IMqttToken

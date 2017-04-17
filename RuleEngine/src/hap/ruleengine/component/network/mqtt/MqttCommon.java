@@ -1,9 +1,9 @@
-package hap.ruleengine.component.network;
+package hap.ruleengine.component.network.mqtt;
 
 
 import hap.ruleengine.component.IPropertyDisplay;
-import hap.ruleengine.component.network.mqtt.ConnectionInfo;
-import hap.ruleengine.component.network.mqtt.MqttConnection;
+import hap.ruleengine.component.network.mqtt.helpers.ConnectionInfo;
+import hap.ruleengine.component.network.mqtt.helpers.MqttConnection;
 import hap.ruleengine.parts.Component;
 import hap.ruleengine.parts.composite.CompositeComponent;
 import hap.ruleengine.parts.output.BooleanOutput;
@@ -100,7 +100,7 @@ public abstract class MqttCommon extends Component implements IMqttMessageReceiv
 		display.show( new IntProperty( "Port", "Port", 0, 0, 65535, "The port of the broker to which a connection is made. Leave at 0 for default port.", this ) );
 		display.show( new StringProperty( "User", "User", "", 0, "The user name used when connecting to the broker", this ) );
 		display.show( new StringProperty( "Password", "Password", "", 0, "The password used when connecting to the broker", this ) );
-		display.show( new StringProperty( "Topic", "Topic", "", 2, "The topic to subscribe to", this ) );
+
 		display.show( new BooleanProperty( "Secure connection", "Secure", false, "Use secure communication", this ) );
 	}
 

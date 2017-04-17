@@ -1,4 +1,4 @@
-package hap.ruleengine.component.network.mqtt
+package hap.ruleengine.component.network.mqtt.helpers
 
 import chainedfsm.EnterChain
 import chainedfsm.interfaces.IEnter
