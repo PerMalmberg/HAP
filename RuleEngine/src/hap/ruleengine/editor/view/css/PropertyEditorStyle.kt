@@ -24,13 +24,13 @@ class PropertyEditorStyle : Stylesheet()
 	init
 	{
 		PropertyEditorStyle.revertButton {
-			backgroundImage = multi(URI("/icons/arrow_undo.png"))
+			backgroundImage = multi(URI("/famfamfam/icons/arrow_undo.png"))
 			backgroundRepeat = multi(Pair(BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT))
 			backgroundPosition = multi(BackgroundPosition.CENTER, BackgroundPosition.CENTER)
 		}
 
 		PropertyEditorStyle.applyButton {
-			backgroundImage = multi(URI("/icons/accept.png"))
+			backgroundImage = multi(URI("/famfamfam/icons/accept.png"))
 			backgroundRepeat = multi(Pair(BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT))
 			backgroundPosition = multi(BackgroundPosition.CENTER, BackgroundPosition.CENTER)
 		}
