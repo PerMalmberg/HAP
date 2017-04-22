@@ -16,10 +16,11 @@ import java.util.*
 
 class Countdown(id: UUID, executionState: Boolean) : Component(id, executionState)
 {
-	private var reset = BooleanInput("Reset", UUID.fromString("6e8fe669-4a0c-4ac5-a7d6-397b3615acf4"), this)
-	private var trigger = BooleanInput("Trigger", UUID.fromString("7752513a-a3df-4ee6-a923-d90fc112d19c"), this)
-	private var enabled = BooleanInput("Enabled", UUID.fromString("8516eb6f-9355-4d52-9459-6549c6bc8b9b"), this)
-	private var expired = BooleanOutput("Expired", UUID.fromString("ee4351e9-dd24-4c60-b47e-9f2590c32603"), this)
+	private val reset = BooleanInput("Reset", UUID.fromString("6e8fe669-4a0c-4ac5-a7d6-397b3615acf4"), this)
+	private val trigger = BooleanInput("Trigger", UUID.fromString("7752513a-a3df-4ee6-a923-d90fc112d19c"), this)
+	private val enabled = BooleanInput("Enabled", UUID.fromString("8516eb6f-9355-4d52-9459-6549c6bc8b9b"), this)
+	private val expired = BooleanOutput("Expired", UUID.fromString("ee4351e9-dd24-4c60-b47e-9f2590c32603"), this)
+	private val outClk = BooleanOutput("Clk", UUID.fromString("2ecb93d2-a955-4661-a3a4-54cfa1b36885"), this)
 	private var timeLeft = Duration.ZERO
 	private var lastTick = Instant.now()
 	private var countingDown = false
@@ -30,6 +31,7 @@ class Countdown(id: UUID, executionState: Boolean) : Component(id, executionStat
 		addInput(trigger)
 		addInput(enabled)
 		addOutput(expired)
+		addOutput(outClk)
 		Reset()
 	}
 
@@ -51,6 +53,7 @@ class Countdown(id: UUID, executionState: Boolean) : Component(id, executionStat
 				if (timeLeft <= Duration.ZERO)
 				{
 					expired.set(true)
+					outClk.toggle()
 				}
 			}
 		}
@@ -83,6 +86,7 @@ class Countdown(id: UUID, executionState: Boolean) : Component(id, executionStat
 		val t = getProperty("Timeout", 0).toLong()
 		timeLeft = Duration.ofSeconds(t)
 		expired.set(false)
+		outClk.set(false)
 		countingDown = false
 	}
 }
