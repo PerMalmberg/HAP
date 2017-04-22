@@ -68,6 +68,10 @@ class DrawingSurfaceVM : ViewModel()
 			interaction.openComposite(this@DrawingSurfaceVM, it.window)
 		}
 
+		subscribe<NewComposite> {
+			interaction.newComposite(this@DrawingSurfaceVM, it.window)
+		}
+
 		subscribe<SelectComponent> {
 			interaction.selectComponent(it.component, it.addToOrRemoveFromSelection)
 		}
@@ -126,6 +130,7 @@ class DrawingSurfaceVM : ViewModel()
 
 	fun setComposite(cc: CompositeComponent)
 	{
+		currentCC.executionState = false
 		surface.clearComponents()
 		currentCC.tearDown()
 		currentCC = cc

@@ -1,5 +1,6 @@
 package hap.ruleengine.editor.view
 
+import hap.ruleengine.editor.viewmodel.event.NewComposite
 import hap.ruleengine.editor.viewmodel.event.OpenCompositeFromFile
 import hap.ruleengine.editor.viewmodel.event.SaveComposite
 import hap.ruleengine.editor.viewmodel.event.SetLiveComponentsEvent
@@ -13,6 +14,10 @@ class RuleEngineTab : Fragment()
 			// TODO: Can the menu of the window itself be set based on selected tab?
 			menubar {
 				menu("_File") {
+					menuitem("_New Composite")
+					{
+						fire(NewComposite(this@borderpane.scene.window))
+					}
 					menuitem("_Open Composite") {
 						fire(OpenCompositeFromFile(this@borderpane.scene.window))
 					}

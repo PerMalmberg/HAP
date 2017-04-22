@@ -18,6 +18,11 @@ import java.io.File
 import java.util.*
 
 class UserInteractionFSM(val surface: IDrawingSurfaceView, val vm : DrawingSurfaceVM) : chainedfsm.FSM<UserInteractionState>(), IUserInteraction {
+    override fun newComposite(surfce: DrawingSurfaceVM, window: Window)
+    {
+        currentState.newComposite(surfce, window);
+    }
+
     override fun endDragComponentFromComponentPallet() {
         currentState.endDragComponentFromComponentPallet()
     }

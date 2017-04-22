@@ -87,6 +87,11 @@ abstract class UserInteractionState constructor(val fsm: UserInteractionFSM) : E
 		fsm.setState(OpenComposite(fsm, surface, window))
 	}
 
+	override fun newComposite(surface: DrawingSurfaceVM, window: Window)
+	{
+		fsm.setState(NewComposite(fsm, surface, window));
+	}
+
 	override fun saveComposite(surface: DrawingSurfaceVM, window: Window)
 	{
 		fsm.setState(SaveComposite(fsm, surface, window))

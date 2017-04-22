@@ -17,6 +17,7 @@ interface IUserInteraction {
     fun endDragComponentFromComponentPallet()
     fun mouseDragDropReleased(event: MouseDragDropReleased, view: IDrawingSurfaceView, currentCC: CompositeComponent)
     fun openComposite(surface: DrawingSurfaceVM, window: Window)
+    fun newComposite(surface: DrawingSurfaceVM, window: Window)
     fun selectComponent(component: ComponentVM, addToOrRemoveFromSelection: Boolean)
     fun componentDragged(dragged: ComponentDragged)
     fun mouseReleased()
