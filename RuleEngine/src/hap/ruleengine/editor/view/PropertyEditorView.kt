@@ -11,7 +11,7 @@ class PropertyEditorView : Fragment()
 		center {
 			stackpane {
 				subscribe<SelectedComponentsChanged> {
-					this.replaceChildren {
+					replaceChildren {
 						if (it.selectedComponents.size == 1)
 						{
 							val single = it.selectedComponents.values.first()

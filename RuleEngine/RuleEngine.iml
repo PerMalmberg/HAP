@@ -8,7 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/testdata" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Common" exported="" />
     <orderEntry type="module-library" exported="">
@@ -49,6 +49,6 @@
     </orderEntry>
     <orderEntry type="module" module-name="FSM" exported="" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
-    <orderEntry type="library" name="no.tornado:tornadofx:1.6.2" level="project" />
+    <orderEntry type="library" name="no.tornado:tornadofx:1.7.3" level="project" />
   </component>
 </module>

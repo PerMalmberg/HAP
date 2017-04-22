@@ -13,15 +13,12 @@
         <element id="extracted-dir" path="$PROJECT_DIR$/lib/jackson-core-2.8.5.jar" path-in-jar="/com/" />
         <element id="extracted-dir" path="$PROJECT_DIR$/lib/jackson-databind-2.8.5.jar" path-in-jar="/com/" />
       </element>
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-runtime.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-reflect.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/javax.json-1.0.4.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/httpclient-4.5.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/httpcore-4.4.3.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-logging-1.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-codec-1.9.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/org.apache.felix.framework-5.4.0.jar" path-in-jar="/" />
-      <element id="library" level="project" name="no.tornado:tornadofx:1.6.2" />
       <element id="module-output" name="Common" />
     </root>
   </artifact>

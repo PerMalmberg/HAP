@@ -65,7 +65,7 @@ class DrawingSurfaceVM : ViewModel()
 		}
 
 		subscribe<OpenCompositeFromFile> {
-			interaction.openComposite(this, it.window)
+			interaction.openComposite(this@DrawingSurfaceVM, it.window)
 		}
 
 		subscribe<SelectComponent> {
@@ -81,7 +81,7 @@ class DrawingSurfaceVM : ViewModel()
 		}
 
 		subscribe<SaveComposite> {
-			interaction.saveComposite(this, it.window)
+			interaction.saveComposite(this@DrawingSurfaceVM, it.window)
 		}
 
 		subscribe<BeginConnectWire> {
