@@ -4,104 +4,147 @@ import hap.ruleengine.component.network.mqtt.IMqttMessageReceiver
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import java.util.*
+import java.util.concurrent.ConcurrentLinkedDeque
+import java.util.logging.Logger
 
 /**
  * Created by Per Malmberg on 2017-02-21.
  */
-class MqttConnection(val receiver: IMqttMessageReceiver) : chainedfsm.FSM<MqttState>(), MqttCallback, IMqttActionListener, IMqttMessageListener
+class MqttConnection(val receiver: IMqttMessageReceiver) : MqttCallback, Runnable
 {
-	private val client = MqttAsyncClient("tcp://ignored.tld", UUID.randomUUID().toString(), MemoryPersistence())
+	var run = true
+	val log: Logger = Logger.getLogger("MqttConnection")
+
+	private val client = MqttClient("tcp://ignored.tld", UUID.randomUUID().toString(), MemoryPersistence())
+	private val outgoing = ConcurrentLinkedDeque<Pair<String, MqttMessage>>()
+	private var thread = Thread(this)
 
 	init
 	{
-		setState(IdleState(this))
+		client.setCallback(this)
 	}
 
-	override fun messageArrived(topic: String?, message: MqttMessage?)
+	override fun run()
 	{
-		synchronized(client)
+		while (run)
 		{
 			receiver.connectionStatus(client.isConnected)
-			receiver.messageArrived(topic, message)
-		}
-	}
 
-	override fun connectionLost(cause: Throwable?)
-	{
-		synchronized(client)
+			if (client.isConnected)
+			{
+				while (outgoing.size > 0)
+				{
+					val out = outgoing.pop()
+
+					try
+					{
+						client.publish(out.first, out.second)
+					}
+					catch (e: Exception)
+					{
+						log.severe(e.message)
+					}
+				}
+			}
+			else
+			{
+				try
+				{
+					// Wait some between reconnecting
+					Thread.sleep(500)
+					client.connect(getOptions())
+
+					if (!getTopic().isEmpty())
+					{
+						client.subscribe(getTopic())
+					}
+				}
+				catch (e: Exception)
+				{
+					log.severe(e.message)
+				}
+			}
+		}
+
+		try
 		{
-			receiver.connectionStatus(client.isConnected)
-			currentState.connectionLost()
+			if (client.isConnected)
+			{
+				client.disconnect()
+			}
 		}
-	}
-
-	override fun deliveryComplete(token: IMqttDeliveryToken?)
-	{
-		synchronized(client)
+		catch (e: Exception)
 		{
-			receiver.connectionStatus(client.isConnected)
+			log.severe(e.message)
 		}
+
+		receiver.connectionStatus(client.isConnected)
 	}
-
-	override fun onSuccess(token: IMqttToken)
-	{
-		synchronized(client)
-		{
-			receiver.connectionStatus(client.isConnected)
-			currentState.success(token)
-		}
-	}
-
-	override fun onFailure(token: IMqttToken, exception: Throwable?)
-	{
-		synchronized(client)
-		{
-			receiver.connectionStatus(client.isConnected)
-			currentState.failure(token)
-		}
-	}
-
-	fun getClient() = client
-
 
 	fun connect()
 	{
-		synchronized(client)
-		{
-			currentState.connect()
-		}
+		thread = Thread(this)
+		run = true
+		thread.start()
 	}
 
 	fun disconnect()
 	{
-		synchronized(client)
+		if (thread.isAlive)
 		{
-			currentState.disconnect()
+			run = false
+			thread.join()
+			receiver.connectionStatus(false)
 		}
 	}
 
 	fun reconnect()
 	{
-		synchronized(client)
-		{
-			setState(ReconnectState(this))
-		}
+		disconnect()
+		connect()
 	}
 
 	fun publish(topic: String, msg: String)
 	{
-		synchronized(client)
+		val m = MqttMessage(msg.toByteArray())
+		m.isRetained = false
+		m.qos = 2
+
+		try
 		{
-			currentState.publish(topic, msg)
+			client.publish(topic, m)
 		}
+		catch (e: Exception)
+		{
+			log.severe(e.message)
+		}
+	}
+
+	override fun messageArrived(topic: String?, msg: MqttMessage?)
+	{
+		if (topic != null && msg != null)
+		{
+			receiver.messageArrived(topic, msg)
+		}
+	}
+
+	override fun connectionLost(token: Throwable?)
+	{
+
+	}
+
+	override fun deliveryComplete(token: IMqttDeliveryToken?)
+	{
+
 	}
 
 	fun getOptions(): MqttConnectOptions
 	{
 		val info = receiver.connectionInfo
 		val opt = MqttConnectOptions()
-		opt.isAutomaticReconnect = true
+		opt.isAutomaticReconnect = false
 		opt.isCleanSession = true
+		opt.connectionTimeout = 3000
 
 		if (info.user.isNotEmpty() && info.password.isNotEmpty())
 		{

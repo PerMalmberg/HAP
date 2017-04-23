@@ -22,7 +22,7 @@ public abstract class MqttCommon extends Component implements IMqttMessageReceiv
 		this.doSubscription = doSubscription;
 	}
 
-	protected MqttConnection connection = new MqttConnection(this);
+	MqttConnection connection = new MqttConnection(this);
 
 	private boolean doSubscription;
 
@@ -65,17 +65,13 @@ public abstract class MqttCommon extends Component implements IMqttMessageReceiv
 		}
 	}
 
-	private void connect()
-	{
-		connection.connect();
-	}
 
 	@Override
 	protected void executionStateChanged( boolean executionState )
 	{
 		if( executionState )
 		{
-			connect();
+			connection.connect();
 		}
 		else
 		{
