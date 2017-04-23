@@ -53,10 +53,12 @@ class MqttConnection(val receiver: IMqttMessageReceiver) : MqttCallback, Runnabl
 					// Wait some between reconnecting
 					Thread.sleep(500)
 					client.connect(getOptions())
+					log.finest("Client with UUID ${client.clientId} connected")
 
 					if (!getTopic().isEmpty())
 					{
 						client.subscribe(getTopic())
+						log.finest("Client with UUID ${client.clientId} subscribed to ${getTopic()}")
 					}
 				}
 				catch (e: Exception)
@@ -95,6 +97,7 @@ class MqttConnection(val receiver: IMqttMessageReceiver) : MqttCallback, Runnabl
 			run = false
 			thread.join()
 			receiver.connectionStatus(false)
+			log.finest("Client with UUID ${client.clientId} disconnected")
 		}
 	}
 
