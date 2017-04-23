@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="RuleEngine">
-    <output-path>$PROJECT_DIR$/out/artifacts/modules</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/</output-path>
     <root id="archive" name="RuleEngine.jar">
       <element id="module-output" name="RuleEngine" />
       <element id="module-output" name="CmdParser4J" />
@@ -20,6 +20,7 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-codec-1.9.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/org.apache.felix.framework-5.4.0.jar" path-in-jar="/" />
       <element id="module-output" name="Common" />
+      <element id="extracted-dir" path="$APPLICATION_HOME_DIR$/lib/kotlin-runtime.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
